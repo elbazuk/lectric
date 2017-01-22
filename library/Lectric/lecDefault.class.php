@@ -7,7 +7,6 @@ namespace Lectric;
 * @package    Lectric Framework
 * @author     Elliott Barratt
 * @copyright  Elliott Barratt, all rights reserved.
-* @license    As license.txt in root
 *
 */ 
 class lecDefault extends SQLQueryPDO 

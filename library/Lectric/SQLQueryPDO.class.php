@@ -9,7 +9,6 @@ namespace Lectric;
 * @package    Lectric Framework
 * @author     Elliott Barratt
 * @copyright  Elliott Barratt, all rights reserved.
-* @license    As license.txt in root
 *
 */ 
 class SQLQueryPDO 
@@ -1086,7 +1085,6 @@ class SQLQueryPDO
 * @package    Lectric Framework
 * @author     Elliott Barratt
 * @copyright  Elliott Barratt, all rights reserved.
-* @license    As license.txt in root
 *
 */ 
 class SQLException extends \Exception {}
