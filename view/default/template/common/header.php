@@ -25,7 +25,7 @@
     <meta name="keywords" content="<?php echo $this->page['metakeywords'];?>" />
     
 	<!--favicon-->
-    <link rel="shortcut icon" type="image/png" href="/public/img/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="<?php echo $this->_imgLocalDir; ?>/favicon.png" />
 	
 	<!--mobile support meta-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -36,9 +36,9 @@
 	<link rel="stylesheet" href="<?php echo $this->_iconSet; ?>">
 	
 	<!--Main css stylesheet-->
-    <link rel="stylesheet" href="/view/<?php echo $this->_fileDirectory; ?>/css/style.css">
+    <link rel="stylesheet" href="<?php echo $this->_cssLocalDir; ?>/style.css">
 	
-	<script src="/library/js/jquery.js"></script>
+	<script src="<?php echo $this->_jsLibDir; ?>/jquery.js"></script>
     
 </head>
 

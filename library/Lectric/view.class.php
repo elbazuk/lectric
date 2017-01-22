@@ -14,11 +14,19 @@ namespace Lectric;
 */ 
 class view extends SQLQueryPDO {
 	
-	private $page;
-	private $_URLdirectory;
-	private $_directory;
-	private $_pageUrl;
+	private $page = null;
+	
+	private $_URLdirectory = '';
+	private $_directory = '';
+	private $_pageUrl = '';
+	
 	private $_iconSet = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
+	private $_imgLocalDir = '';
+	private $_cssLocalDir = '';
+	private $_jsLocalDir = '';
+	
+	private $_cssLibDir = '/library/css';
+	private $_jsLibDir = '/library/js';
 	
 	/**
      * construct to parse URL for your viewing pleasure
@@ -33,67 +41,76 @@ class view extends SQLQueryPDO {
 		* seeing as we're using the construct for other stuff, we need to pass the DBH through as normal as in parent
 		* 
 		*/
-		parent::__construct($DBH);
+			parent::__construct($DBH);
+		
+		
 		 
 		/*
 		* parse URL into file directories, url directories and page urls
 		* 
 		*/
 		
-		$urlNodes = URL_NODES; 	//needed for use of end()
-		
-		if (!isset($urlNodes[0])){
+			$urlNodes = URL_NODES; 	//needed for use of end()
 			
-			$this->_URLdirectory = 'root';						//
-			$this->_fileDirectory = DEFAULT_DIRECTORY;			//
-			$this->_pageUrl = 'index';							//
-			
-		} else {
-			
-			if (count($urlNodes) === 1){
+			if (!isset($urlNodes[0])){
 				
-				/*
-				* first find physical actual derectories - they will always be preffered over default directory.
-				* e.g. if you have an "admin" interface seperate to front end, mount in a directory called /view/admin/ 
-				*/
-				if (is_dir(DOC_ROOT.'/view/'.$urlNodes[0])){
-					
-					$this->_URLdirectory = 'root';				//
-					$this->_fileDirectory = $urlNodes[0];		//
-					$this->_pageUrl = 'index';					//
-					
-				} else {
-					$this->_URLdirectory = 'root';				//
-					$this->_fileDirectory = DEFAULT_DIRECTORY;	//
-					$this->_pageUrl = $urlNodes[0];				//
-				}
+				$this->_URLdirectory = 'root';						//
+				$this->_fileDirectory = DEFAULT_DIRECTORY;			//
+				$this->_pageUrl = 'index';							//
 				
 			} else {
 				
-				if (is_dir(DOC_ROOT.'/view/'.$urlNodes[0])){
+				if (count($urlNodes) === 1){
 					
-					if (count($urlNodes) === 2){
-						$this->_URLdirectory = 'root';			//
-						$this->_fileDirectory = $urlNodes[0];	//
-						$this->_pageUrl = end($urlNodes);
+					/*
+					* first find physical actual derectories - they will always be preffered over default directory.
+					* e.g. if you have an "admin" interface seperate to front end, mount in a directory called /view/admin/ 
+					*/
+					if (is_dir(DOC_ROOT.'/view/'.$urlNodes[0])){
+						
+						$this->_URLdirectory = 'root';				//
+						$this->_fileDirectory = $urlNodes[0];		//
+						$this->_pageUrl = 'index';					//
+						
 					} else {
-						$this->_URLdirectory = $urlNodes[1]; 	//
-						$this->_fileDirectory = $urlNodes[0];	//
-						$this->_pageUrl = end($urlNodes);
+						$this->_URLdirectory = 'root';				//
+						$this->_fileDirectory = DEFAULT_DIRECTORY;	//
+						$this->_pageUrl = $urlNodes[0];				//
 					}
 					
 				} else {
+					
+					if (is_dir(DOC_ROOT.'/view/'.$urlNodes[0])){
+						
+						if (count($urlNodes) === 2){
+							$this->_URLdirectory = 'root';			//
+							$this->_fileDirectory = $urlNodes[0];	//
+							$this->_pageUrl = end($urlNodes);
+						} else {
+							$this->_URLdirectory = $urlNodes[1]; 	//
+							$this->_fileDirectory = $urlNodes[0];	//
+							$this->_pageUrl = end($urlNodes);
+						}
+						
+					} else {
+					
+						$this->_URLdirectory = $urlNodes[0];		//
+						$this->_fileDirectory = DEFAULT_DIRECTORY;	//
+						$this->_pageUrl = end($urlNodes);		//
+					}
+					
+				}			
 				
-					$this->_URLdirectory = $urlNodes[0];		//
-					$this->_fileDirectory = DEFAULT_DIRECTORY;	//
-					$this->_pageUrl = end($urlNodes);		//
-				}
-				
-			}			
+			}
 			
-		}
-		
-		//render!
+		/*
+		* set up some helper properties
+		* 
+		*/
+		$this->_imgLocalDir = '/view/'.$this->_fileDirectory.'/img';
+		$this->_cssLocalDir = '/view/'.$this->_fileDirectory.'/css';
+		$this->_jsLocalDir = '/view/'.$this->_fileDirectory.'/js';
+			
 		$this->render();
 		
 	}
