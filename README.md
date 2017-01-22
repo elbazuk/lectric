@@ -18,6 +18,7 @@
         <li>SITE_LINK - the domain name, eg. foo.bar.com</li>
         <li>SITE_DESCRIPTION - default description for website (useful for uncaught webapage meta descrips... - defaults to "Lectric Default Installation"</li>
       </ul>
+        Note: You can use logic here to define both dev and production DB settings, by testing on $_SERVER['HTTP_HOST'] and providing different definitions!
     </li>
     <li>run install.sql to set up basic database tables</li>
     <li>browse to / and read the messages displayed!</li>
