@@ -11,7 +11,7 @@
 		?><p class="end">The Project Root is <?php echo DOC_ROOT; ?></p><?php
 		?><p class="end">The Request URL for this do action is <?php echo URL_REQUEST; ?></p>
 		<br/>
-		<form action="/do/Lectric/lecDefault/test" method="post"><button type="submit" class="btn btn-large btn red">Push Me!</button></form>
+		<form action="/do/action/Lectric/lecDefault/test" method="post"><button type="submit" class="btn btn-large btn red">Push Me!</button></form>
 		
 		<?php
 		

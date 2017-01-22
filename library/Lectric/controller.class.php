@@ -29,19 +29,19 @@ class controller {
 			} else {
 				//DO!
 				
-				if (count(URL_NODES) !== 4){
-					if (DEBUG){
-						echo 'wrong do node count for response.';
-					}
-					exit;
-				}
+				
 				
 				/*
 				* Response type do
 				*/
 				if (URL_NODES[1] === 'response'){
 					
-					
+					if (count(URL_NODES) !== 4){
+						if (DEBUG){
+							echo 'wrong do node count for response.';
+						}
+						exit;
+					}
 					
 					if (file_exists(DOC_ROOT.'/do/'.URL_NODES[2].'/'.URL_NODES[3].'.php')) {
 						require(DOC_ROOT.'/do/'.URL_NODES[2].'/'.URL_NODES[3].'.php');
@@ -55,27 +55,34 @@ class controller {
 				} 
 				
 				/*
-				* Action type do (no response, may generate another view)
+				* Action type do (no response, may generate another view or do something else...?)
 				*/
 				else {
 					
+					if (count(URL_NODES) !== 5){
+						if (DEBUG){
+							echo 'wrong do node count for action.';
+						}
+						exit;
+					}
+					
 					try{
-						if (class_exists('\\'.URL_NODES[1].'\\'.URL_NODES[2])){
+						if (class_exists('\\'.URL_NODES[2].'\\'.URL_NODES[3])){
 							
-							$doClass = '\\'.URL_NODES[1].'\\'.URL_NODES[2];
+							$doClass = '\\'.URL_NODES[2].'\\'.URL_NODES[3];
 							$doer = new $doClass($DBH);
 							
-							if (method_exists($doer, 'do_'.URL_NODES[3])){
+							if (method_exists($doer, 'do_'.URL_NODES[4])){
 							
-								$action = $doer->{'do_'.URL_NODES[3]}($_POST, $_GET);
+								$action = $doer->{'do_'.URL_NODES[4]}($_POST, $_GET);
 								$action->performAction();
 							
 							} else {
-								throw new \Exception('Class '.htmlentities('\\'.URL_NODES[1].'\\'.URL_NODES[2]).' doesn\'t contain method '.'do_'.URL_NODES[3].' in do action.');
+								throw new \Exception('Class '.htmlentities('\\'.URL_NODES[2].'\\'.URL_NODES[3]).' doesn\'t contain method '.'do_'.URL_NODES[4].' in do action.');
 							}
 							
 						} else {
-							throw new \Exception('Class '.htmlentities('\\'.URL_NODES[1].'\\'.URL_NODES[2]).' doesn\'t exist for do action.');
+							throw new \Exception('Class '.htmlentities('\\'.URL_NODES[2].'\\'.URL_NODES[3]).' doesn\'t exist for do action.');
 						}
 						
 					} catch (\Exception $e){
