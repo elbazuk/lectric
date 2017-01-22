@@ -1,4 +1,6 @@
 <h2>The light weight Lectric Framework!</h2>
+<p>Lectric is a psuedo MVC PHP framework, or tentatively defined as a CARV PHP framework(controller - action|response|view). It's basic pricipal is that most web apps are tools for&nbsp;<strong>view</strong>ing something,&nbsp;performing an<strong> action&nbsp;</strong>or generating a none-view&nbsp;<strong>response</strong>. Exactly what the framework does, generate a view, response or run an action is determined by the url - descriubed as the URL Nodes. It follows PSR-2 coding standards and PSR-4 autloading standards.&nbsp;</p>
+<h2>Installation</h2>
 <p>To install:</p>
 <ul>
 <ul>
@@ -23,7 +25,7 @@ Note: You can use logic here to define both dev and production DB settings, by t
 </ul>
 <h2>Basics</h2>
 <h4>Adding classes - PSR-4</h4>
-<p>Classes should be added to the framework using the PSR-4 standard with 1 caveat - no sub namespaces. For example, to use the class \yourProjectNamespace\yourClass, you must create a file yourClass.class.php in /library/yourProjectNamespace/. Inside your class file, you must then obviously declase the namespace as&nbsp;yourProjectNamespace. Most of the time you will want to extend the \Lectric\SQLQueryPDO class. Fill your boots.</p>
+<p>Classes should be added to the framework using the PSR-4 standard with 1 caveat - no sub namespaces. For example, to use the class \yourProjectNamespace\yourClass, you must create a file yourClass.class.php in /library/yourProjectNamespace/. Inside your class file, you must then obviously declare the namespace as&nbsp;yourProjectNamespace. Most of the time you will want to extend the \Lectric\SQLQueryPDO class. Fill your boots.</p>
 <h4>Working Directory</h4>
 <p>To start developing with Lectric after installation, it's as simple as cracking open the /view/default/ directory and modifying the files within!</p>
 <p>It is recommended that a different default directory be used, by copying /view/default/ into another directory in /view/. Usually this would be /view/public/. This is to ensure that if you pull from this repo in the future, it doesn't overwrite any changes you've made to /view/default/. <strong>Ensure to define your default directory if not using /view/default/ in /engine/plugin/core_config.php - e.g. define('DEFAULT_DIRECTORY', 'public').</strong></p>
@@ -81,4 +83,5 @@ Note: You can use logic here to define both dev and production DB settings, by t
 </ul>
 <p>The&nbsp;\Lectric\controlAction is used to determine what happens once the do function has been run. The construct can be passed the arguments of type, param1, param2 or no arguements to simply exit. For example, if after calling the do_function, you want the user to be redirected to "/", and providing you&nbsp;<strong>have not set any other headers</strong> then return&nbsp;new \Lectric\controlAction('view', '/'), optionally passing back a message in param2 to be saved to the controller session messages (see controller dox for details).</p>
 <p>The example default Lectric project has examples of both do-responses and do-actions. See /view/default/js/js_home.php for do-response call and /do/lectric/test.php for a form that posts to a do-action (see /library/Lectric/lecDefault.class.php too!).</p>
-<p>&nbsp;</p>
+<h2>Further reading</h2>
+<p>&nbsp;All classes within Lectric have been docblocked, for you to generate documentation (I reccomend phpdox - it works fine with PHP 7.1.0 as of this release).&nbsp;</p>
