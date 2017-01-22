@@ -60,9 +60,40 @@ Note: You can use logic here to define both dev and production DB settings, by t
 </ul>
 </li>
 </ul>
+<p>Once a record has been made in the database, you'll need to have an appropriate file structure for the /view/DEFAULT_DIRECTORY/render.php file to call upon. As with the default repo, we recommend:</p>
+<ul>
+<li>/view
+<ul>
+<li>/template
+<ul>
+<li>/common
+<ul>
+<li>/header.php etc..</li>
+</ul>
+</li>
+<li>/includes
+<ul>
+<li>view specific "chunks"</li>
+</ul>
+</li>
+<li>/views
+<ul>
+<li>index.php etc...</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>/img</li>
+<li>/css</li>
+<li>/js</li>
+<li>/render.php</li>
+</ul>
+</li>
+</ul>
+<p>Following the Lectric sample default project, /view/default/render.php loads the view from the database and puts it in $view-&gt;page property, to be used in the following included template common files. By being in render.php, these files will be&nbsp;<strong>common</strong> to every view in the /view/default/ directory (unless you stipulate some logic in&nbsp;<em>your</em> render file). In /view/template/common/content.php (the second included common view file) you can see we're checking if a specific /view/template/views/*.php file exists by using the `url` field value&nbsp;from the loaded view. In this case, index.php&nbsp;<em>does</em> exist, so it is included. Inside /view/template/views/index.php you can see we use the `html` field value from the loaded view, plus some extra HTML directly in the view file. By adding view fields to your view tables, you can build as many insertions from the database as needed (for example, `sidebar_content`, `testimonial_snippet`). You may also want to include files from the /view/template/includes/ directory, through this is usually reserved for class html ouput functions.</p>
 <h4>Do-ing things</h4>
-<p>Everything in Lectric is either a "view" or a "do" action. Views are simple, they are discreet generated webpages defined by the URL, and should be comprised of common elements (header, footer, etc), database driven elements (meta title etc) and&nbsp;<strong>includes </strong>(small bits of html that collect to make up the bulk of a view).&nbsp;</p>
-<p>Do's on the other hand, come in two&nbsp;flavours: Do-Response and Do-Action.&nbsp;</p>
+<p>Everything in Lectric is either a "view", a "do-response" or a "do-action".</p>
+<p>Views are simple, they are discreet generated webpages defined by the URL, and should be comprised of common elements (header, footer, etc), database driven elements (meta title etc) and&nbsp;<strong>includes </strong>(small bits of html that collect to make up the bulk of a view). See above.</p>
 <h5>Do Response</h5>
 <ul>
 <li>URL Format -&nbsp; /do/response/&lt;actionGroup&gt;/&lt;action&gt;</li>
