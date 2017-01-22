@@ -40,7 +40,9 @@ class controlAction
 					//do nothing
 				break;
 				
-				}								return;
+				}
+				
+			return;
 			
 		}
 	
