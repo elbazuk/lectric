@@ -1,6 +1,6 @@
 # lectric
 
-<h3>The light weight Lectric Framework!</h3>
+<h2>The light weight Lectric Framework!</h2>
 
 To install:
   <ul>
@@ -24,3 +24,10 @@ To install:
     <li>browse to / and read the messages displayed!</li>
   <ul>
     
+    <h2>Basics</h2>
+    
+    <p>To start developing with Lectric after installation, it's as simple as cracking open the /view/default/ directory and modifying the files within!</p>
+    
+    <p>It is recommended that a different default directory be used, by copying /view/default/ into another directory in /view/. Usually this would be /view/public/. This is to ensure that if you pull from this repo in the future, it doesn't overwrite any changes you've made to /view/default/. <b>Ensure to define your default directory if not using /view/default/ in /engine/plugin/core_config.php - e.g. define('DEFAULT_DIRECTORY', 'public').</b></p>
+    
+    <p>
