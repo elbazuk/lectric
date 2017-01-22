@@ -30,4 +30,4 @@ To install:
     
     <p>It is recommended that a different default directory be used, by copying /view/default/ into another directory in /view/. Usually this would be /view/public/. This is to ensure that if you pull from this repo in the future, it doesn't overwrite any changes you've made to /view/default/. <b>Ensure to define your default directory if not using /view/default/ in /engine/plugin/core_config.php - e.g. define('DEFAULT_DIRECTORY', 'public').</b></p>
     
-    <p>
+    <p></p>
