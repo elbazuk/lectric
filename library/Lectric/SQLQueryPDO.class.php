@@ -1079,4 +1079,15 @@ class SQLQueryPDO
 	***/
 }
 
+/**
+* SQLQuery Exception class
+*
+* Used to throw PDO class specific exceptions
+*
+* @package    RWS Framework
+* @author     Elliott Barratt
+* @copyright  Elliott Barratt, all rights reserved.
+* @license    As license.txt in root
+*
+*/ 
 class SQLException extends \Exception {}
