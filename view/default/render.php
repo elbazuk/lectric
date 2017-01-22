@@ -1,26 +1,20 @@
 <?php
 
-
-
 	/*
-
 	* load up webpage based on PAGE_URL 
-
 	*/
-
-		$this->page = $this->loadPage($this->_directory, $this->_pageUrl);
-
-
+		$this->page = $this->loadPage();
+		
+	/*
+	* Limit view to only index <-REMOVE THIS CALL IF COPYING TO DEVELOP WITH
+	*/
+		if ($this->_pageUrl !== 'index' || $this->_URLdirectory !== 'root'){
+			(new \Lectric\controlAction('view', '/default'))->performAction();
+		}
 
 	/*
-
 	* Include each template part from directory. Add switch here to facilitate other directories. 
-
 	*/
-
-		include(DOC_ROOT.'/view/default/template/common/header.php');
-
-		include(DOC_ROOT.'/view/default/template/common/content.php');
-
-		include(DOC_ROOT.'/view/default/template/common/footer.php'); 
-
+		include(DOC_ROOT.'/view/'.$this->_fileDirectory.'/template/common/header.php');
+		include(DOC_ROOT.'/view/'.$this->_fileDirectory.'/template/common/content.php');
+		include(DOC_ROOT.'/view/'.$this->_fileDirectory.'/template/common/footer.php'); 

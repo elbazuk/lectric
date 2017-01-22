@@ -1,250 +1,170 @@
 <?php
-
 namespace Lectric;
-
 /**
-
-* Controller routing class for do/view 
-
+* View class, URL parse and view loader
 *
-
 * The controller determines whether do and action or vieww something
-
 *
-
 * @package    RWS Framework
-
 * @author     Elliott Barratt
-
 * @copyright  Elliott Barratt, all rights reserved.
-
 * @license    As license.txt in root
-
 *
-
 */ 
-
 class view extends SQLQueryPDO {
-
 	
-
-	private $_pages_table = '`webpages`';
-
-    private $_directory_table = '`directories`';
-
-	
-
 	private $page;
-
+	private $_URLdirectory;
 	private $_directory;
-
 	private $_pageUrl;
-
 	private $_iconSet = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
-
 	
-
 	/**
-
-     * construct contains the main do or view logic
-
+     * construct to parse URL for your viewing pleasure
      *
-
-     * @param array URL_NODES array of URL nodes
-
+     * @param object $DBH DBH handler for SQLQueryPDO
 	 *
-
      */
-
 	function __construct($DBH){
-
 		
-
+		/*
+		* seeing as we're using the construct for other stuff, we need to pass the DBH through as normal as in parent
+		* 
+		*/
 		parent::__construct($DBH);
-
 		 
-
-		//set members
-
-		if (!isset(URL_NODES[0])){
-
-			
-
-			$this->_directory = 'root';
-
-			$this->_pageUrl = 'index';
-
-			
-
-		} else {
-
-			
-
-			if (count(URL_NODES) === 1){
-
-				$this->_directory = 'root';
-
-				$this->_pageUrl = URL_NODES[0];
-
-			} else {
-
-				$this->_directory = URL_NODES[1];
-
-				$this->_pageUrl = URL_NODES[0];
-
-			}
-
-			
-
-		}
-
+		/*
+		* parse URL into file directories, url directories and page urls
+		* 
+		*/
 		
-
+		$urlNodes = URL_NODES; 	//needed for use of end()
+		
+		if (!isset($urlNodes[0])){
+			
+			$this->_URLdirectory = 'root';						//
+			$this->_fileDirectory = DEFAULT_DIRECTORY;			//
+			$this->_pageUrl = 'index';							//
+			
+		} else {
+			
+			if (count($urlNodes) === 1){
+				
+				/*
+				* first find physical actual derectories - they will always be preffered over default directory.
+				* e.g. if you have an "admin" interface seperate to front end, mount in a directory called /view/admin/ 
+				*/
+				if (is_dir(DOC_ROOT.'/view/'.$urlNodes[0])){
+					
+					$this->_URLdirectory = 'root';				//
+					$this->_fileDirectory = $urlNodes[0];		//
+					$this->_pageUrl = 'index';					//
+					
+				} else {
+					$this->_URLdirectory = 'root';				//
+					$this->_fileDirectory = DEFAULT_DIRECTORY;	//
+					$this->_pageUrl = $urlNodes[0];				//
+				}
+				
+			} else {
+				
+				if (is_dir(DOC_ROOT.'/view/'.$urlNodes[0])){
+					
+					if (count($urlNodes) === 2){
+						$this->_URLdirectory = 'root';			//
+						$this->_fileDirectory = $urlNodes[0];	//
+						$this->_pageUrl = end($urlNodes);
+					} else {
+						$this->_URLdirectory = $urlNodes[1]; 	//
+						$this->_fileDirectory = $urlNodes[0];	//
+						$this->_pageUrl = end($urlNodes);
+					}
+					
+				} else {
+				
+					$this->_URLdirectory = $urlNodes[0];		//
+					$this->_fileDirectory = DEFAULT_DIRECTORY;	//
+					$this->_pageUrl = end($urlNodes);		//
+				}
+				
+			}			
+			
+		}
+		
 		//render!
-
 		$this->render();
-
 		
-
 	}
-
 	
-
     /**
-
      * main render call
-
      * 
-
      * 
-
      * @return void
-
      */
-
     public function render(): void{
+		
+		/*
+		* first find physical actual derectories - they will always be preffered over default directory.
+		* e.g. if you have an "admin" interface seperate to front end, mount in a directory called /view/admin/ 
+		*/
+		if (is_dir(DOC_ROOT.'/view/'.$this->_fileDirectory)){
 
-		
-
-		if (is_dir(DOC_ROOT.'/view/'.$this->_directory)){
-
-
-
-			if (file_exists(DOC_ROOT.'/view/'.$this->_directory.'/render.php')) {
-
-				require(DOC_ROOT.'/view/'.$this->_directory.'/render.php');
-
+			if (file_exists(DOC_ROOT.'/view/'.$this->_fileDirectory.'/render.php')) {
+				require(DOC_ROOT.'/view/'.$this->_fileDirectory.'/render.php');
 			} else {
-
-				echo 'render file not in view directory: '.$this->_directory;
-
+				echo 'render file not in view directory: '.$this->_fileDirectory;
 				exit;
-
-			}
-
+			}		
+		} 
+		
+		/*
+		* if a physical directory does not exist, attempt to rout to DEFAULT_DIRECTORY instead
+		*/
+		else {
 			
-
-		} else {
-
-			
-
-			if (!defined('DEFAULT_DIRECTORY')){
-
-				$default = 'default';
-
+			if (file_exists(DOC_ROOT.'/view/'.DEFAULT_DIRECTORY.'/render.php')) {
+				require(DOC_ROOT.'/view/'.DEFAULT_DIRECTORY.'/render.php');
 			} else {
-
-				$default = DEFAULT_DIRECTORY;
-
-			}
-
-			
-
-			if (file_exists(DOC_ROOT.'/view/'.$default.'/render.php')) {
-
-				require(DOC_ROOT.'/view/'.$default.'/render.php');
-
-			} else {
-
-				echo 'render file not in view directory: '.$default;
-
+				echo 'render file not in view directory: '.DEFAULT_DIRECTORY;
 				exit;
-
 			}
-
 			
-
 		}
-
 		
-
 		return;
 
-
-
     }
-
 	
-
     /**
-
      * Load up the webpage row from database
-
      * 
-
-     * @param string $directorySelector 
-
-     * @param string $pageSelector 
-
-     * 
-
      * @return array
-
      */
-
-	public function loadPage(string $directorySelector, string $pageSelector): ?array{
-
+	public function loadPage(): ?array{
 		
-
 		try{
-
-			//strict to catch a directory that doesn't exist.
-
-			$this->setWhereFields(array('name' => $directorySelector, 'live' => 1));
-
-			$this->setWhereOps('==');
-
-			$result_dir = $this->selStrict($this->_directory_table,'SINGLE', 'STRICT');
-
 			
-
-			$this->setWhereFields(array('directory' => $directorySelector,'url' => $pageSelector, 'live' => 1));
-
+			//strict to catch a directory that doesn't exist.
+			$this->setWhereFields(array('name' => $this->_URLdirectory, 'live' => 1));
+			$this->setWhereOps('==');
+			$result_dir = $this->selStrict($this->_fileDirectory.'_directories','SINGLE', 'STRICT', 'NOT_TABLED');
+			
+			//get webpage via directory id
+			$this->setWhereFields(array('directory' => $result_dir['id'],'url' => $this->_pageUrl, 'live' => 1));
 			$this->setWhereOps('===');
-
-			$result = $this->selectStrict($this->_pages_table, 'SINGLE', 'STRICT');
-
+			$result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'STRICT', 'NOT_TABLED');
+			
 		} catch (SQLException $e){
-
+			//chuck up the 404, watch for headers!
 			header("HTTP/1.0 404 Not Found");
-
 			$this->setWhereFields(array('url' => 'error'));
-
 			$this->setWhereOps('=');
-
-			return $result = $this->selectStrict($this->_pages_table, 'SINGLE', 'NOT_STRICT');
-
+			return $result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'NOT_TABLED');
 		}
-
 		
-
 		return $result;
-
 		
-
 	}
-
 	
-
 }
-
