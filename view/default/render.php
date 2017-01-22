@@ -13,7 +13,7 @@
 		}
 
 	/*
-	* Include each template part from directory. Add switch here to facilitate other directories. 
+	* Include each template part from directory. Add switch here to facilitate other directories.
 	*/
 		include(DOC_ROOT.'/view/'.$this->_fileDirectory.'/template/common/header.php');
 		include(DOC_ROOT.'/view/'.$this->_fileDirectory.'/template/common/content.php');

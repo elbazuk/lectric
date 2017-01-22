@@ -1,5 +1,8 @@
 <?php
-
+	
+	/*
+	* process do-response ajax call from /view/default/template/views/index.php
+	*/
 	if (isset($_POST['do'])){
 		
 		?><p>Congrats, this message means you can DO things too! Here's some info about your current configuration:</p><?php
