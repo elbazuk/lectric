@@ -1,8 +1,8 @@
 # lectric
 
-<h1>The light weight Lectric Framework!</h1>
+<h3>The light weight Lectric Framework!</h3>
 
-<p>To install:
+To install:
   <ul>
     <li>Unpack the git archive into your projects' root directory</li>
     <li>Define the following (provided you need to) constants in /engine/plugin/core_config.php (create if needed):
@@ -23,5 +23,4 @@
     <li>run install.sql to set up basic database tables</li>
     <li>browse to / and read the messages displayed!</li>
   <ul>
-</p>
     
