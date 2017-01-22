@@ -9,7 +9,7 @@
 	* Limit view to only index <-REMOVE THIS CALL IF COPYING TO DEVELOP WITH
 	*/
 		if ($this->_pageUrl !== 'index' || $this->_URLdirectory !== 'root'){
-			(new \Lectric\controlAction('view', '/default'))->performAction();
+			(new \Lectric\controlAction('view', '/'))->performAction();
 		}
 
 	/*
