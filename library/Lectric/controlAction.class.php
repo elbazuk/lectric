@@ -47,7 +47,7 @@ class controlAction
 		}
 	
     /**
-     * perform the action set up by construct
+     * perform the action set up by construct.
      * 
      * @return void
      */

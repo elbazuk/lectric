@@ -1,5 +1,6 @@
 <?php
 namespace Lectric;
+
 /**
 * View class, URL parse and view loader
 *
@@ -14,7 +15,7 @@ namespace Lectric;
 class view extends SQLQueryPDO {
 	
 	private $page;
-	private $_URLdirectory;
+	private $_URLdirectory;
 	private $_directory;
 	private $_pageUrl;
 	private $_iconSet = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
@@ -25,7 +26,8 @@ class view extends SQLQueryPDO {
      * @param object $DBH DBH handler for SQLQueryPDO
 	 *
      */
-	function __construct($DBH){
+	function __construct($DBH)
+	{
 		
 		/*
 		* seeing as we're using the construct for other stuff, we need to pass the DBH through as normal as in parent
@@ -42,50 +44,50 @@ class view extends SQLQueryPDO {
 		
 		if (!isset($urlNodes[0])){
 			
-			$this->_URLdirectory = 'root';						//
+			$this->_URLdirectory = 'root';						//
 			$this->_fileDirectory = DEFAULT_DIRECTORY;			//
 			$this->_pageUrl = 'index';							//
 			
 		} else {
 			
-			if (count($urlNodes) === 1){
-				
-				/*
-				* first find physical actual derectories - they will always be preffered over default directory.
-				* e.g. if you have an "admin" interface seperate to front end, mount in a directory called /view/admin/ 
-				*/
+			if (count($urlNodes) === 1){
+				
+				/*
+				* first find physical actual derectories - they will always be preffered over default directory.
+				* e.g. if you have an "admin" interface seperate to front end, mount in a directory called /view/admin/ 
+				*/
 				if (is_dir(DOC_ROOT.'/view/'.$urlNodes[0])){
-					
-					$this->_URLdirectory = 'root';				//
-					$this->_fileDirectory = $urlNodes[0];		//
+					
+					$this->_URLdirectory = 'root';				//
+					$this->_fileDirectory = $urlNodes[0];		//
 					$this->_pageUrl = 'index';					//
-					
-				} else {
-					$this->_URLdirectory = 'root';				//
-					$this->_fileDirectory = DEFAULT_DIRECTORY;	//
-					$this->_pageUrl = $urlNodes[0];				//
+					
+				} else {
+					$this->_URLdirectory = 'root';				//
+					$this->_fileDirectory = DEFAULT_DIRECTORY;	//
+					$this->_pageUrl = $urlNodes[0];				//
 				}
 				
-			} else {
-				
+			} else {
+				
 				if (is_dir(DOC_ROOT.'/view/'.$urlNodes[0])){
-					
+					
 					if (count($urlNodes) === 2){
 						$this->_URLdirectory = 'root';			//
 						$this->_fileDirectory = $urlNodes[0];	//
-						$this->_pageUrl = end($urlNodes);
+						$this->_pageUrl = end($urlNodes);
 					} else {
 						$this->_URLdirectory = $urlNodes[1]; 	//
 						$this->_fileDirectory = $urlNodes[0];	//
-						$this->_pageUrl = end($urlNodes);
-					}
-					
-				} else {
+						$this->_pageUrl = end($urlNodes);
+					}
+					
+				} else {
 				
-					$this->_URLdirectory = $urlNodes[0];		//
+					$this->_URLdirectory = $urlNodes[0];		//
 					$this->_fileDirectory = DEFAULT_DIRECTORY;	//
-					$this->_pageUrl = end($urlNodes);		//
-				}
+					$this->_pageUrl = end($urlNodes);		//
+				}
 				
 			}			
 			
@@ -102,11 +104,12 @@ class view extends SQLQueryPDO {
      * 
      * @return void
      */
-    public function render(): void{
-		
-		/*
-		* first find physical actual derectories - they will always be preffered over default directory.
-		* e.g. if you have an "admin" interface seperate to front end, mount in a directory called /view/admin/ 
+    public function render(): void
+	{
+		
+		/*
+		* first find physical actual derectories - they will always be preffered over default directory.
+		* e.g. if you have an "admin" interface seperate to front end, mount in a directory called /view/admin/ 
 		*/
 		if (is_dir(DOC_ROOT.'/view/'.$this->_fileDirectory)){
 
@@ -116,11 +119,11 @@ class view extends SQLQueryPDO {
 				echo 'render file not in view directory: '.$this->_fileDirectory;
 				exit;
 			}		
-		} 
-		
-		/*
-		* if a physical directory does not exist, attempt to rout to DEFAULT_DIRECTORY instead
-		*/
+		} 
+		
+		/*
+		* if a physical directory does not exist, attempt to rout to DEFAULT_DIRECTORY instead
+		*/
 		else {
 			
 			if (file_exists(DOC_ROOT.'/view/'.DEFAULT_DIRECTORY.'/render.php')) {
@@ -141,7 +144,8 @@ class view extends SQLQueryPDO {
      * 
      * @return array
      */
-	public function loadPage(): ?array{
+	public function loadPage(): ?array
+	{
 		
 		try{
 			
