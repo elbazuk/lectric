@@ -6,7 +6,7 @@ namespace Lectric;
 *
 * The controller determines whether do and action or vieww something
 *
-* @package    RWS Framework
+* @package    Lectric Framework
 * @author     Elliott Barratt
 * @copyright  Elliott Barratt, all rights reserved.
 * @license    As license.txt in root
