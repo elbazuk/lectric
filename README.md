@@ -64,15 +64,24 @@ Note: You can use logic here to define both dev and production DB settings, by t
 <p>Everything in Lectric is either a "view" or a "do" action. Views are simple, they are discreet generated webpages defined by the URL, and should be comprised of common elements (header, footer, etc), database driven elements (meta title etc) and&nbsp;<strong>includes </strong>(small bits of html that collect to make up the bulk of a view).&nbsp;</p>
 <p>Do's on the other hand, come in two&nbsp;flavours: Do-Response and Do-Action.&nbsp;</p>
 <h5>Do Response</h5>
-<p>A do-response is used to get anything back that isn't nothing, or a view. For example, an api script may return JSON headers and content, thus being a&nbsp;<em>response</em>. Response Do's reside in /do/&lt;folder&gt;/&lt;action&gt; and can be access from a browser by using the following URL format: /do/response/&lt;actionGroup&gt;/&lt;action&gt;, where actionGroup = a folder in /do/ appropriately named for the actions within it and &lt;action&gt; is the name of the php file within /do/&lt;actionGroup&gt;/ (without the .php).</p>
+<ul>
+<li>URL Format -&nbsp; /do/response/&lt;actionGroup&gt;/&lt;action&gt;</li>
+<li>Directory Format -&nbsp;/do/&lt;folder&gt;/&lt;action&gt;.php</li>
+</ul>
+<p>A do-response is used to get anything back that isn't nothing, or a view. For example, an api script may return JSON headers and content, thus being a&nbsp;<em>response</em>. Response Do's reside in /do/&lt;folder&gt;/&lt;action&gt; and can be access from a browser by using the following URL format:/do/response/&lt;actionGroup&gt;/&lt;action&gt;, where actionGroup = a folder in /do/ appropriately named for the actions within it and &lt;action&gt; is the name of the php file within /do/&lt;actionGroup&gt;/ (without the .php).</p>
 <p>For example, you might have an api that has two functions, returning data and returning meta-data. You might organise your do files into /do/api/data.php and /do/api/meta-data.php. To call these scripts, you would browse to /do/response/api/data (or meta-data).&nbsp;</p>
 <p>Inside a /do/&lt;actionFolder&gt;/&lt;action&gt; script file, you have access to all the constants setup in the config. This file is included under the /library/Lectric/controller.class.php construct function.&nbsp;</p>
 <p><strong>Do response actions scripts also accept GET params, but must test for existence of GET / POST vars.</strong></p>
 <h5>Do&nbsp;Action</h5>
-<p>A do-action is a way to run a specific class function (inventively called a "do" function). These functions are called if the URL falls into the format of /do/&lt;namespace&gt;/&lt;className&gt;/&lt;functionName&gt;. You would run a do-action if you wanted to return a view or nothing only.</p>
+<ul>
+<li>URL Format - /do/action/&lt;namespace&gt;/&lt;className&gt;/&lt;functionName&gt;</li>
+<li>Directory Format -&nbsp;/library/&lt;namespace&gt;/&lt;className&gt;.class.php</li>
+</ul>
+<p>A do-action is a way to run a specific class function (inventively called a "do" function). These functions are called if the URL falls into the format of /do/action/&lt;namespace&gt;/&lt;className&gt;/&lt;functionName&gt;. You would run a do-action if you wanted to return a view or nothing only.</p>
 <p>Classes that have to run do functions must:</p>
 <ul>
 <li>accept lecDBH as the first argument for the construct (if the class extends \Lectric\SQLQueryPDO, this will be the case anyway. otherwise, make sure you set your additional argument defaults!)</li>
+<li>reside in the folder asked for by the URL nodes</li>
 </ul>
 <p>Do functions must:</p>
 <ul>
