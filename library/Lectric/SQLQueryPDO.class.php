@@ -1024,9 +1024,8 @@ class SQLQueryPDO
 		*
 		* @return void
 		*/
-		public function setWhereOps($ops): void
+		public function setWhereOps(string $ops): void
 		{
-			//can be string or integer...
 			$this->_whereOps = $ops;
 			return;
 		}
