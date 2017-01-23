@@ -138,15 +138,6 @@
 				if (file_exists(DOC_ROOT.'/library/'. $classnameBits[0] .'/'. $classnameBits[1] .'.class.php')){
 					include_once(DOC_ROOT.'/library/'. $classnameBits[0] .'/'. $classnameBits[1] .'.class.php');
 				}
-			
-			//not found
-				else {
-					if (DEBUG){
-						echo DOC_ROOT.'/library/'. $classnameBits[0] .'/'. $classnameBits[1] .'.class.php'.PHP_EOL;
-						var_dump($classnameBits).PHP_EOL;
-						echo $className;
-					}
-				}
 
 		}
 		spl_autoload_register('lec_autoload');
