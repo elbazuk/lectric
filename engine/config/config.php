@@ -26,9 +26,8 @@
 	/* 
 	* Check version 
 	*/
-		if (phpversion() != '7.1.0'){
-			echo 'This framework only supports PHP >= 7.1.* ';
-			exit;
+		if (PHP_MAJOR_VERSION  < 7){
+			echo '<p style="text-align:center;">This framework only supports PHP 7.1 ></p>';
 		}
 		
 	
