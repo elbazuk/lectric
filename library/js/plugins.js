@@ -9,6 +9,11 @@ var firstAvailCol;if(typeof(matrix[rowIndex])=="undefined"){matrix[rowIndex]=[];
 
 
 //filters!
+//filter_alphanumeric : [0-9a-zA-Z]
+//filter_username : [0-9a-zA-Z_\-]
+//filter_email : [0-9a-zA-Z_.\-@]
+//filter_name : [0-9a-zA-Z_.\- ]
+//filter_number : [0-9]
 
 	function setFilters(){
 		
