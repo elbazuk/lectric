@@ -163,10 +163,9 @@ Note: You can use logic here to define both dev and production DB settings, by t
 <ul>
 <li>be called do_&lt;functionName&gt;</li>
 <li>be a public function</li>
-<li>accept arguments of ($_POST, and $_GET) (or none, or just $_POST)</li>
 <li>have a return type of&nbsp;\Lectric\controlAction and return said object</li>
 </ul>
 <p>The&nbsp;\Lectric\controlAction is used to determine what happens once the do function has been run. The construct can be passed the arguments of type, param1, param2 or no arguements to simply exit. For example, if after calling the do_function, you want the user to be redirected to "/", and providing you&nbsp;<strong>have not set any other headers</strong> then return&nbsp;new \Lectric\controlAction('view', '/'), optionally passing back a message in param2 to be saved to the controller session messages (see controller dox for details).</p>
 <p>The example default Lectric project has examples of both do-responses and do-actions. See /view/default/js/js_home.php for do-response call and /do/lectric/test.php for a form that posts to a do-action (see /library/Lectric/lecDefault.class.php too!).</p>
 <h2>Further reading</h2>
-<p>&nbsp;All classes within Lectric have been docblocked, for you to generate documentation (I reccomend phpdox - it works fine with PHP 7.1.0 as of this release).&nbsp;</p>
+<p>&nbsp;All classes within Lectric have been docblocked, for you to generate documentation (I reccomend phpdox - it works fine with PHP 7.1.1 as of this release).&nbsp;</p>
