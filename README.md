@@ -32,20 +32,20 @@ Note: You can use logic here to define both dev and production DB settings, by t
 	/*
 	* Set DB connection details
 	*/
-		if (strpos($_SERVER['HTTP_HOST'],'spdev.website') !== false) {
+		if (strpos($_SERVER['HTTP_HOST'],'dev.url') !== false) {
 			// DEV
-			define('DB_NAME', 'tabx_db');
-			define('DB_USER', 'tabx_user');
-			define('DB_PASSWORD', 'c0=~v+DylT2(');
+			define('DB_NAME', 'dev_db');
+			define('DB_USER', 'dev_user');
+			define('DB_PASSWORD', 'devpass');
 			define('DB_HOST', 'localhost');
 			
 			/*Error Reporting on, turn off after deployment. */
 			define('DEBUG', TRUE);
 		} else {
 			// LIVE
-			define('DB_NAME', 'tabx_db');
-			define('DB_USER', 'tabx_user');
-			define('DB_PASSWORD', 'E-9o=&*PD)JW');
+			define('DB_NAME', 'live_db');
+			define('DB_USER', 'live_user');
+			define('DB_PASSWORD', 'livepass');
 			define('DB_HOST', 'localhost');
 			
 			/*Error Reporting on, turn off after deployment. */
@@ -63,9 +63,9 @@ Note: You can use logic here to define both dev and production DB settings, by t
 	*/
 		define('SESSION_IGNORES', []);
 		define('DEFAULT_DIRECTORY', 'public');
-		define('SITE_NAME','TABX Demo');
-		define('SITE_LINK','tabx.spdev.website');
-		define('SITE_DESCRIPTION','Dashboard Data Demo');
+		define('SITE_NAME','Demo Website');
+		define('SITE_LINK','site.url');
+		define('SITE_DESCRIPTION','Some description about the Demo Website');
 ```
 
 <h2>Basics</h2>
