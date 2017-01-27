@@ -23,6 +23,51 @@ Note: You can use logic here to define both dev and production DB settings, by t
 <li>browse to / and read the messages displayed!</li>
 </ul>
 </ul>
+
+<p>An example /engine/plugin/core_config.php file might be:</p>
+
+```
+<?php
+
+	/*
+	* Set DB connection details
+	*/
+		if (strpos($_SERVER['HTTP_HOST'],'spdev.website') !== false) {
+			// DEV
+			define('DB_NAME', 'tabx_db');
+			define('DB_USER', 'tabx_user');
+			define('DB_PASSWORD', 'c0=~v+DylT2(');
+			define('DB_HOST', 'localhost');
+			
+			/*Error Reporting on, turn off after deployment. */
+			define('DEBUG', TRUE);
+		} else {
+			// LIVE
+			define('DB_NAME', 'tabx_db');
+			define('DB_USER', 'tabx_user');
+			define('DB_PASSWORD', 'E-9o=&*PD)JW');
+			define('DB_HOST', 'localhost');
+			
+			/*Error Reporting on, turn off after deployment. */
+			define('DEBUG', FALSE);
+		}
+
+
+	/*
+	* Timezone 
+	*/
+		date_default_timezone_set('Europe/London');
+		
+	/* 
+	* core definitions
+	*/
+		define('SESSION_IGNORES', []);
+		define('DEFAULT_DIRECTORY', 'public');
+		define('SITE_NAME','TABX Demo');
+		define('SITE_LINK','tabx.spdev.website');
+		define('SITE_DESCRIPTION','Dashboard Data Demo');
+```
+
 <h2>Basics</h2>
 <h4>Adding classes - PSR-4</h4>
 <p>Classes should be added to the framework using the PSR-4 standard with 1 caveat - no sub namespaces. For example, to use the class \yourProjectNamespace\yourClass, you must create a file yourClass.class.php in /library/yourProjectNamespace/. Inside your class file, you must then obviously declare the namespace as&nbsp;yourProjectNamespace. Most of the time you will want to extend the \Lectric\SQLQueryPDO class. Fill your boots.</p>
