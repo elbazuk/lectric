@@ -103,6 +103,13 @@
 		}
 		spl_autoload_register('lec_autoload');
 		
+	/**
+	* grab the vendor autloader if it exists
+	*/
+		if (file_exists(DOC_ROOT.'/vendor/autoload.php')) {
+			require(DOC_ROOT.'/vendor/autoload.php');
+		}
+		
 	
 	/*
 	* get the database connection from core_config, or set to null (if DB not needed)
