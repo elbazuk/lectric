@@ -86,8 +86,6 @@ engine/plugin/*
 
 view/*
 
-library/plugin/*
-
 do/*
 
 .htaccess
