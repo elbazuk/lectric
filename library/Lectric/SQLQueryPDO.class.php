@@ -92,7 +92,7 @@ class SQLQueryPDO
 				$this->clearProperties();
 				return $this->DBH->lastInsertId();
 				
-			} catch (Exception | \PDOException $e){
+			} catch (\Exception | \PDOException $e){
 				throw new SQLException ($e->getMessage());
 				return null;
 			}
@@ -114,7 +114,7 @@ class SQLQueryPDO
 			
 			try {
 				$this->checkSQLClauses($table, 'update', 'Update Strict');
-			} catch (Exception $e){
+			} catch (\Exception $e){
 				throw new SQLException ($e->getMessage());
 				return null;
 			}
@@ -138,7 +138,7 @@ class SQLQueryPDO
 						if ($op === 'X'){
 							$this->_whereArray[$key] = '%'.$value.'%';
 						}
-					} catch (Exception $e){
+					} catch (\Exception $e){
 						throw new SQLException ($e->getMessage());
 						return false;
 					}
@@ -191,7 +191,7 @@ class SQLQueryPDO
 			
 				try {
 					$this->checkSQLClauses($table, 'select', 'Select Strict');
-				} catch (Exception $e){
+				} catch (\Exception $e){
 					throw new SQLException ($e->getMessage());
 					return null;
 				}
@@ -240,7 +240,7 @@ class SQLQueryPDO
 			
 				try {
 					$this->checkSQLClauses($table, 'select', 'Select Strict');
-				} catch (Exception $e){
+				} catch (\Exception $e){
 					throw new SQLException ($e->getMessage());
 					return null;
 				}
@@ -318,7 +318,7 @@ class SQLQueryPDO
 		
 			try {
 				$this->checkSQLClauses($table, 'delete', 'Delete Strict');
-			} catch (Exception $e){
+			} catch (\Exception $e){
 				throw new SQLException ($e->getMessage());
 				return;
 			}
@@ -353,7 +353,7 @@ class SQLQueryPDO
 		
 			try {
 				$this->checkSQLClauses($table, 'rowExists', 'Row Exists');
-			} catch (Exception $e){
+			} catch (\Exception $e){
 				throw new SQLException ($e->getMessage());
 				return null;
 			}
@@ -552,18 +552,18 @@ class SQLQueryPDO
 			/* Checks the FIELDS, WHERES, LIMITS and ORDER BYS for the "strict" functions. */
 		
 			if ($table === ''){
-					throw new Exception ('Table Argument empty string in '.$function);
+					throw new \Exception ('Table Argument empty string in '.$function);
 					return;
 			}
 		
 			if ($type === 'select' || $type === 'rowExists'){
 				if ($this->_selectFields !== '*' && !is_array($this->_selectFields)){
-					throw new Exception ('Fields not an array, or * in '.$function);
+					throw new \Exception ('Fields not an array, or * in '.$function);
 					return;
 				}
 			} elseif($type !== 'insert' &&  $type !== 'delete'){
 				if (!is_array($this->_queryFields)){
-					throw new Exception ('Fields not an array in '.$function);
+					throw new \Exception ('Fields not an array in '.$function);
 					return;
 				}
 			}
@@ -571,15 +571,15 @@ class SQLQueryPDO
 			if(is_array($this->_whereArray)){
 				$whereArrayCount = count($this->_whereArray);
 				if ($whereArrayCount < 1){
-					throw new Exception ('Where array empty in '.$function);
+					throw new \Exception ('Where array empty in '.$function);
 					return;
 				}
 				if ($this->_whereOps === ''){
-					throw new Exception ('Ops empty in '.$function);
+					throw new \Exception ('Ops empty in '.$function);
 					return;
 				}
 				if (strlen($this->_whereOps) !== $whereArrayCount){
-					throw new Exception ('Ops does not match Where array count in '.$function);
+					throw new \Exception ('Ops does not match Where array count in '.$function);
 					return;
 				}
 			}
@@ -587,11 +587,11 @@ class SQLQueryPDO
 			if(is_array($this->_orderByArray)){
 				foreach ($this->_orderByArray as $key => $value){
 					if (!preg_match('/^[A-Za-z0-9_]+$/', $key)){
-						throw new Exception ('Invalid Order By key '.$key.' in '.$function);
+						throw new \Exception ('Invalid Order By key '.$key.' in '.$function);
 						return;
 					}
 					if (!preg_match('/ASC/', $value) && !preg_match('/DESC/', $value) && !preg_match('/ /', $value)){
-						throw new Exception ('Invalid Order By value '.$value.' in '.$function);
+						throw new \Exception ('Invalid Order By value '.$value.' in '.$function);
 						return;
 					}
 				}
@@ -600,7 +600,7 @@ class SQLQueryPDO
 			if(is_array($this->_groupByArray)){
 				foreach ($this->_groupByArray as $key => $value){
 					if ($value === ''){
-						throw new Exception ('Invalid GROUP Value '.$value.' in '.$function);
+						throw new \Exception ('Invalid GROUP Value '.$value.' in '.$function);
 						return;
 					}
 				}
@@ -609,7 +609,7 @@ class SQLQueryPDO
 			if(is_array($this->_limitArray)){
 				foreach ($this->_limitArray as $key => $value){
 					if (!is_int((int)$value)){
-						throw new Exception ('Invalid Limit Value '.$value.' in '.$function);
+						throw new \Exception ('Invalid Limit Value '.$value.' in '.$function);
 						return;
 					}
 				}
@@ -1078,7 +1078,7 @@ class SQLQueryPDO
 }
 
 /**
-* SQLQuery Exception class
+* SQLQuery \Exception class
 *
 * Used to throw PDO class specific exceptions
 *
