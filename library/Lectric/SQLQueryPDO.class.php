@@ -708,6 +708,9 @@ class SQLQueryPDO
 			$indexCount = count($this->_queryFields);
 			
 			foreach ($this->_queryFields as $key=>$value){
+				
+				$value = ($value == null) ? '' : $value; // so checkFunction works
+				
 				if ($i <= $indexCount && $i > 1){
 					$inj['fields'] .= ',';
 					$inj['values'] .= ',';
