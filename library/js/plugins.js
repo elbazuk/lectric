@@ -6,100 +6,58 @@ var firstAvailCol;if(typeof(matrix[rowIndex])=="undefined"){matrix[rowIndex]=[];
 /* Caret position  - $(element).caret();*/
 !function(e){e.fn.caret=function(e){var t=this[0],n="true"===t.contentEditable;if(0==arguments.length){if(window.getSelection){if(n){t.focus();var o=window.getSelection().getRangeAt(0),r=o.cloneRange();return r.selectNodeContents(t),r.setEnd(o.endContainer,o.endOffset),r.toString().length}return t.selectionStart}if(document.selection){if(t.focus(),n){var o=document.selection.createRange(),r=document.body.createTextRange();return r.moveToElementText(t),r.setEndPoint("EndToEnd",o),r.text.length}var e=0,c=t.createTextRange(),r=document.selection.createRange().duplicate(),a=r.getBookmark();for(c.moveToBookmark(a);0!==c.moveStart("character",-1);)e++;return e}return t.selectionStart?t.selectionStart:0}if(-1==e&&(e=this[n?"text":"val"]().length),window.getSelection)n?(t.focus(),window.getSelection().collapse(t.firstChild,e)):t.setSelectionRange(e,e);else if(document.body.createTextRange)if(n){var c=document.body.createTextRange();c.moveToElementText(t),c.moveStart("character",e),c.collapse(!0),c.select()}else{var c=t.createTextRange();c.move("character",e),c.select()}return n||t.focus(),this}}(jQuery);
 
-
-
-//filters!
-//filter_alphanumeric : [0-9a-zA-Z]
-//filter_username : [0-9a-zA-Z_\-]
-//filter_email : [0-9a-zA-Z_.\-@]
-//filter_name : [0-9a-zA-Z_.\- ]
-//filter_number : [0-9]
-
-	function setFilters(){
+function setFilters(){
+	
+	//test limit
+	$('body').on('keyup change click', '.limit', function (){
+		var text = $(this).val();
+		var limit = $(this).attr('data-limit');
+		if (text.length <= limit){
+			//do nothing
+		} else {
+			//remove everything atfer limit
+			var newText = text.slice(0,limit);
+			console.log(newText); 
+			$(this).val(newText);
+		}
+	});
+	
+	$('body').on('keyup change click','.filter_alphanumeric, .filter_username, .filter_email, .filter_name, .filter_number, .filter_decimal, .filter', function (){
 		
-		$('body').on('keyup change click','.filter_alphanumeric', function (){
-			var text = $(this).val();
-			var patt = new RegExp(/[0-9a-zA-Z]/);
+		var input = $(this);
+		var text = input.val();
+		
+		var pattern = $(this).attr('data-filter-pattern');
+		
+		if(typeof pattern === 'undefined' || pattern === ''){
 			
-			var caretPos = $(this).caret();
-			var lastChar = text.substr((caretPos-1), 1);
-			if (patt.test(lastChar)){
-				//do nothing
-			} else {
-				//remove last character
-				var newText = text.slice(0, (caretPos-1)) + text.slice(caretPos, text.length);
-				$(this).val(newText);
-				//put caret back to where it was
-				$(this).caret(caretPos-1);
+			if (input.hasClass('filter_alphanumeric')){
+				var pattReplace = new RegExp(/[^0-9a-zA-Z]/g);
+			} else if (input.hasClass('filter_username')){
+				var pattReplace = new RegExp(/[^0-9a-zA-Z_\-]/g);
+			} else if (input.hasClass('filter_email')){
+				var pattReplace = new RegExp(/[^0-9a-zA-Z_\.\-@]/g);
+			} else if (input.hasClass('filter_name')){
+				var pattReplace = new RegExp(/[^0-9a-zA-Z_\.\- ]/g);
+			} else if (input.hasClass('filter_number')){
+				var pattReplace = new RegExp(/[^0-9]/g);
+			} else if (input.hasClass('filter_decimal')){
+				var pattReplace = new RegExp(/[^0-9\.]/g);
 			}
-		});
-		
-		 $('body').on('keyup change click','.filter_username', function (){
-			var text = $(this).val();
-			var patt = new RegExp(/[0-9a-zA-Z_\-]/);
 			
-			var caretPos = $(this).caret();
-			var lastChar = text.substr((caretPos-1), 1);
-			if (patt.test(lastChar)){
-				//do nothing
-			} else {
-				//remove last character
-				var newText = text.slice(0, (caretPos-1)) + text.slice(caretPos, text.length);
-				$(this).val(newText);
-				//put caret back to where it was
-				$(this).caret(caretPos-1);
-			}
-		});
+		} else {
+			var pattReplace = new RegExp('[^'+pattern+']', 'g');
+		}
 		
-		 $('body').on('keyup change click', '.filter_email', function (){
-			var text = $(this).val();
-			var patt = new RegExp(/[0-9a-zA-Z_.\-@]/);
-			
-			var caretPos = $(this).caret();
-			var lastChar = text.substr((caretPos-1), 1);
-			if (patt.test(lastChar)){
-				//do nothing
-			} else {
-				//remove last character
-				var newText = text.slice(0, (caretPos-1)) + text.slice(caretPos, text.length);
-				$(this).val(newText);
-				//put caret back to where it was
-				$(this).caret(caretPos-1);
-			}
-		});
+		var newText = text.replace(pattReplace, "");
 		
-		$('body').on('keyup change click', '.filter_name', function (){
-			var text = $(this).val();
-			var patt = new RegExp(/[0-9a-zA-Z_.\- ]/);
-			
+		if (newText.length<text.length){
 			var caretPos = $(this).caret();
-			var lastChar = text.substr((caretPos-1), 1);
-			if (patt.test(lastChar)){
-				//do nothing
-			} else {
-				//remove last character
-				var newText = text.slice(0, (caretPos-1)) + text.slice(caretPos, text.length);
-				$(this).val(newText);
-				//put caret back to where it was
-				$(this).caret(caretPos-1);
-			}
-		});
+			$(this).val(newText);
+			//put caret back to where it was
+			$(this).caret(caretPos-1);
+		}
 		
-		$('body').on('keyup change click', '.filter_number', function (){
-			var text = $(this).val();
-			var patt = new RegExp(/[0-9]/);
-			
-			var caretPos = $(this).caret();
-			var lastChar = text.substr((caretPos-1), 1);
-			if (patt.test(lastChar)){
-				//do nothing
-			} else {
-				//remove last character
-				var newText = text.slice(0, (caretPos-1)) + text.slice(caretPos, text.length);
-				$(this).val(newText);
-				//put caret back to where it was
-				$(this).caret(caretPos-1);
-			}
-		});
-		
-	}
+	});
+	
+}
