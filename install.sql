@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `default_directories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8_bin NOT NULL,
+  `name` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `live` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -22,9 +22,9 @@ INSERT INTO `default_directories` (`id`, `name`, `live`) VALUES
   `directory` tinyint(1) NOT NULL DEFAULT '1',
   `live` tinyint(1) NOT NULL DEFAULT '0',
   `sidebar` tinyint(1) NOT NULL DEFAULT '0',
-  `js` varchar(255) COLLATE utf8_bin NOT NULL,
-  `filename` varchar(250) COLLATE utf8_bin NOT NULL,
-  `ext` varchar(50) COLLATE utf8_bin NOT NULL,
+  `js` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `filename` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `ext` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `permission` varchar(50) COLLATE utf8_bin DEFAULT 'none',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -36,7 +36,7 @@ INSERT INTO `default_views` (`id`, `pageheading`, `pagesubheading`, `navheading`
 
 	CREATE TABLE IF NOT EXISTS `lec-admin_directories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8_bin NOT NULL,
+  `name` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `live` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -47,23 +47,23 @@ INSERT INTO `lec-admin_directories` (`id`, `name`, `live`) VALUES
 
 	CREATE TABLE IF NOT EXISTS `lec-admin_objects` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(250) COLLATE utf8_bin NOT NULL,
-  `short_desc` varchar(250) COLLATE utf8_bin NOT NULL,
-  `icon` varchar(250) COLLATE utf8_bin NOT NULL,
-  `tab` tinyint(4) NOT NULL,
-  `permission` varchar(250) COLLATE utf8_bin NOT NULL,
-  `s_word` varchar(250) COLLATE utf8_bin NOT NULL,
-  `table` varchar(250) COLLATE utf8_bin NOT NULL,
-  `table_fields` varchar(250) COLLATE utf8_bin NOT NULL,
-  `deletion_tables` varchar(250) COLLATE utf8_bin NOT NULL,
+  `name` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `short_desc` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `icon` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `tab` tinyint(4) DEFAULT NULL,
+  `permission` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `s_word` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `table` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `table_fields` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `deletion_tables` varchar(250) COLLATE utf8_bin DEFAULT NULL,
   `nodelete` varchar(250) COLLATE utf8_bin NOT NULL DEFAULT '[]',
-  `edit_fields` text COLLATE utf8_bin NOT NULL,
-  `search` tinyint(4) NOT NULL,
-  `search_inj` varchar(1000) COLLATE utf8_bin NOT NULL,
+  `edit_fields` text COLLATE utf8_bin DEFAULT NULL,
+  `search` tinyint(4) DEFAULT NULL,
+  `search_inj` varchar(1000) COLLATE utf8_bin DEFAULT NULL,
   `img_fields` varchar(250) COLLATE utf8_bin NOT NULL DEFAULT '[]',
-  `img_directory` varchar(500) COLLATE utf8_bin NOT NULL,
-  `thumb_directory` varchar(500) COLLATE utf8_bin NOT NULL,
-  `extra_functions` varchar(1000) COLLATE utf8_bin NOT NULL,
+  `img_directory` varchar(500) COLLATE utf8_bin DEFAULT NULL,
+  `thumb_directory` varchar(500) COLLATE utf8_bin DEFAULT NULL,
+  `extra_functions` varchar(1000) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -76,7 +76,7 @@ INSERT INTO `lec-admin_objects` (`id`, `name`, `short_desc`, `icon`, `tab`, `per
 	CREATE TABLE IF NOT EXISTS `lec-admin_tabs` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `sortorder` int(11) unsigned NOT NULL DEFAULT '0',
-  `name` varchar(500) COLLATE utf8_bin NOT NULL,
+  `name` varchar(500) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -87,14 +87,14 @@ INSERT INTO `lec-admin_tabs` (`id`, `sortorder`, `name`) VALUES
 
 	CREATE TABLE IF NOT EXISTS `lec-admin_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(250) COLLATE utf8_bin NOT NULL,
-  `username` varchar(250) COLLATE utf8_bin NOT NULL,
-  `password` varchar(250) COLLATE utf8_bin NOT NULL,
-  `salt` varchar(250) COLLATE utf8_bin NOT NULL,
-  `unique` varchar(250) COLLATE utf8_bin NOT NULL,
-  `folders` varchar(1000) COLLATE utf8_bin NOT NULL,
-  `last_logged_in` datetime NOT NULL,
-  `created` datetime NOT NULL,
+  `name` varchar(250) COLLATE utf8_binDEFAULT NULL,
+  `username` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `password` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `salt` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `unique` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `folders` varchar(1000) COLLATE utf8_bin DEFAULT NULL,
+  `last_logged_in` datetime DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
   `read_only` int(1) unsigned NOT NULL DEFAULT '0',
   `admin` int(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -141,9 +141,9 @@ CREATE TABLE IF NOT EXISTS `lec-admin_views` (
   `directory` tinyint(1) NOT NULL DEFAULT '1',
   `live` tinyint(1) NOT NULL DEFAULT '0',
   `sidebar` tinyint(1) NOT NULL DEFAULT '0',
-  `js` varchar(255) COLLATE utf8_bin NOT NULL,
-  `filename` varchar(250) COLLATE utf8_bin NOT NULL,
-  `ext` varchar(50) COLLATE utf8_bin NOT NULL,
+  `js` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `filename` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `ext` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `permission` varchar(50) COLLATE utf8_bin DEFAULT 'none',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
