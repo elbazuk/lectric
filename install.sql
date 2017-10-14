@@ -87,7 +87,7 @@ INSERT INTO `lec-admin_tabs` (`id`, `sortorder`, `name`) VALUES
 
 	CREATE TABLE IF NOT EXISTS `lec-admin_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(250) COLLATE utf8_binDEFAULT NULL,
+  `name` varchar(250) COLLATE utf8_bin DEFAULT NULL,
   `username` varchar(250) COLLATE utf8_bin DEFAULT NULL,
   `password` varchar(250) COLLATE utf8_bin DEFAULT NULL,
   `salt` varchar(250) COLLATE utf8_bin DEFAULT NULL,
