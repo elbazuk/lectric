@@ -9,6 +9,94 @@ var firstAvailCol;if(typeof(matrix[rowIndex])=="undefined"){matrix[rowIndex]=[];
 /* Caret position  - $(element).caret();*/
 !function(e){e.fn.caret=function(e){var t=this[0],n="true"===t.contentEditable;if(0==arguments.length){if(window.getSelection){if(n){t.focus();var o=window.getSelection().getRangeAt(0),r=o.cloneRange();return r.selectNodeContents(t),r.setEnd(o.endContainer,o.endOffset),r.toString().length}return t.selectionStart}if(document.selection){if(t.focus(),n){var o=document.selection.createRange(),r=document.body.createTextRange();return r.moveToElementText(t),r.setEndPoint("EndToEnd",o),r.text.length}var e=0,c=t.createTextRange(),r=document.selection.createRange().duplicate(),a=r.getBookmark();for(c.moveToBookmark(a);0!==c.moveStart("character",-1);)e++;return e}return t.selectionStart?t.selectionStart:0}if(-1==e&&(e=this[n?"text":"val"]().length),window.getSelection)n?(t.focus(),window.getSelection().collapse(t.firstChild,e)):t.setSelectionRange(e,e);else if(document.body.createTextRange)if(n){var c=document.body.createTextRange();c.moveToElementText(t),c.moveStart("character",e),c.collapse(!0),c.select()}else{var c=t.createTextRange();c.move("character",e),c.select()}return n||t.focus(),this}}(jQuery);
 
+//tinymce function for multiple file manager instances in multi tinymce
+function filemanager(id, value, type, win) {
+	editor=tinymce.activeEditor;
+	// DEFAULT AS FILE
+	urltype=2;
+	if (type=='image') { urltype=1; }
+	if (type=='media') { urltype=3; }
+	var title="FileManager";
+	if (typeof editor.settings.filemanager_title !== "undefined" && editor.settings.filemanager_title) {
+		title=editor.settings.filemanager_title;
+	}
+	var akey="key";
+	if (typeof editor.settings.filemanager_access_key !== "undefined" && editor.settings.filemanager_access_key) {
+		akey=editor.settings.filemanager_access_key;
+	}
+	var sort_by="";
+	if (typeof editor.settings.filemanager_sort_by !== "undefined" && editor.settings.filemanager_sort_by) {
+		sort_by="&sort_by="+editor.settings.filemanager_sort_by;
+	}
+	var descending="false";
+	if (typeof editor.settings.filemanager_descending !== "undefined" && editor.settings.filemanager_descending) {
+		descending=editor.settings.filemanager_descending;
+	}
+	var fldr="";
+	if (typeof editor.settings.filemanager_subfolder !== "undefined" && editor.settings.filemanager_subfolder) {
+		fldr="&fldr="+editor.settings.filemanager_subfolder;
+	}
+	var crossdomain="";
+	if (typeof editor.settings.filemanager_crossdomain !== "undefined" && editor.settings.filemanager_crossdomain) {
+		crossdomain="&crossdomain=1";
+
+		// Add handler for a message from ResponsiveFilemanager
+		if(window.addEventListener){
+			window.addEventListener('message', filemanager_onMessage, false);
+		} else {
+			window.attachEvent('onmessage', filemanager_onMessage);
+		}
+	}
+	
+	var r = window.innerWidth - 30,
+		g = window.innerHeight - 60;
+	if (r > 1800 && (r = 1800), g > 1200 && (g = 1200), r > 600) {
+		var d = (r - 20) % 138;
+		r = r - d + 10
+	}
+
+	tinymce.activeEditor.windowManager.open({
+		title: title,
+		file: editor.settings.external_filemanager_path+'dialog.php?type='+urltype+'&descending='+descending+sort_by+fldr+crossdomain+'&lang='+editor.settings.language+'&akey='+akey,
+		width: r,  
+		height: g,
+		resizable: true,
+		maximizable: true,
+		inline: 1
+		}, {
+		setUrl: function (url) {
+			var fieldElm = win.document.getElementById(id);
+		  
+			url = editor.convertURL(url);
+
+			var static_url = use_static_urls_in_catalog;
+
+			if(static_url){
+				fieldElm.value = url;
+			}else{
+				/* check if this is a local url */
+				var base_host = win.location.protocol + '//' + win.location.host;
+				var fnd = url.indexOf("media/wysiwyg");
+
+				if(url.indexOf(base_host) == 0 && fnd != -1){
+					fieldElm.value = "{{media url='" + url.substr(fnd + 6) + "'}}";
+				}else{
+					fieldElm.value = url;
+				}
+			}
+		  
+			if ("fireEvent" in fieldElm) {
+				fieldElm.fireEvent("onchange")
+			} else {
+				var evt = document.createEvent("HTMLEvents");
+				evt.initEvent("change", false, true);
+				fieldElm.dispatchEvent(evt);
+			}
+
+		}
+	});
+}
+
 function setFilters(){
 	
 	//test limit
