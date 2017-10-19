@@ -1,0 +1,6 @@
+{
+    "require": {
+	   "lectric/lectricFence":"*",
+	   "mailchimp/mailchimp":"*"
+    }
+}
