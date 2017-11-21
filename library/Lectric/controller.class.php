@@ -68,15 +68,28 @@ class controller {
      * 
      * @return void
      */
-		public static function setSessionMessage(string $msg): void
+		public static function setSessionMessage(string $msg, string $color = ''): void
 		{
 			
 			if (!isset($_SESSION['lec_msg'])){
 				$_SESSION['lec_msg'] = [];
 			}
 			
-			if (trim($msg) !== ''){
-				$_SESSION['lec_msg'][] = $msg;
+			if ($color === ''){
+				
+				if (trim($msg) !== ''){
+					$_SESSION['lec_msg'][] = $msg;
+				}
+				
+			} else {
+				
+				if (trim($msg) !== ''){
+					$_SESSION['lec_msg'][] = [
+						'msg' =>$msg,
+						'color'=>$color
+					];
+				}
+				
 			}
 			
 			return;
