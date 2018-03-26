@@ -187,4 +187,36 @@ class view extends SQLQueryPDO {
 			
 		}
 	
+    /**
+     * Load up the webpage row from database, by selection
+     * 
+     * @return array
+     */
+		public function loadPageSelection(string $directory, string $url): ?array
+		{
+			
+			try{
+				
+				//strict to catch a directory that doesn't exist.
+				$this->setWhereFields(array('name' => $directory, 'live' => 1));
+				$this->setWhereOps('==');
+				$result_dir = $this->selStrict($this->_fileDirectory.'_directories','SINGLE', 'STRICT', 'NOT_TABLED');
+				
+				//get webpage via directory id
+				$this->setWhereFields(array('directory' => $result_dir['id'],'url' => $url, 'live' => 1));
+				$this->setWhereOps('===');
+				$result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'STRICT', 'NOT_TABLED');
+				
+			} catch (SQLException $e){
+				//chuck up the 404, watch for headers!
+				header("HTTP/1.0 404 Not Found");
+				$this->setWhereFields(array('url' => 'error'));
+				$this->setWhereOps('=');
+				return $result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'NOT_TABLED');
+			}
+			
+			return $result;
+			
+		}
+	
 }
