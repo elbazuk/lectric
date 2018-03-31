@@ -18,6 +18,9 @@ class adminUser extends \Lectric\SQLQueryPDO
 	private $_permissions_table = '`lec-admin_user_permissions`';
 	private $_permissions_types_table = '`lec-admin_user_permission_types`';
 	
+	public $name = 0;
+	private $unique = '';
+	
 	/**
 	* Override of base construct to include loadUserData()
 	*
@@ -58,10 +61,7 @@ class adminUser extends \Lectric\SQLQueryPDO
 				}
 				
 				$this->name = $user['name'];
-				$this->username = $user['username'];
-				$_SESSION['admin_user'] = $user['username'];
 				$this->unique = $user['unique'];
-				
 				return;
 				
 			}
@@ -76,7 +76,6 @@ class adminUser extends \Lectric\SQLQueryPDO
 			{
 				unset($_SESSION['admin_userid']);
 				$this->name = 0;
-				$this->username =0;
 				$this->unique = '';
 				return;
 			}
