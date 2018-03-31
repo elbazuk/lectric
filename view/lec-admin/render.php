@@ -26,7 +26,7 @@
 		}
 		
 	//page count definitions
-		define('PER_PAGE_ADMIN', 30);
+		define('PER_PAGE_FRONT', 30);
 		
 		if (isset($_GET['page'])){
 			
@@ -40,10 +40,12 @@
 			$page = 1;
 		}
 		
-		$start_pos = PER_PAGE_ADMIN * ($page - 1);
+		$start_pos = PER_PAGE_FRONT * ($page - 1);
 		
-		define('PAG_PAGE_ADMIN', $page);
-		define('PAG_START_ADMIN', $start_pos);
+		define('PAG_PAGE', $page);
+		define('PAG_START', $start_pos);
+		
+		
 
 	/*
 	* Include each template part from directory. Add switch here to facilitate other directories.
