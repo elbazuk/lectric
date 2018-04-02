@@ -149,8 +149,8 @@ fieldset{
 		} 
 	
 		header h1, header p, header button, header a{
-			line-height:50px !important;
-			height:50px !important;
+			line-height:40px !important;
+			height:40px !important;
 			color:white;
 			padding:0 20px !important;
 		}
