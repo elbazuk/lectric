@@ -38,11 +38,13 @@
 	<!--Main css stylesheet-->
     <link rel="stylesheet" href="<?php echo $this->_cssLocalDir; ?>/style.css">
     <link rel="stylesheet" href="<?php echo $this->_cssLibDir; ?>/jquery_ui.css">
+	<link rel="stylesheet" href="/view/lec-admin/css/fancybox-v20170806.css">
 	
 	<script src="<?php echo $this->_jsLibDir; ?>/jquery.js"></script>
 	<script src="<?php echo $this->_jsLibDir; ?>/jquery_ui.js"></script>
 	<script src="<?php echo $this->_jsLibDir; ?>/plugins.js"></script>
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+	<script src="/view/lec-admin/js/fancybox.js"></script>
     
 </head>
 
@@ -50,23 +52,25 @@
 <body>
 
 	<header>
-	<h1 class="end left"><?php echo SITE_NAME.' - Administration'; ?></h1>
-	<form action="/do/action/LecAdmin/adminUser/adminLogout" method="post" class="forms end right" display="inline"> 
-		<input type="hidden" name="logout" value="yes">
-		<button class="btn btn-blue " type="submit"><i class="fa fa-sign-out"></i> Logout</button>
-	</form>
-	<p class="right end">Logged in as: <?php echo htmlentities($this->adminUser->name); ?>. </p>
-	<a href="/lec-admin/" class="right end"><i class="fa fa-home fa-fw"></i></a>
-	<?php 
-	if ($this->adminUser->loggedIn()){
+		<h1 class="end left"><?php echo SITE_NAME.' - Administration'; ?></h1>
 		
-		//header menu ?>
-		<nav class="navbar nav-fullwidth end clear">
-			<?php echo $this->lecAdmin->adminTabsHTML() ; ?>
-		</nav>
-		<?php
-	}
-	?>
+		<a href="/lec-admin/" class="right end"><i class="fa fa-home fa-fw"></i></a>
+		<?php 
+		if ($this->adminUser->loggedIn()){
+			
+			//header menu ?>
+			
+			<form action="/do/action/LecAdmin/adminUser/adminLogout" method="post" class="forms end right" display="inline"> 
+				<input type="hidden" name="logout" value="yes">
+				<button class="btn btn-blue " type="submit"><i class="fa fa-sign-out"></i> Logout</button>
+			</form>
+			<p class="right end">Logged in as: <?php echo htmlentities($this->adminUser->name); ?>. </p>
+			<nav class="navbar nav-fullwidth end clear">
+				<?php echo $this->lecAdmin->adminTabsHTML() ; ?>
+			</nav>
+			<?php
+		}
+		?>
 	</header>
 	
 	<div style="height:90px;"></div>
