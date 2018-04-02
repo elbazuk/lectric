@@ -160,12 +160,12 @@ echo \lectricFence\Form::startForm($objectLoaded['table'].'_form', 'post', $link
 
 <?php
 
-	
-
 	if ($new){
 		echo \lectricFence\Form::makeInput('new', 'hidden', 'new', 'yes');
 	} else {
 		echo \lectricFence\Form::makeInput('id', 'hidden', 'id', $itemLoaded['id']);
 	}
 
-	echo \lectricFence\Form::closeForm();
+	echo \lectricFence\Form::closeForm().'<br/>';
+	
+	
