@@ -51,6 +51,7 @@ INSERT INTO `lec-admin_directories` (`id`, `name`, `live`) VALUES
   `short_desc` varchar(250) COLLATE utf8_bin DEFAULT NULL,
   `icon` varchar(250) COLLATE utf8_bin DEFAULT NULL,
   `tab` tinyint(4) DEFAULT NULL,
+  `sort_order` tinyint(4) DEFAULT '0',
   `permission` varchar(250) COLLATE utf8_bin DEFAULT NULL,
   `s_word` varchar(250) COLLATE utf8_bin DEFAULT NULL,
   `table` varchar(250) COLLATE utf8_bin DEFAULT NULL,
