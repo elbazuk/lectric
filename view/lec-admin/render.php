@@ -1,5 +1,14 @@
 <?php
 
+	//IP permissions
+		$ips = [
+			'80.0.195.126'
+		];
+		
+		if (!in_array($_SERVER['REMOTE_ADDR'], $ips)){
+			//exit;
+		}
+
 	//get permissions
 		$this->adminUser = new \LecAdmin\adminUser($this->DBH);
 
@@ -45,7 +54,12 @@
 		define('PAG_PAGE', $page);
 		define('PAG_START', $start_pos);
 		
-		
+	//editor stylesheets MUST HAVE LEADING COMMA
+		if(DEBUG){
+			define('EDITOR_STYLESHEETS', '');
+		} else {
+			define('EDITOR_STYLESHEETS', '');
+		}
 
 	/*
 	* Include each template part from directory. Add switch here to facilitate other directories.
