@@ -114,7 +114,7 @@ echo \lectricFence\Form::startForm($objectLoaded['table'].'_form', 'post', $link
 								selector:'#<?php echo $fField['field']; ?>',
 								plugins: "image,link, fullscreen, code,  filemanager, lists, paste, media,  table, colorpicker, textcolor, fontawesome",
 								image_advtab: true,
-								content_css : "/view/public/css/style.css,/view/default/css/style.css,https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
+								content_css : "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css<?php echo EDITOR_STYLESHEETS; ?>", 
 								width : '100%',
 								toolbar: " undo redo | styleselect | bold italic underline strikethrough subscript superscript forecolor backcolor | inserttable bullist numlist outdent indent | alignleft aligncenter alignright alignjustify |  media link image  | code fullscreen | fontawesome",
 								relative_urls: true,
