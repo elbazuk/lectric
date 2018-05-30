@@ -1,6 +1,5 @@
 {
     "require": {
-	   "lectric/lectricFence":"*",
-	   "mailchimp/mailchimp":"*"
+	   "lectric/lectricFence":"*"
     }
 }
