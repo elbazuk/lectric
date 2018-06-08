@@ -456,13 +456,7 @@ class SQLQueryPDO
 					$fetched = $STH->fetchAll();
 					
 					if (empty($fetched)){
-						//no rows
-						if($strict === 'STRICT'){
-							throw new SQLException('No Results', 0);
-							return null;
-						} else {
-							return null;
-						}
+						return null;
 					} else {
 						foreach($fetched as $row){
 							foreach ($row as $key=>$value){
