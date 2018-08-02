@@ -68,6 +68,7 @@ INSERT INTO `lec-admin_directories` (`id`, `name`, `live`) VALUES
   `extra_functions` varchar(1000) COLLATE utf8_bin DEFAULT NULL,
   `include_file_after` VARCHAR(1000) NULL DEFAULT NULL,
   `include_file_before` VARCHAR(1000) NULL DEFAULT NULL,
+  `include_file_list` VARCHAR(1000) NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
