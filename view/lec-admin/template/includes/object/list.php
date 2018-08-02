@@ -154,3 +154,10 @@
 	$pagination = new \lectricFence\pagination($itemCount);
 	
 	?><p style="text-align:center;" class="end"><?php echo $itemCount; ?> total entries</p><br/>
+	
+	
+	<?php
+	//include form
+	if(file_exists(DOC_ROOT.'/view/lec-admin/template/includes/object/plugin/'.$objectLoaded['include_file_list']) && $objectLoaded['include_file_list'] != ''){
+		include(DOC_ROOT.'/view/lec-admin/template/includes/object/plugin/'.$objectLoaded['include_file_list']);
+	}
