@@ -57,6 +57,7 @@ INSERT INTO `lec-admin_directories` (`id`, `name`, `live`) VALUES
   `table` varchar(250) COLLATE utf8_bin DEFAULT NULL,
   `table_fields` varchar(250) COLLATE utf8_bin DEFAULT NULL,
   `deletion_tables` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `deletions` TINYINT(4) NULL DEFAULT NULL,
   `nodelete` varchar(250) COLLATE utf8_bin NOT NULL DEFAULT '[]',
   `edit_fields` text COLLATE utf8_bin DEFAULT NULL,
   `search` tinyint(4) DEFAULT NULL,
