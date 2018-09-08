@@ -447,7 +447,7 @@ class lecAdmin extends \Lectric\SQLQueryPDO
 				try {
 					if ($newItem){
 						$this->setQueryFields($insertArray);
-						$this->insertStrict($objectLoaded['table']);
+						$_POST['id'] = $this->insertStrict($objectLoaded['table']); //set the post id here so you can use it in include files on list page...
 					} else {
 						$this->setQueryFields($insertArray);
 						$this->setWhereFields(array('W_id'=>$_POST['id']));
