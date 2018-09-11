@@ -1,39 +1,39 @@
-<br/>
-
 <h1><i class="fa <?php echo $objectLoaded['icon'] ;?>"></i> <?php echo $objectLoaded['name'];?></h1>
-
-<br/>
 
 <div class="units-row end">
 
 	<div class="unit-50">
 	
-		<a href="/lec-admin/object?ob=<?php echo $objectLoaded['id']; ?>&new=yes" class="btn btn-blue add_new"><i class="fa <?php echo $objectLoaded['icon'] ;?>"></i> Add New <?php echo $objectLoaded['s_word'];?></a>
-		<button type="button" class="btn btn-red  delete_button"><i class="fa fa-trash-o"></i> Delete Selected</button>
-		<button type="button"  class="btn btn-blue  duplicate_button"><i class="fa fa-copy"></i> Duplicate Selected</button>
+		<?php if ($objectLoaded['add_new'] === 1){ ?>
+			<a href="/lec-admin/object?ob=<?php echo $objectLoaded['id']; ?>&new=yes" class="btn btn-blue add_new"><i class="fa <?php echo $objectLoaded['icon'] ;?>"></i> Add New <?php echo $objectLoaded['s_word'];?></a>
+		<?php } ?>
+		<?php if ($objectLoaded['deletions'] === 1){ ?>
+			<button type="button" class="btn btn-red  delete_button"><i class="fa fa-trash-o"></i> Delete Selected</button>
+		<?php } ?>
+		<?php if ($objectLoaded['duplications'] === 1){ ?>
+			<button type="button"  class="btn btn-blue  duplicate_button"><i class="fa fa-copy"></i> Duplicate Selected</button>
+		<?php } ?>
 		
 	</div>
 	
-	<div class="unit-50">
+	<?php if ($objectLoaded['search'] === 1){ ?>
 	
-		<?php
-		if ($objectLoaded['search'] === 1){
-			echo \lectricFence\Form::startForm('search_form', 'post', '/lec-admin/object?ob='.$objectLoaded['id'].'&list=yes', ' class="end" enctype="multipart/form-data" '); ?>
+		<div class="unit-50" style="float:right">
+			
+			<?php echo \lectricFence\Form::startForm('search_form', 'post', '/lec-admin/object?ob='.$objectLoaded['id'].'&list=yes', ' class="end" enctype="multipart/form-data" '); ?>
 			<p class="text-right end" style="line-height:35px;">
 				<?php $s = (isset($_POST['search'])) ? $_POST['search'] : '';?>
 				<a href="/lec-admin/object?ob=<?php echo $objectLoaded['id']; ?>&list=yes" class="right" style="display:block;padding-left:20px;">Clear X </a>
 				<?php echo \lectricFence\Form::makeInput('search', 'text', 'search', $s, 'Search', ' class="input-search right"  ');?>
 				<button type="submit" style="display:none;">Submit</button>
 			</p>
-			<?php echo \lectricFence\Form::closeForm();
-		} else {
-		} ?>
-	
-	</div>
+			<?php echo \lectricFence\Form::closeForm(); ?>
+				
+		</div>
+		
+	<?php } ?>
 	
 </div>
-
-<br/>
 
 <?php
 
@@ -107,7 +107,7 @@
 		
 			?><tr><?php
 			
-			if (in_array($item['id'],json_decode($objectLoaded['nodelete'], true)) || $objectLoaded['deletions'] === 0){
+			if (in_array($item['id'],json_decode($objectLoaded['nodelete'], true))){
 				?><td style="width:10px;"><input type="checkbox" disabled="disabled"/></td><?php
 			} else {
 			
