@@ -162,7 +162,7 @@ echo \lectricFence\Form::startForm($objectLoaded['table'].'_form', 'post', $link
 <?php
 
 	if ($new){
-		echo \lectricFence\Form::makeInput('new', 'hidden', 'new', 'yes');
+		echo \lectricFence\Form::makeInput('lec-admin_new', 'hidden', 'lec-admin_new', 'yes');
 	} else {
 		echo \lectricFence\Form::makeInput('id', 'hidden', 'id', $itemLoaded['id']);
 	}
