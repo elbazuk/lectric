@@ -32,9 +32,9 @@
 					}
 
 				//catch saves
-					if (isset($_POST['id']) || isset($_POST['new'])){
+					if (isset($_POST['id']) || isset($_POST['lec-admin_new'])){
 						
-						$new = (isset($_POST['new'])) ? true : false;
+						$new = (isset($_POST['lec-admin_new'])) ? true : false;
 						
 						if($this->lecAdmin->saveItem($objectLoaded, $new)){
 							\Lectric\controller::setSessionMessage('<i class="fa fa-check"></i> '.$objectLoaded['s_word'].' Saved.');
