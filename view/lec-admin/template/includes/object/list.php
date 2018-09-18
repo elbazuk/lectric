@@ -135,6 +135,14 @@
 						}
 					}
 					 
+					if ($fieldName == 'complete'){
+						if ($item[$fieldName] == 1){
+							$item[$fieldName] = 'Yes';
+						} else {
+							$item[$fieldName] = 'No';
+						}
+					}
+					 
 					?><td><a href="<?php echo '/lec-admin/object?ob='.$objectLoaded['id'].'&edit='.$item['id']; ?>"><?php echo htmlentities($item[$fieldName]);?></a></td><?php
 				}
 			
