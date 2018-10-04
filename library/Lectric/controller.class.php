@@ -19,7 +19,7 @@ class controller {
      * @param array URL_NODES array of URL nodes 
 	 *
      */
-		function __construct($DBH)
+		function __construct($DBH = null)
 		{
 			
 			/*
@@ -120,7 +120,7 @@ class controller {
 	
     /**
      * Unset Session messages if present
-     * @return <type>
+     * @return void
      */
 		public static function clearSessionMessages(): void
 		{
