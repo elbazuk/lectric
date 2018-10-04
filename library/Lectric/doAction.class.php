@@ -12,25 +12,29 @@ namespace Lectric;
 class doAction
 {
 	
-    /**
-     * The do action construct for calling do functions
-     *
-     * @param array $lecNodes the URL nodes array
-     *
-	 * @param object $DBH db handler 
-	 *
-     */
-		function __construct(array $lecNodes, $DBH)
+	/**
+	* The do action construct for calling do functions
+	*
+	* @param array $lecNodes the URL nodes array
+	*
+	* @param object $DBH db handler 
+	*
+	*/
+		function __construct(array $lecNodes, $DBH = null, ...$args)
 		{
 			
 			if (count($lecNodes) !== 5){
-				throw new \Exception('wrong do node count for action.');
+				throw new \Exception('Wrong node count for do action.');
 			}
 			
 			if (class_exists('\\'.$lecNodes[2].'\\'.$lecNodes[3])){
 				
 				$doClass = '\\'.$lecNodes[2].'\\'.$lecNodes[3];
-				$doer = new $doClass($DBH);
+				if($DBH === null){
+					$doer = new $doClass(...$args);
+				} else {
+					$doer = new $doClass($DBH, ...$args);
+				}
 				
 				if (method_exists($doer, 'do_'.$lecNodes[4])){
 				
