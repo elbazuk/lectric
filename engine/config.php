@@ -95,9 +95,11 @@
 			
 			$classnameBits = explode('\\', $className);
 			
-			//core first (Lectric namespace)
-				if (file_exists(DOC_ROOT.'/library/'. $classnameBits[0] .'/'. $classnameBits[1] .'.class.php')){
-					include_once(DOC_ROOT.'/library/'. $classnameBits[0] .'/'. $classnameBits[1] .'.class.php');
+			//lectric Library
+				if(count($classnameBits) === 2){
+					if (file_exists(DOC_ROOT.'/library/'. $classnameBits[0] .'/'. $classnameBits[1] .'.class.php')){
+						include_once(DOC_ROOT.'/library/'. $classnameBits[0] .'/'. $classnameBits[1] .'.class.php');
+					}
 				}
 
 		}
