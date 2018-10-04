@@ -34,7 +34,7 @@
 	/*
 	* set up directory root
 	*/
-		define('DOC_ROOT',dirname(dirname(__DIR__)));
+		define('DOC_ROOT',dirname(__DIR__));
 	
 	
 	/**
