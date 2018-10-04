@@ -12,4 +12,4 @@
 	/*
 	* controller instantiate
 	*/
-		$lecController = new \Lectric\controller($lecDBH, URL_NODES); 
+		$lecController = new \Lectric\controller($lecDBH); 
