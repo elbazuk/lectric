@@ -3,11 +3,10 @@
 	/**
 	* set up the system parameter via config
 	*/
-		if (file_exists(__DIR__.'/config/config.php')) {
-			require(__DIR__.'/config/config.php');
+		if (file_exists(__DIR__.'/config.php')) {
+			require(__DIR__.'/config.php');
 		} else {
-			echo 'config file not found';
-			exit;  
+			die('<p>Config file not found at <doc_root>/engine/config.php</p>');
 		}
 
 	/*
