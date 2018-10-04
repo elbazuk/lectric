@@ -77,7 +77,7 @@
 		define('URL_PATH', parse_url(URL_REQUEST, PHP_URL_PATH));
 		define ('REQUEST_METHOD', $_SERVER['REQUEST_METHOD']);
 		
-		//re-register egt
+		//re-register get params
 		define('REQUEST_QUERY_STRING', parse_url(URL_REQUEST, PHP_URL_QUERY));
 		mb_parse_str(REQUEST_QUERY_STRING, $_GET);
 
