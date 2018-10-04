@@ -40,8 +40,8 @@
 	/**
 	* grab the dbatase connection, doc root and definition list
 	*/
-		if (file_exists(DOC_ROOT.'/engine/plugin/app_config.php')) {
-			require(DOC_ROOT.'/engine/plugin/app_config.php');
+		if (file_exists(DOC_ROOT.'/engine/app_config.php')) {
+			require(DOC_ROOT.'/engine/app_config.php');
 		}
 		
 		
@@ -104,7 +104,7 @@
 		spl_autoload_register('lec_autoload');
 		
 	/**
-	* grab the vendor autloader if it exists
+	* grab the Composer vendor autloader if it exists
 	*/
 		if (file_exists(DOC_ROOT.'/vendor/autoload.php')) {
 			require(DOC_ROOT.'/vendor/autoload.php');
