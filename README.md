@@ -5,7 +5,7 @@
 <ul>
 <ul>
 <li>Unpack the git archive into your projects' root directory</li>
-<li>Define the following (provided you need to) constants in /engine/plugin/core_config.php (create if needed):
+<li>Define the following (provided you need to) constants in /engine/app_config.php (create if needed):
 <ul>
 <li>DB_NAME - database name</li>
 <li>DB_USER - database user</li>
@@ -24,7 +24,7 @@ Note: You can use logic here to define both dev and production DB settings, by t
 </ul>
 </ul>
 
-<p>An example /engine/plugin/core_config.php file might be:</p>
+<p>An example /engine/app_config.php file might be:</p>
 
 ```
 <?php
