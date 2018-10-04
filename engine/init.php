@@ -9,13 +9,8 @@
 			echo 'config file not found';
 			exit;  
 		}
-	
-	/**
-	* main lectric engine file
+
+	/*
+	* controller instantiate
 	*/
-		if (file_exists(DOC_ROOT.'/engine/lectric.php')) {
-			require(DOC_ROOT.'/engine/lectric.php');
-		} else { 
-			echo 'lectric engine file not found';
-			exit;  
-		}
+		$lecController = new \Lectric\controller($lecDBH, URL_NODES); 
