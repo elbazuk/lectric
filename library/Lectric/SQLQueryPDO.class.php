@@ -30,7 +30,7 @@ class SQLQueryPDO
 	private $_limitArray = null;
 	private $_groupByArray = null;
 	
-	function __construct($DBH)
+	function __construct(&$DBH)
 	{
        $this->DBH = $DBH;
 	}
