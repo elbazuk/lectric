@@ -17,7 +17,8 @@
 	/*
 	* naive performance function
 	*/
-		function lec_rutime($ru, $rus, $index) {
+		function lec_rutime($ru, $rus, $index):float
+		{
 			return ($ru['ru_'.$index.'.tv_sec']*1000 + intval($ru['ru_'.$index.'.tv_usec']/1000))
 			 -  ($rus['ru_'.$index.'.tv_sec']*1000 + intval($rus['ru_'.$index.'.tv_usec']/1000));
 		}
@@ -91,7 +92,8 @@
 	/*
 	* define autoloader for lectric classes
 	*/
-		function lec_autoload($className) {
+		function lec_autoload($className):void
+		{
 			
 			$classnameBits = explode('\\', $className);
 			
@@ -101,7 +103,7 @@
 						include_once(DOC_ROOT.'/library/'. $classnameBits[0] .'/'. $classnameBits[1] .'.class.php');
 					}
 				}
-
+			return;
 		}
 		spl_autoload_register('lec_autoload');
 		
