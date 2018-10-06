@@ -12,40 +12,36 @@ namespace Lectric;
 class doAction
 {
 	
-	/**
-	* The do action construct for calling do functions
-	*
-	* @param array $lecNodes the URL nodes array
-	*
-	* @param object $DBH db handler 
-	*
-	*/
-		function __construct(array $lecNodes, $DBH = null, ...$args)
+    /**
+     * The do action construct for calling do functions
+     *
+     * @param array URL_NODES the URL nodes array
+     *
+	 * @param object $DBH db handler 
+	 *
+     */
+		function __construct(&$DBH)
 		{
 			
-			if (count($lecNodes) !== 5){
-				throw new \Exception('Wrong node count for do action.');
+			if (count(URL_NODES) !== 5){
+				throw new \Exception('wrong do node count for action.');
 			}
 			
-			if (class_exists('\\'.$lecNodes[2].'\\'.$lecNodes[3])){
+			if (class_exists('\\'.URL_NODES[2].'\\'.URL_NODES[3])){
 				
-				$doClass = '\\'.$lecNodes[2].'\\'.$lecNodes[3];
-				if($DBH === null){
-					$doer = new $doClass(...$args);
-				} else {
-					$doer = new $doClass($DBH, ...$args);
-				}
+				$doClass = '\\'.URL_NODES[2].'\\'.URL_NODES[3];
+				$doer = new $doClass($DBH);
 				
-				if (method_exists($doer, 'do_'.$lecNodes[4])){
+				if (method_exists($doer, 'do_'.URL_NODES[4])){
 				
-					$action = $doer->{'do_'.$lecNodes[4]}()->performAction();
+					$action = $doer->{'do_'.URL_NODES[4]}()->performAction();
 				
 				} else {
-					throw new \Exception('Class '.htmlentities('\\'.$lecNodes[2].'\\'.$lecNodes[3]).' doesn\'t contain method '.'do_'.$lecNodes[4].' in do action.');
+					throw new \Exception('Class '.htmlentities('\\'.URL_NODES[2].'\\'.URL_NODES[3]).' doesn\'t contain method '.'do_'.URL_NODES[4].' in do action.');
 				}
 				
 			} else {
-				throw new \Exception('Class '.htmlentities('\\'.$lecNodes[2].'\\'.$lecNodes[3]).' doesn\'t exist for do action.');
+				throw new \Exception('Class '.htmlentities('\\'.URL_NODES[2].'\\'.URL_NODES[3]).' doesn\'t exist for do action.');
 			}
 			
 		}
