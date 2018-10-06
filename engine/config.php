@@ -60,7 +60,7 @@
 		
 		
 	/*
-	* Default constants - override these in /engine/plugin/core_config
+	* Default constants - override these in /engine/app_config.php
 	*/
 		if (!defined('SITE_NAME')){ define('SITE_NAME','Lectric'); }									//for ,eta title
 		if (!defined('SITE_LINK')){ define('SITE_LINK',$_SERVER['SERVER_NAME']); } 						//url, defaults to nothing
