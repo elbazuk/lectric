@@ -38,7 +38,7 @@
 	
 	
 	/**
-	* grab the dbatase connection, doc root and definition list
+	* grab the application specific configuration eg. dbatase connection, doc root and definition list
 	*/
 		if (file_exists(DOC_ROOT.'/engine/app_config.php')) {
 			require(DOC_ROOT.'/engine/app_config.php');
