@@ -25,43 +25,38 @@ class controller {
 			/*
 			* define if view or not 
 			*/
-				define('VIEW', (URL_PATH === '/') ? true : ((URL_NODES[0] !== 'do') ? true : false) );		//do or view?
+				define('VIEW', 
+					(URL_PATH === '/') ?
+						true : 
+						((URL_NODES[0] !== 'do') ? 
+							true : 
+							((!isset(URL_NODES[1])) ?
+								true :
+								( (URL_NODES[1] !== 'response' && URL_NODES[1] !== 'action') ?
+									true:
+									false
+								)
+							)
+						) 
+				);
 			
-			if (VIEW){
+			if (VIEW === true){
 				$lecView = new view($DBH);
 			} else {
-				
-				try{
 					
-					if(!isset(URL_NODES[1])){
-						throw new \Exception('URL_NODE[1] missing.');
-					}
-					
-					switch(URL_NODES[1]){
-						case 'response':
-							/*
-							* Response type do
-							*/
-							$lecDo = new doResponse($DBH);
-						break;
-						case 'action':
-							/*
-							* Action type do (no response, may generate another view or do something else...?)
-							*/
-							$lecDo = new doAction($DBH);
-						break;
-						default:
-							throw new \Exception('neither response or action keywords defined in url after /do/');
-						break;
-					}
-				
-				} catch (\Exception $e){
-					if (DEBUG){
-						\Lectric\controller::setSessionMessage($e->getMessage());
-					}
-					
-					//go to view and provide 404 error
-					$lecView = new view($DBH);
+				switch(URL_NODES[1]){
+					case 'response':
+						/*
+						* Response type do
+						*/
+						$lecDo = new doResponse($DBH);
+					break;
+					case 'action':
+						/*
+						* Action type do (no response, may generate another view or do something else...?)
+						*/
+						$lecDo = new doAction($DBH);
+					break;
 				}
 				
 			}
