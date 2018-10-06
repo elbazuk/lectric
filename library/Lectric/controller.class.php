@@ -19,7 +19,7 @@ class controller {
      * @param array URL_NODES array of URL nodes 
 	 *
      */
-		function __construct($DBH = null)
+		function __construct(&$DBH = null)
 		{
 			
 			/*
