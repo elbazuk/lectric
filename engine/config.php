@@ -92,7 +92,7 @@
 	/*
 	* define autoloader for lectric classes
 	*/
-		function lec_autoload($className):void
+		function lecAutoload($className):void
 		{
 			
 			$classnameBits = explode('\\', $className);
@@ -105,7 +105,7 @@
 				}
 			return;
 		}
-		spl_autoload_register('lec_autoload');
+		spl_autoload_register('lecAutoload');
 		
 	/**
 	* grab the Composer vendor autloader if it exists
