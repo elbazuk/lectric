@@ -1,4 +1,4 @@
-<h2>The light weight Lectric PHP Framework!</h2>
+<h1>The light weight Lectric PHP Framework!</h1>
 <p>Lectric is a psuedo MVC PHP framework, or tentatively defined as a CARV PHP framework(controller - action|response|view). It's basic pricipal is that most web apps are tools for&nbsp;<strong>view</strong>ing something,&nbsp;performing an<strong> action&nbsp;</strong>or generating a none-view&nbsp;<strong>response</strong>. Exactly what the framework does, generate a view, response or run an action is determined by the url - described as the URL Nodes. It follows PSR-2 coding standards and PSR-4 autloading standards.&nbsp;</p>
 <h2>Installation</h2>
 <p>To install:</p>
