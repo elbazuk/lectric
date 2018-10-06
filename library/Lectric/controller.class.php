@@ -33,28 +33,35 @@ class controller {
 				
 				try{
 					
-					/*
-					* Response type do
-					*/
-						if (URL_NODES[1] === 'response'){
-							$lecDo = new doResponse(URL_NODES, $DBH);
-						} 
+					if(!isset(URL_NODES[1])){
+						throw new \Exception('URL_NODE[1] missing.');
+					}
 					
-					/*
-					* Action type do (no response, may generate another view or do something else...?)
-					*/
-						elseif(URL_NODES[1] === 'action'){
-							$lecDo = new doAction(URL_NODES, $DBH);
-						} else {
+					switch(URL_NODES[1]){
+						case 'response':
+							/*
+							* Response type do
+							*/
+							$lecDo = new doResponse($DBH);
+						break;
+						case 'action':
+							/*
+							* Action type do (no response, may generate another view or do something else...?)
+							*/
+							$lecDo = new doAction($DBH);
+						break;
+						default:
 							throw new \Exception('neither response or action keywords defined in url after /do/');
-						}
+						break;
+					}
 				
 				} catch (\Exception $e){
 					if (DEBUG){
-						echo $e->getMessage();
+						\Lectric\controller::setSessionMessage($e->getMessage());
 					}
-					//all errors above cause an exit;
-					exit;
+					
+					//go to view and provide 404 error
+					$lecView = new view($DBH);
 				}
 				
 			}
@@ -68,28 +75,15 @@ class controller {
      * 
      * @return void
      */
-		public static function setSessionMessage(string $msg, string $color = ''): void
+		public static function setSessionMessage(string $msg): void
 		{
 			
 			if (!isset($_SESSION['lec_msg'])){
 				$_SESSION['lec_msg'] = [];
 			}
 			
-			if ($color === ''){
-				
-				if (trim($msg) !== ''){
-					$_SESSION['lec_msg'][] = $msg;
-				}
-				
-			} else {
-				
-				if (trim($msg) !== ''){
-					$_SESSION['lec_msg'][] = [
-						'msg' =>$msg,
-						'color'=>$color
-					];
-				}
-				
+			if (trim($msg) !== ''){
+				$_SESSION['lec_msg'][] = $msg;
 			}
 			
 			return;
@@ -120,7 +114,7 @@ class controller {
 	
     /**
      * Unset Session messages if present
-     * @return void
+     * @return <type>
      */
 		public static function clearSessionMessages(): void
 		{
