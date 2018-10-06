@@ -19,7 +19,7 @@ class doResponse extends SQLQueryPDO
 	 * @param object $DBH db handler 
 	 *
      */
-		function __construct(array $lecNodes, $DBH)
+		function __construct(array $lecNodes, &$DBH)
 		{
 			
 			parent::__construct($DBH);
