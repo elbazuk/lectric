@@ -121,11 +121,10 @@
 		if (defined('DB_HOST') && defined('DB_NAME') && defined('DB_USER') && defined('DB_PASSWORD')){
 			try { 
 				$lecDBH = new \PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8mb4', DB_USER, DB_PASSWORD);
-				$lecDBH->setAttribute(\PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				$lecDBH->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, FALSE);
-				$lecDBH->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, false);
-				//return database data type instead of all strings
-				$lecDBH->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+				$lecDBH->setAttribute(\PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);					//output exceptions when errors encountered
+				$lecDBH->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);					//keeps data on DB server, important for fetch() calls in SQLQueryPDO class
+				$lecDBH->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, false);						//return database data type instead of all strings
+				$lecDBH->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);						//Ensure only 1 statement execution allowed per transaction.
 			}  
 			catch(PDOException $e) {  
 				echo $e->getMessage(); exit;
