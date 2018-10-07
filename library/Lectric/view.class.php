@@ -15,13 +15,11 @@ class view extends SQLQueryPDO {
 	
 	private $page = null;
 	
-	//callable memebrs for use in template
+	//callable members for use in template
 	private $_URLdirectory = '';
 	private $_directory = '';
 	private $_pageUrl = '';
 	
-	//change and push to update icon set for all eployments
-	private $_iconSet = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
 	private $_imgLocalDir = '';
 	private $_cssLocalDir = '';
 	private $_jsLocalDir = '';
@@ -44,8 +42,6 @@ class view extends SQLQueryPDO {
 			* 
 			*/
 				parent::__construct($DBH);
-			
-			
 			 
 			/*
 			* parse URL into file directories, url directories and page urls
@@ -54,7 +50,7 @@ class view extends SQLQueryPDO {
 			
 				$urlNodes = URL_NODES; 										//needed for use of end()
 				
-				if (!isset($urlNodes[0])){									//i.e.empty
+				if (!isset($urlNodes[0])){									//i.e.empty, homepage.
 					$this->_URLdirectory = 'root';
 					$this->_fileDirectory = DEFAULT_DIRECTORY;
 					$this->_pageUrl = 'index';	
@@ -68,36 +64,39 @@ class view extends SQLQueryPDO {
 						*/
 							if (is_dir(DOC_ROOT.'/view/'.$urlNodes[0])){
 								
-								$this->_URLdirectory = 'root';				//
+								$this->_URLdirectory = 'root';				// database directory
 								$this->_fileDirectory = $urlNodes[0];		// as phsical folder
-								$this->_pageUrl = 'index';					//
+								$this->_pageUrl = 'index';					// database url
 								
 							} else {
-								$this->_URLdirectory = 'root';				//
-								$this->_fileDirectory = DEFAULT_DIRECTORY;	//
+								$this->_URLdirectory = 'root';				// database directory
+								$this->_fileDirectory = DEFAULT_DIRECTORY;	// default directory instead?
 								$this->_pageUrl = $urlNodes[0];				// ie /webpage
 							}
 						
 					} else {
 						
-						if (is_dir(DOC_ROOT.'/view/'.$urlNodes[0])){
-							
-							if (count($urlNodes) === 2){					//
-								$this->_URLdirectory = 'root';				//
-								$this->_fileDirectory = $urlNodes[0];		//
-								$this->_pageUrl = end($urlNodes);			// end() to allow many sub directories in link
+						/*
+						* Is the first node a phyiscal view directory? if not, then treat as database directory
+						*/
+							if (is_dir(DOC_ROOT.'/view/'.$urlNodes[0])){
+								
+								if (count($urlNodes) === 2){
+									$this->_URLdirectory = 'root';				// database directory
+									$this->_fileDirectory = $urlNodes[0];		// as physical folder
+									$this->_pageUrl = end($urlNodes);			// end() to allow many sub directories in link
+								} else {
+									$this->_URLdirectory = $urlNodes[1];		// database directory (after physical directory in URL)
+									$this->_fileDirectory = $urlNodes[0];		// as physical folder
+									$this->_pageUrl = end($urlNodes);			// end() to allow many sub directories in link
+								}
+								
 							} else {
-								$this->_URLdirectory = $urlNodes[1];		//
-								$this->_fileDirectory = $urlNodes[0];		//
-								$this->_pageUrl = end($urlNodes);			// end() to allow many sub directories in link
-							}
 							
-						} else {
-						
-							$this->_URLdirectory = $urlNodes[0];			//
-							$this->_fileDirectory = DEFAULT_DIRECTORY;		//
-							$this->_pageUrl = end($urlNodes);				// end() to allow many sub directories in link
-						}
+								$this->_URLdirectory = $urlNodes[0];			// database directory
+								$this->_fileDirectory = DEFAULT_DIRECTORY;		// default directory instead?
+								$this->_pageUrl = end($urlNodes);				// end() to allow many sub directories in link
+							}
 						
 					}			
 					
@@ -124,32 +123,32 @@ class view extends SQLQueryPDO {
 		{
 			
 			/*
-			* first find physical actual derectories - they will always be preffered over default directory.
-			* e.g. if you have an "admin" interface seperate to front end, mount in a directory called /view/admin/ 
+			* first find physical actual directories - they will always be preferred over default directory.
+			* e.g. if you have an "admin" interface separate to front end, mount in a directory called /view/admin/ 
 			*/
-			if (is_dir(DOC_ROOT.'/view/'.$this->_fileDirectory)){
+				if (is_dir(DOC_ROOT.'/view/'.$this->_fileDirectory)){
 
-				if (file_exists(DOC_ROOT.'/view/'.$this->_fileDirectory.'/render.php')) {
-					require(DOC_ROOT.'/view/'.$this->_fileDirectory.'/render.php');
-				} else {
-					echo 'render file not in view directory: '.$this->_fileDirectory;
-					exit;
-				}		
-			} 
+					if (file_exists(DOC_ROOT.'/view/'.$this->_fileDirectory.'/render.php')) {
+						require(DOC_ROOT.'/view/'.$this->_fileDirectory.'/render.php');
+					} else {
+						echo 'render file not in view directory: '.$this->_fileDirectory;
+						exit;
+					}		
+				} 
 			
 			/*
 			* if a physical directory does not exist, attempt to rout to DEFAULT_DIRECTORY instead
 			*/
-			else {
-				
-				if (file_exists(DOC_ROOT.'/view/'.DEFAULT_DIRECTORY.'/render.php')) {
-					require(DOC_ROOT.'/view/'.DEFAULT_DIRECTORY.'/render.php');
-				} else {
-					echo 'render file not in view directory: '.DEFAULT_DIRECTORY;
-					exit;
+				else {
+					
+					if (file_exists(DOC_ROOT.'/view/'.DEFAULT_DIRECTORY.'/render.php')) {
+						require(DOC_ROOT.'/view/'.DEFAULT_DIRECTORY.'/render.php');
+					} else {
+						echo 'render file not in view directory: '.DEFAULT_DIRECTORY;
+						exit;
+					}
+					
 				}
-				
-			}
 			
 			return;
 
@@ -176,11 +175,18 @@ class view extends SQLQueryPDO {
 				$result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'STRICT', 'NOT_TABLED');
 				
 			} catch (SQLException $e){
-				//chuck up the 404, watch for headers!
-				header("HTTP/1.0 404 Not Found");
+				
+				//is what they've requested a /do/ request?
+				if($this->_URLdirectory === 'do'){
+					header("HTTP/1.0 400 Bad Request");
+				} else {
+					header("HTTP/1.0 404 Not Found");
+				}
+				
 				$this->setWhereFields(array('url' => 'error'));
 				$this->setWhereOps('=');
-				return $result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'NOT_TABLED');
+				$result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'NOT_TABLED');
+
 			}
 			
 			return $result;
@@ -208,11 +214,18 @@ class view extends SQLQueryPDO {
 				$result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'STRICT', 'NOT_TABLED');
 				
 			} catch (SQLException $e){
-				//chuck up the 404, watch for headers!
-				header("HTTP/1.0 404 Not Found");
+				
+				//is what they've requested a /do/ request?
+				if($directory === 'do'){
+					header("HTTP/1.0 400 Bad Request");
+				} else {
+					header("HTTP/1.0 404 Not Found");
+				}
+				
 				$this->setWhereFields(array('url' => 'error'));
 				$this->setWhereOps('=');
-				return $result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'NOT_TABLED');
+				$result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'NOT_TABLED');
+				
 			}
 			
 			return $result;
