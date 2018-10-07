@@ -31,9 +31,16 @@ class doAction
 				$doer = new $doClass($DBH);
 				
 				if (method_exists($doer, 'do_'.URL_NODES[4])){
-				
-					//do_function returns a controllAction object, which then fires performAction();
-					$action = $doer->{'do_'.URL_NODES[4]}()->performAction();
+					
+					$action = $doer->{'do_'.URL_NODES[4]}();
+					
+					if ($action instanceof controlAction) {
+					
+						$action->performAction();
+						
+					} else {
+						throw new \Exception('Class '.htmlentities('\\'.URL_NODES[2].'\\'.URL_NODES[3].' doesn\'t return a controllAction class in Do-Action.'));
+					}
 				
 				} else {
 					throw new \Exception('Class '.htmlentities('\\'.URL_NODES[2].'\\'.URL_NODES[3].' doesn\'t contain method '.'do_'.URL_NODES[4].' in Do-Action.'));
