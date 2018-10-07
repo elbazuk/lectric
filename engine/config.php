@@ -17,8 +17,7 @@
 	/*
 	* naive performance function
 	*/
-		function lec_rutime($ru, $rus, $index):float
-		{
+		function lec_rutime($ru, $rus, $index) {
 			return ($ru['ru_'.$index.'.tv_sec']*1000 + intval($ru['ru_'.$index.'.tv_usec']/1000))
 			 -  ($rus['ru_'.$index.'.tv_sec']*1000 + intval($rus['ru_'.$index.'.tv_usec']/1000));
 		}
@@ -39,7 +38,7 @@
 	
 	
 	/**
-	* grab the application specific configuration eg. dbatase connection, doc root and definition list
+	* grab the dbatase connection, doc root and definition list
 	*/
 		if (file_exists(DOC_ROOT.'/engine/app_config.php')) {
 			require(DOC_ROOT.'/engine/app_config.php');
@@ -61,14 +60,15 @@
 		
 		
 	/*
-	* Default constants - override these in /engine/app_config.php
+	* Default constants - override these in /engine/plugin/core_config
 	*/
 		if (!defined('SITE_NAME')){ define('SITE_NAME','Lectric'); }									//for ,eta title
 		if (!defined('SITE_LINK')){ define('SITE_LINK',$_SERVER['SERVER_NAME']); } 						//url, defaults to nothing
 		if (!defined('SITE_DESCRIPTION')){ define('SITE_DESCRIPTION','Lectric Default Installation'); }	//for meta desc
 		if (!defined('DEFAULT_DIRECTORY')){ define('DEFAULT_DIRECTORY','default'); }					//for view directory selection
 		if (!defined('SESSION_IGNORES')){ define('SESSION_IGNORES', []); }								//if scripts need to set own headers, they can be ignored for seesion start further down.
-		
+		if (!defined('VIEW_ON_FAILED_DO_REQUEST')){ define('VIEW_ON_FAILED_DO_REQUEST', true); }		//how do we deal with bad URL /do/ requests? View or not...
+
 		
 	/*
 	* define base URL NODES, URL_REQUEST AND REQUEST_METHOD
@@ -92,8 +92,7 @@
 	/*
 	* define autoloader for lectric classes
 	*/
-		function lecAutoload($className):void
-		{
+		function lec_autoload($className) {
 			
 			$classnameBits = explode('\\', $className);
 			
@@ -103,12 +102,12 @@
 						include_once(DOC_ROOT.'/library/'. $classnameBits[0] .'/'. $classnameBits[1] .'.class.php');
 					}
 				}
-			return;
+
 		}
-		spl_autoload_register('lecAutoload');
+		spl_autoload_register('lec_autoload');
 		
 	/**
-	* grab the Composer vendor autloader if it exists
+	* grab the vendor autloader if it exists, if not then use Lectric
 	*/
 		if (file_exists(DOC_ROOT.'/vendor/autoload.php')) {
 			require(DOC_ROOT.'/vendor/autoload.php');
@@ -121,10 +120,11 @@
 		if (defined('DB_HOST') && defined('DB_NAME') && defined('DB_USER') && defined('DB_PASSWORD')){
 			try { 
 				$lecDBH = new \PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8mb4', DB_USER, DB_PASSWORD);
-				$lecDBH->setAttribute(\PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);					//output exceptions when errors encountered
-				$lecDBH->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);					//keeps data on DB server, important for fetch() calls in SQLQueryPDO class
-				$lecDBH->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, false);						//return database data type instead of all strings
-				$lecDBH->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);						//Ensure only 1 statement execution allowed per transaction.
+				$lecDBH->setAttribute(\PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$lecDBH->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, FALSE);
+				$lecDBH->setAttribute(\PDO::ATTR_STRINGIFY_FETCHES, false);
+				//return database data type instead of all strings
+				$lecDBH->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
 			}  
 			catch(PDOException $e) {  
 				echo $e->getMessage(); exit;
