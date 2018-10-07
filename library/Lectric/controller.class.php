@@ -44,19 +44,29 @@ class controller {
 				$lecView = new view($DBH);
 			} else {
 					
-				switch(URL_NODES[1]){
-					case 'response':
-						/*
-						* Response type do
-						*/
-						$lecDo = new doResponse($DBH);
-					break;
-					case 'action':
-						/*
-						* Action type do (no response, may generate another view or do something else...?)
-						*/
-						$lecDo = new doAction($DBH);
-					break;
+				try{
+					switch(URL_NODES[1]){
+						case 'response':
+							/*
+							* Response type do
+							*/
+							$lecDo = new doResponse($DBH);
+						break;
+						case 'action':
+							/*
+							* Action type do (no response, may generate another view or do something else...?)
+							*/
+							$lecDo = new doAction($DBH);
+						break;
+					}
+				} catch (\Exception $e){
+					
+					if(DEBUG){
+						\Lectric\controller::setSessionMessage($e->getMessage());
+					}
+					//graceful request error handling
+					$lecView = new view($DBH);
+					
 				}
 				
 			}
