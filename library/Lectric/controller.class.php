@@ -65,7 +65,9 @@ class controller {
 						\Lectric\controller::setSessionMessage($e->getMessage());
 					}
 					//graceful request error handling
-					$lecView = new view($DBH);
+					if(VIEW_ON_FAILED_DO_REQUEST === true){
+						$lecView = new view($DBH);
+					}
 					
 				}
 				
