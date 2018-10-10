@@ -78,7 +78,7 @@ class lecPDO
 					throw new \Exception('"SELECT" not part of the query in selLax();');
 				}
 				
-				return $this->runSelect($query, $table, in_array(self::SINGLE, $args), in_array(self::STRICT, $args), in_array(self::TABLED, $args), $boundArray);
+				return $this->runSelect($query, 'table', in_array(self::SINGLE, $args), in_array(self::STRICT, $args), in_array(self::TABLED, $args), $boundArray);
 				
 			}
 			
