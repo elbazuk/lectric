@@ -11,7 +11,7 @@ namespace Lectric;
 * @copyright  Elliott Barratt, all rights reserved.
 *
 */ 
-class view extends SQLQueryPDO {
+class view extends lecPDO {
 	
 	private $page = null;
 	
@@ -34,7 +34,7 @@ class view extends SQLQueryPDO {
      * @param object $DBH DBH handler for SQLQueryPDO
 	 *
      */
-		function __construct($DBH)
+		function __construct(&$DBH)
 		{
 			
 			/*
@@ -165,14 +165,14 @@ class view extends SQLQueryPDO {
 			try{
 				
 				//strict to catch a directory that doesn't exist.
-				$this->setWhereFields(array('name' => $this->_URLdirectory, 'live' => 1));
+				$this->setWhereFields(['name' => $this->_URLdirectory, 'live' => 1]);
 				$this->setWhereOps('==');
-				$result_dir = $this->selStrict($this->_fileDirectory.'_directories','SINGLE', 'STRICT', 'NOT_TABLED');
+				$result_dir = $this->selStrict($this->_fileDirectory.'_directories', \Lectric\lecPDO::SINGLE, \Lectric\lecPDO::STRICT);
 				
 				//get webpage via directory id
-				$this->setWhereFields(array('directory' => $result_dir['id'],'url' => $this->_pageUrl, 'live' => 1));
+				$this->setWhereFields(['directory' => $result_dir['id'],'url' => $this->_pageUrl, 'live' => 1]);
 				$this->setWhereOps('===');
-				$result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'STRICT', 'NOT_TABLED');
+				$result = $this->selStrict($this->_fileDirectory.'_views', \Lectric\lecPDO::SINGLE, \Lectric\lecPDO::STRICT);
 				
 			} catch (SQLException $e){
 				
@@ -183,9 +183,9 @@ class view extends SQLQueryPDO {
 					header("HTTP/1.0 404 Not Found");
 				}
 				
-				$this->setWhereFields(array('url' => 'error'));
+				$this->setWhereFields(['url' => 'error']);
 				$this->setWhereOps('=');
-				$result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'NOT_TABLED');
+				$result = $this->selStrict($this->_fileDirectory.'_views', \Lectric\lecPDO::SINGLE);
 
 			}
 			
@@ -204,14 +204,14 @@ class view extends SQLQueryPDO {
 			try{
 				
 				//strict to catch a directory that doesn't exist.
-				$this->setWhereFields(array('name' => $directory, 'live' => 1));
+				$this->setWhereFields(['name' => $directory, 'live' => 1]);
 				$this->setWhereOps('==');
-				$result_dir = $this->selStrict($this->_fileDirectory.'_directories','SINGLE', 'STRICT', 'NOT_TABLED');
+				$result_dir = $this->selStrict($this->_fileDirectory.'_directories', \Lectric\lecPDO::SINGLE, \Lectric\lecPDO::STRICT);
 				
 				//get webpage via directory id
-				$this->setWhereFields(array('directory' => $result_dir['id'],'url' => $url, 'live' => 1));
+				$this->setWhereFields(['directory' => $result_dir['id'],'url' => $url, 'live' => 1]);
 				$this->setWhereOps('===');
-				$result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'STRICT', 'NOT_TABLED');
+				$result = $this->selStrict($this->_fileDirectory.'_views', \Lectric\lecPDO::SINGLE, \Lectric\lecPDO::STRICT);
 				
 			} catch (SQLException $e){
 				
@@ -222,9 +222,9 @@ class view extends SQLQueryPDO {
 					header("HTTP/1.0 404 Not Found");
 				}
 				
-				$this->setWhereFields(array('url' => 'error'));
+				$this->setWhereFields(['url' => 'error']);
 				$this->setWhereOps('=');
-				$result = $this->selStrict($this->_fileDirectory.'_views', 'SINGLE', 'NOT_TABLED');
+				$result = $this->selStrict($this->_fileDirectory.'_views', \Lectric\lecPDO::SINGLE);
 				
 			}
 			
