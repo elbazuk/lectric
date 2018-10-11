@@ -9,7 +9,7 @@ namespace Lectric;
 * @copyright  Elliott Barratt, all rights reserved.
 *
 */ 
-class doResponse extends SQLQueryPDO
+class doResponse extends lecPDO
 {
 	/**
      * The do response construct for calling do response files
