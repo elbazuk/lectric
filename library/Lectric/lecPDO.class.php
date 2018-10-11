@@ -3,13 +3,10 @@ namespace Lectric;
 
 /**
 * lecPDO Class
-*
 * Handles Strict Select, Update, Insert and Delete functions
-*
 * @package    Lectric Framework
 * @author     Elliott Barratt
 * @copyright  Elliott Barratt, all rights reserved.
-*
 */ 
 class lecPDO 
 { 
