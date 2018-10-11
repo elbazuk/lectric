@@ -22,14 +22,14 @@ class lecPDO
 	public const TABLED = 4;
 	public const SQL_ECHO = 5;
 	
-	protected $_selectFields = '*';
-	protected $_insertFields = null;
-	protected $_updateFields = null;
-	protected $_whereArray = null;
-	protected $_whereOps = null;
-	protected $_orderByArray = null;
-	protected $_limit = null;
-	protected $_groupBy = null;
+	private $_selectFields = '*';
+	private $_insertFields = null;
+	private $_updateFields = null;
+	private $_whereArray = null;
+	private $_whereOps = null;
+	private $_orderByArray = null;
+	private $_limit = null;
+	private $_groupBy = null;
 
 	function __construct(&$DBH)
 	{
@@ -307,7 +307,7 @@ class lecPDO
 		* @param string $type the function that requested the check
 		* @return void
 		*/
-			protected function checkSQLClauses(string $table, string $type, string $function): void
+			private function checkSQLClauses(string $table, string $type, string $function): void
 			{
 			
 				//insert and delete specific checks
@@ -329,7 +329,7 @@ class lecPDO
 		* @param string $value a sql function
 		* @return bool
 		*/
-			protected function checkFunction(string $value = ''): ?bool
+			private function checkFunction(string $value = ''): ?bool
 			{
 				switch ($value){
 					case 'NOW()':
@@ -365,7 +365,7 @@ class lecPDO
 		* Build the whole where injection.
 		* @return string
 		*/
-			protected function getWhereInj(string $prefix = ''): ?string
+			private function getWhereInj(string $prefix = ''): ?string
 			{
 			
 				/* This function takes all of the values (and arrays) in the Where Array and turns them into a string with bound parametres. */
