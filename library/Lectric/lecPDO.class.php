@@ -51,7 +51,7 @@ class lecPDO
 					throw new \Exception ('Table argument empty string.');
 				}
 				
-				$sql = 'SELECT '. $this->getFieldInjSelect().' FROM `'.trim($table,'`').'` '.$this->getWhereInj().' '.$this->getGroupByInj().' '.$this->getOrderByInj().' '.$this->getLimitInj();
+				$sql = 'SELECT '. $this->getFieldInjSelect().' FROM `'.$table.'` '.$this->getWhereInj().' '.$this->getGroupByInj().' '.$this->getOrderByInj().' '.$this->getLimitInj();
 				
 				if (in_array(self::SQL_ECHO, $args)){
 					echo $sql;
@@ -91,7 +91,7 @@ class lecPDO
 			public function updateStrict(string $table, ...$args): void
 			{
 				
-				$sql = 'UPDATE '.$table.' SET '.$this->getUpdateFieldInj().' '.$this->getWhereInj('w_').'';
+				$sql = 'UPDATE `'.$table.'` SET '.$this->getUpdateFieldInj().' '.$this->getWhereInj('w_').'';
 				
 				if (in_array(self::SQL_ECHO, $args)){
 					echo $sql;
@@ -119,7 +119,7 @@ class lecPDO
 			{
 			
 				$inj = $this->getFieldToValueInsert();
-				$sql = 'INSERT INTO '.$table.' ('.$inj['fields'].') VALUE ('.$inj['values'].')';
+				$sql = 'INSERT INTO `'.$table.'` ('.$inj['fields'].') VALUE ('.$inj['values'].')';
 				
 				if (in_array(self::SQL_ECHO, $args)){
 					echo $sql;
@@ -139,7 +139,7 @@ class lecPDO
 			public function deleteStrict(string $table, ...$args): void
 			{
 					
-				$sql = 'DELETE FROM '.$table.' '.$this->getWhereInj().'';
+				$sql = 'DELETE FROM `'.$table.'` '.$this->getWhereInj().'';
 				
 				if (in_array(self::SQL_ECHO, $args)){
 					echo $sql;
