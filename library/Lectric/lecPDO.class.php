@@ -67,7 +67,7 @@ class lecPDO
 		* @param string $args array of args for single/multi, strict, tabled prefix return array and echo.
 		* @return array
 		*/
-			public function selSLax(string $query, array $boundArray = null, string ...$args): ?array
+			public function selLax(string $query, array $boundArray = null, string ...$args): ?array
 			{
 				
 				if (in_array(self::SQL_ECHO, $args)){
