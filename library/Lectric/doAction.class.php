@@ -15,7 +15,7 @@ class doAction
     /**
      * The do action construct for calling do functions
      *
-	 * @param object $DBH db handler 
+	 * @param object $DBH db handler (passthrough only)
 	 *
      */
 		function __construct(&$DBH)
