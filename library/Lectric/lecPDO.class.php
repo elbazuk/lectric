@@ -301,30 +301,6 @@ class lecPDO
 			}
 			
 		/**
-		* Parse and verify the SQL clause members
-		* @param string $table the table to get the cols from
-		* @param string $type where's the check request coming from
-		* @param string $type the function that requested the check
-		* @return void
-		*/
-			private function checkSQLClauses(string $table, string $type, string $function): void
-			{
-			
-				//insert and delete specific checks
-				if($type === 'insert' ||  $type === 'update'){
-					if (!is_array($this->_updateFields)){
-						throw new \Exception ('Fields not an array in '.$function);
-					}
-				}
-				
-				if($type !== 'insert'){
-					
-				}
-				
-				
-			}
-			
-		/**
 		* Check the sql function passed is ok
 		* @param string $value a sql function
 		* @return bool
