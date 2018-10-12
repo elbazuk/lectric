@@ -174,7 +174,7 @@ class view extends lecPDO {
 				$this->setWhereOps('===');
 				$result = $this->selStrict($this->_fileDirectory.'_views', \Lectric\lecPDO::SINGLE, \Lectric\lecPDO::STRICT);
 				
-			} catch (SQLException $e){
+			} catch (\Exception $e){
 				
 				//is what they've requested a /do/ request?
 				if($this->_URLdirectory === 'do'){
@@ -213,7 +213,7 @@ class view extends lecPDO {
 				$this->setWhereOps('===');
 				$result = $this->selStrict($this->_fileDirectory.'_views', \Lectric\lecPDO::SINGLE, \Lectric\lecPDO::STRICT);
 				
-			} catch (SQLException $e){
+			} catch (\Exception $e){
 				
 				//is what they've requested a /do/ request?
 				if($directory === 'do'){
