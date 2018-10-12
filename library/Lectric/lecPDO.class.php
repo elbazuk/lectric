@@ -3,10 +3,13 @@ namespace Lectric;
 
 /**
 * lecPDO Class
+*
 * Handles Strict Select, Update, Insert and Delete functions
+*
 * @package    Lectric Framework
 * @author     Elliott Barratt
 * @copyright  Elliott Barratt, all rights reserved.
+*
 */ 
 class lecPDO 
 { 
@@ -215,7 +218,7 @@ class lecPDO
 						
 						$fetched = $STH->fetch();
 						
-						if ($fetched === false){
+						if ($fetched === false || empty($fetched)){
 						
 							//no rows
 							if($strict === true){
@@ -235,7 +238,7 @@ class lecPDO
 						if (empty($fetched)){
 							
 							//no rows
-							if($strict === 'STRICT'){
+							if($strict === true){
 								throw new \Exception('No Results');
 							}
 							
@@ -262,10 +265,10 @@ class lecPDO
 						
 						$fetched = $STH->fetch();
 						
-						if ($fetched === false){
+						if ($fetched === false || empty($fetched)){
 							
 							//no rows
-							if($strict === 'STRICT'){
+							if($strict === true){
 								throw new \Exception('No Results');
 							}
 								
@@ -295,6 +298,30 @@ class lecPDO
 					}
 				}
 			
+			}
+			
+		/**
+		* Parse and verify the SQL clause members
+		* @param string $table the table to get the cols from
+		* @param string $type where's the check request coming from
+		* @param string $type the function that requested the check
+		* @return void
+		*/
+			private function checkSQLClauses(string $table, string $type, string $function): void
+			{
+			
+				//insert and delete specific checks
+				if($type === 'insert' ||  $type === 'update'){
+					if (!is_array($this->_updateFields)){
+						throw new \Exception ('Fields not an array in '.$function);
+					}
+				}
+				
+				if($type !== 'insert'){
+					
+				}
+				
+				
 			}
 			
 		/**
