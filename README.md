@@ -70,7 +70,7 @@ Note: You can use logic here to define both dev and production DB settings, by t
 
 <h2>Basics</h2>
 <h4>Adding classes - PSR-4</h4>
-<p>Classes should be added to the framework using the PSR-4 standard with 1 caveat - no sub namespaces. For example, to use the class \yourProjectNamespace\yourClass, you must create a file yourClass.class.php in /library/yourProjectNamespace/. Inside your class file, you must then obviously declare the namespace as&nbsp;yourProjectNamespace. Most of the time you will want to extend the \Lectric\SQLQueryPDO class. Fill your boots.</p>
+<p>Classes should be added to the framework using the PSR-4 standard with 1 caveat - no sub namespaces. For example, to use the class \yourProjectNamespace\yourClass, you must create a file yourClass.class.php in /library/yourProjectNamespace/. Inside your class file, you must then obviously declare the namespace as&nbsp;yourProjectNamespace. Most of the time you will want to extend the \Lectric\lecPDO class. Fill your boots.</p>
 <h4>Working Directory</h4>
 <p>To start developing with Lectric after installation, it's as simple as cracking open the /view/default/ directory and modifying the files within!</p>
 <p>It is recommended that a different default directory be used, by copying /view/default/ into another directory in /view/. Usually this would be /view/public/. This is to ensure that if you pull from this repo in the future, it doesn't overwrite any changes you've made to /view/default/. <strong>Ensure to define your default directory if not using /view/default/ in /engine/app_config.php - e.g. define('DEFAULT_DIRECTORY', 'public').</strong></p>
