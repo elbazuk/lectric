@@ -2,8 +2,14 @@
 
 <?php
 
-	$this->setOrderBy(['sort_order'=>'ASC']);
-	$objectsLoaded = $this->selStrict('lec-admin_objects', 'MULTI', 'NOT_TABLED');
+	try{
+		$this->setOrderBy(['sort_order'=>'ASC']);
+		$objectsLoaded = $this->selStrict('lec-admin_objects', \Lectric\lecPDO::MULTI);
+	} catch (\Exception $e){
+		if(DEBUG){
+			echo 'Failed to load Objects on homepage: '.$e->getMessage();
+		}
+	}
 
 	if ($objectsLoaded !== null){
 		
