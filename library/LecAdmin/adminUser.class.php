@@ -11,12 +11,12 @@ namespace LecAdmin;
 * @license    As license.txt in root
 *
 */ 
-class adminUser extends \Lectric\SQLQueryPDO 
+class adminUser extends \Lectric\lecPDO 
 {
 
-	private $_user_table = '`lec-admin_users`';
-	private $_permissions_table = '`lec-admin_user_permissions`';
-	private $_permissions_types_table = '`lec-admin_user_permission_types`';
+	private $_user_table = 'lec-admin_users';
+	private $_permissions_table = 'lec-admin_user_permissions';
+	private $_permissions_types_table = 'lec-admin_user_permission_types';
 	
 	public $name = 0;
 	private $unique = '';
@@ -48,10 +48,10 @@ class adminUser extends \Lectric\SQLQueryPDO
 			{
 				
 				try {
-					$this->setWhereFields( array('id' => $_SESSION['admin_userid'] ));
+					$this->setWhereFields( ['id' => $_SESSION['admin_userid']] );
 					$this->setWhereOps('=');
-					$user = $this->selStrict($this->_user_table, 'SINGLE', 'NOT_TABLED');
-				} catch (\Lectric\SQLException $e){
+					$user = $this->selStrict($this->_user_table, \Lectric\lecPDO::SINGLE);
+				} catch (\Exception $e){
 					if (DEBUG){
 						echo 'Failed to load user data from database in loadUserData(): '.$e->getMessage();
 					}
@@ -114,11 +114,11 @@ class adminUser extends \Lectric\SQLQueryPDO
 								$_SESSION['unique'] = password_hash(date('Y-m-d H:i:s'), PASSWORD_DEFAULT);
 								
 								try {
-									$this->setWhereFields(array('W_id'=>$user['id']));
+									$this->setWhereFields(['id'=>$user['id']]);
 									$this->setWhereOps('=');
-									$this->setQueryFields(array('last_logged_in'=>date('Y-m-d H:i:s'), 'unique'=>$_SESSION['unique']));
+									$this->setUpdateFields(['last_logged_in'=>date('Y-m-d H:i:s'), 'unique'=>$_SESSION['unique']]);
 									$this->updateStrict($this->_user_table);
-								} catch (\Lectric\SQLException $e){
+								} catch (\Exception $e){
 									if(DEBUG){
 										echo 'Failed to update last login: '.$e->getMessage();
 										return new \Lectric\controlAction();
@@ -191,17 +191,17 @@ class adminUser extends \Lectric\SQLQueryPDO
 					}
 					
 					//load up permission
-					$this->setWhereFields(array('identifier'=>$permissionIdent));
+					$this->setWhereFields(['identifier'=>$permissionIdent]);
 					$this->setWhereOps('=');
-					$permissionLoaded = $this->selStrict($this->_permissions_types_table, 'SINGLE', 'NOT_TABLED');
+					$permissionLoaded = $this->selStrict($this->_permissions_types_table, \Lectric\lecPDO::SINGLE);
 					
 					if ($permissionLoaded === null){
 						return false;
 					} else {
 						
-						$this->setWhereFields(array('user'=>$userid, 'permission'=>$permissionLoaded['id']));
+						$this->setWhereFields(['user'=>$userid, 'permission'=>$permissionLoaded['id']]);
 						$this->setWhereOps('==');
-						$result = $this->selStrict($this->_permissions_table, 'SINGLE');
+						$result = $this->selStrict($this->_permissions_table, \Lectric\lecPDO::SINGLE);
 						if ($result !== null){
 							return true;
 						} else {
@@ -210,7 +210,7 @@ class adminUser extends \Lectric\SQLQueryPDO
 						
 					}
 									
-				} catch (\Lectric\SQLException $e){
+				} catch (\Exception $e){
 					if (DEBUG){
 						
 					}
@@ -231,9 +231,9 @@ class adminUser extends \Lectric\SQLQueryPDO
 			{
 			
 				try {
-					$this->setWhereFields( array('username' => $email ));
+					$this->setWhereFields( ['username' => $email] );
 					$this->setWhereOps('=');
-					$user = $this->selStrict($this->_user_table, 'SINGLE', 'NOT_TABLED');
+					$user = $this->selStrict($this->_user_table,  \Lectric\lecPDO::SINGLE);
 				} catch (SQLException $e){
 					if (DEBUG){
 						echo 'Failed to load userin loadUserArray(): '.$e->getMessage();
