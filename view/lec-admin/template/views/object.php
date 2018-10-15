@@ -4,7 +4,7 @@
 		
 		$objectLoaded = $this->lecAdmin->loadObject((int)$_GET['ob']);
 		
-		$permissions = \lectricFence\Form::loadOptionsFromDbArray($this->DBH, ['id', 'identifier'], 'lec-admin_user_permission_types');
+		$permissions = \LecAdmin\Form::loadOptionsFromDbArray($this->DBH, ['id', 'identifier'], 'lec-admin_user_permission_types');
 		
 		if (isset($permissions[$objectLoaded['permission']])){
 			if($this->adminUser->getAdminPermission($permissions[$objectLoaded['permission']])){
