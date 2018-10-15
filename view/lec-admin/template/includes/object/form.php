@@ -18,7 +18,7 @@ if(file_exists(DOC_ROOT.'/view/lec-admin/template/includes/object/plugin/'.$obje
 
 <?php $link = ($new) ? '/lec-admin/object?ob='.$objectLoaded['id'].'&list=yes' : '/lec-admin/object?ob='.$objectLoaded['id'].'&edit='.$itemLoaded['id'];
 
-echo \lectricFence\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' class="end" enctype="multipart/form-data" '); ?>
+echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' class="end" enctype="multipart/form-data" '); ?>
 
 <fieldset class="forms item_edit_fieldset end">
 
@@ -52,7 +52,7 @@ echo \lectricFence\Form::startForm($objectLoaded['table'].'_form', 'post', $link
 					
 					?><label><?php
 					echo $fField['name']; echo ($fField['mandatory'] === 'yes') ? '<span class="req">*</span>' : '';
-					echo \lectricFence\Form::makeSelect($fField['field'], \lectricFence\Form::loadOptionsFromDbArray($this->DBH, ['id', $fField['select_field']], $fField['select_table']), ' class="width-100 '.$fField['class_inj'].' " ' , $fField['field'], $itemLoaded[$fField['field']]);
+					echo \LecAdmin\Form::makeSelect($fField['field'], \LecAdmin\Form::loadOptionsFromDbArray($this->DBH, ['id', $fField['select_field']], $fField['select_table']), ' class="width-100 '.$fField['class_inj'].' " ' , $fField['field'], $itemLoaded[$fField['field']]);
 					echo (trim($fField['help_text']) === '')? '' : '<div class="forms-desc">'.$fField['help_text'].'</div>';
 					?></label><br/><?php
 					
@@ -60,7 +60,7 @@ echo \lectricFence\Form::startForm($objectLoaded['table'].'_form', 'post', $link
 					
 					?><label><?php
 					echo $fField['name']; echo ($fField['mandatory'] === 'yes') ? '<span class="req">*</span>' : '';
-					echo \lectricFence\Form::makeSelect($fField['field'], [1=>'Yes',0=>'No'], ' class="width-100 '.$fField['class_inj'].' " ' , $fField['field'], $itemLoaded[$fField['field']]);
+					echo \LecAdmin\Form::makeSelect($fField['field'], [1=>'Yes',0=>'No'], ' class="width-100 '.$fField['class_inj'].' " ' , $fField['field'], $itemLoaded[$fField['field']]);
 					echo (trim($fField['help_text']) === '')? '' : '<div class="forms-desc">'.$fField['help_text'].'</div>';
 					?></label><br/><?php
 					
@@ -69,12 +69,12 @@ echo \lectricFence\Form::startForm($objectLoaded['table'].'_form', 'post', $link
 					if (file_exists(DOC_ROOT.$objectLoaded['img_directory'].$itemLoaded[$fField['field']]) && trim($itemLoaded[$fField['field']]) !== ''){
 						
 						?><p><img src="<?php echo $objectLoaded['img_directory'].$itemLoaded[$fField['field']]; ?>" alt="" style="max-height:100px;max-width:100px;"/></p><?php
-						?><label><?php echo \lectricFence\Form::makeInput('deletefile_'.$fField['field'], 'checkbox', 'deletefile_'.$fField['field'], (string)$itemLoaded[$fField['field']]); ?> Delete File?</label><br/><?php
+						?><label><?php echo \LecAdmin\Form::makeInput('deletefile_'.$fField['field'], 'checkbox', 'deletefile_'.$fField['field'], (string)$itemLoaded[$fField['field']]); ?> Delete File?</label><br/><?php
 						
 					} else {
 						?><label><?php
 						echo $fField['name'];
-						echo \lectricFence\Form::makeInput($fField['field'], 'file', $fField['field'], str_replace('"', '&quot;', (string)$itemLoaded[$fField['field']]), '', ' class=" '.$fField['class_inj'].' '.$mandatory.' " ');
+						echo \LecAdmin\Form::makeInput($fField['field'], 'file', $fField['field'], str_replace('"', '&quot;', (string)$itemLoaded[$fField['field']]), '', ' class=" '.$fField['class_inj'].' '.$mandatory.' " ');
 						echo (trim($fField['help_text']) === '')? '' : '<div class="forms-desc">'.$fField['help_text'].'</div>';
 						?></label><br/><?php
 					}
@@ -84,7 +84,7 @@ echo \lectricFence\Form::startForm($objectLoaded['table'].'_form', 'post', $link
 					?><label><?php
 					echo $fField['name']; echo ($fField['mandatory'] === 'yes') ? '<span class="req">*</span>' : '';
 					$cols = ($fField['form_type'] == 'textarea') ? 'rows="15"' : '';
-					echo \lectricFence\Form::makeInput($fField['field'], $fField['form_type'], $fField['field'], str_replace('"', '&quot;', (string)$itemLoaded[$fField['field']]), $fField['placeholder'], ' '.$readOnly.' class="width-100 '.$fField['class_inj'].' '.$mandatory.' " '.$cols.' '); 
+					echo \LecAdmin\Form::makeInput($fField['field'], $fField['form_type'], $fField['field'], str_replace('"', '&quot;', (string)$itemLoaded[$fField['field']]), $fField['placeholder'], ' '.$readOnly.' class="width-100 '.$fField['class_inj'].' '.$mandatory.' " '.$cols.' '); 
 					echo (trim($fField['help_text']) === '')? '' : '<div class="forms-desc">'.$fField['help_text'].'</div>';
 
 					if (strpos($fField['class_inj'],'filemanager') !== false){
@@ -162,11 +162,11 @@ echo \lectricFence\Form::startForm($objectLoaded['table'].'_form', 'post', $link
 <?php
 
 	if ($new){
-		echo \lectricFence\Form::makeInput('lec-admin_new', 'hidden', 'lec-admin_new', 'yes');
+		echo \LecAdmin\Form::makeInput('lec-admin_new', 'hidden', 'lec-admin_new', 'yes');
 	} else {
-		echo \lectricFence\Form::makeInput('id', 'hidden', 'id', $itemLoaded['id']);
+		echo \LecAdmin\Form::makeInput('id', 'hidden', 'id', $itemLoaded['id']);
 	}
 
-	echo \lectricFence\Form::closeForm().'<br/>';
+	echo \LecAdmin\Form::closeForm().'<br/>';
 	
 	
