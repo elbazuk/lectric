@@ -20,14 +20,14 @@
 	
 		<div class="unit-50" style="float:right">
 			
-			<?php echo \lectricFence\Form::startForm('search_form', 'post', '/lec-admin/object?ob='.$objectLoaded['id'].'&list=yes', ' class="end" enctype="multipart/form-data" '); ?>
+			<?php echo \LecAdmin\Form::startForm('search_form', 'post', '/lec-admin/object?ob='.$objectLoaded['id'].'&list=yes', ' class="end" enctype="multipart/form-data" '); ?>
 			<p class="text-right end" style="line-height:35px;">
 				<?php $s = (isset($_POST['search'])) ? $_POST['search'] : '';?>
 				<a href="/lec-admin/object?ob=<?php echo $objectLoaded['id']; ?>&list=yes" class="right" style="display:block;padding-left:20px;">Clear X </a>
-				<?php echo \lectricFence\Form::makeInput('search', 'text', 'search', $s, 'Search', ' class="input-search right"  ');?>
+				<?php echo \LecAdmin\Form::makeInput('search', 'text', 'search', $s, 'Search', ' class="input-search right"  ');?>
 				<button type="submit" style="display:none;">Submit</button>
 			</p>
-			<?php echo \lectricFence\Form::closeForm(); ?>
+			<?php echo \LecAdmin\Form::closeForm(); ?>
 				
 		</div>
 		
@@ -49,10 +49,13 @@
 	}
 	
 	$itemCount = $this->countObjectItems($objectLoaded['table']);
-	$pagination = new \lectricFence\pagination($itemCount);
+	$pagination = new \LecAdmin\pagination($itemCount);
 	$fieldArray = explode(',',$objectLoaded['table_fields']);
+	foreach($fieldArray as $key => $value){
+		$fieldArray[$key] = trim($value, '`');
+	}
 	
-	echo \lectricFence\Form::startForm('adminTable', 'post', '/lec-admin/object?ob='.$objectLoaded['id'].'&list=yes', ' enctype="multipart/form-data" ');
+	echo \LecAdmin\Form::startForm('adminTable', 'post', '/lec-admin/object?ob='.$objectLoaded['id'].'&list=yes', ' enctype="multipart/form-data" ');
 
 	?><table id="admin_list_table" class="table-hovered width-100" style="background:white;"><?php
 		
@@ -76,12 +79,12 @@
 				$this->setSelectFields($fieldArrayHere);
 				$this->setOrderBy(['id'=>'DESC']);
 				$this->setLimit($limitArray);
-				$loadedItems = $this->selStrict($objectLoaded['table'], 'MULTI', 'NOT_TABLED');
+				$loadedItems = $this->selStrict($objectLoaded['table'], \Lectric\lecPDO::MULTI);
 			} else {
-				$loadedItems = $this->select('SELECT `id`,'.$objectLoaded['table_fields'].' FROM `'.trim($objectLoaded['table'], '`').'` '.$sqlInj.' '.$limitInj, 'MULTI', 'NOT_STRICT', 'NOT_ECHO', null, 'NOT_TABLED');
+				$loadedItems = $this->selLax('SELECT `id`,'.$objectLoaded['table_fields'].' FROM `'.trim($objectLoaded['table'], '`').'` '.$sqlInj.' '.$limitInj, null, \Lectric\lecPDO::MULTI);
 			}
 			
-	} catch (SQLException $e){
+	} catch (\Exception $e){
 		if(DEBUG){
 			echo 'Failed to load items from object table for lec admin list: '.$e->getMessage();
 		}
@@ -157,9 +160,9 @@
 			
 	}
 
-	echo \lectricFence\Form::closeForm();
+	echo \LecAdmin\Form::closeForm();
 
-	$pagination = new \lectricFence\pagination($itemCount);
+	$pagination = new \LecAdmin\pagination($itemCount);
 	
 	?><p style="text-align:center;" class="end"><?php echo $itemCount; ?> total entries</p><br/>
 	
