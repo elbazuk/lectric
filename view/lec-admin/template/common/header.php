@@ -32,9 +32,6 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="format-detection" content="telephone=no">
 	
-	<!--layout and font stylesheets-->
-	<link rel="stylesheet" href="<?php echo $this->_iconSet; ?>">
-	
 	<!--Main css stylesheet-->
     <link rel="stylesheet" href="<?php echo $this->_cssLocalDir; ?>/style.css">
     <link rel="stylesheet" href="<?php echo $this->_cssLibDir; ?>/jquery_ui.css">
@@ -54,7 +51,8 @@
 	<header>
 		<h1 class="end left"><?php echo SITE_NAME.' - Administration'; ?></h1>
 		
-		<a href="/lec-admin/" class="right end"><i class="fa fa-home fa-fw"></i></a>
+		
+		
 		<?php 
 		if ($this->adminUser->loggedIn()){
 			
@@ -65,12 +63,16 @@
 				<button class="btn btn-blue " type="submit"><i class="fa fa-sign-out"></i> Logout</button>
 			</form>
 			<p class="right end">Logged in as: <?php echo htmlentities($this->adminUser->name); ?>. </p>
+			<a href="/" class="right end" target="_blank"><i class="fa fa-desktop"></i> View Website</a>
+			<a href="/lec-admin/" class="right end"><i class="fa fa-home fa-fw"></i></a>
+			
 			<nav class="navbar nav-fullwidth end clear">
 				<?php echo $this->lecAdmin->adminTabsHTML() ; ?>
 			</nav>
 			<?php
 		}
 		?>
+		
 	</header>
 	
 	<div style="height:90px;"></div>
