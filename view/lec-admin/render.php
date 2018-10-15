@@ -1,14 +1,5 @@
 <?php
 
-	//IP permissions
-		$ips = [
-			'80.0.195.126'
-		];
-		
-		if (!in_array($_SERVER['REMOTE_ADDR'], $ips)){
-			//exit;
-		}
-
 	//get permissions
 		$this->adminUser = new \LecAdmin\adminUser($this->DBH);
 
