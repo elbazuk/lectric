@@ -9,21 +9,8 @@ namespace Lectric;
 * @copyright  Elliott Barratt, all rights reserved.
 *
 */ 
-class lecDefault extends SQLQueryPDO 
+class lecDefault
 {
-
-    /**
-     * construct does nothing...
-     *
-     * @param array DBH array of URL nodes 
-	 *
-     */
-		function __construct($DBH)
-		{
-			
-			parent::__construct($DBH);
-			
-		}
 	
     /**
 	* test function for do-action
