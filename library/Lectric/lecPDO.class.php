@@ -218,7 +218,7 @@ class lecPDO
 						
 						$fetched = $STH->fetch();
 						
-						if ($fetched === false || empty($fetched)){
+						if ($fetched === false){
 						
 							//no rows
 							if($strict === true){
@@ -238,7 +238,7 @@ class lecPDO
 						if (empty($fetched)){
 							
 							//no rows
-							if($strict === true){
+							if($strict === 'STRICT'){
 								throw new \Exception('No Results');
 							}
 							
@@ -265,10 +265,10 @@ class lecPDO
 						
 						$fetched = $STH->fetch();
 						
-						if ($fetched === false || empty($fetched)){
+						if ($fetched === false){
 							
 							//no rows
-							if($strict === true){
+							if($strict === 'STRICT'){
 								throw new \Exception('No Results');
 							}
 								
@@ -285,7 +285,7 @@ class lecPDO
 						if (empty($fetched)){
 							
 							//no rows
-							if($strict === true){
+							if($strict === 'STRICT'){
 								throw new \Exception('No Results');
 							}
 							
@@ -301,44 +301,72 @@ class lecPDO
 			}
 			
 		/**
-		* Parse and verify the SQL clause members
-		* @param string $table the table to get the cols from
-		* @param string $type where's the check request coming from
-		* @param string $type the function that requested the check
-		* @return void
-		*/
-			private function checkSQLClauses(string $table, string $type, string $function): void
-			{
-			
-				//insert and delete specific checks
-				if($type === 'insert' ||  $type === 'update'){
-					if (!is_array($this->_updateFields)){
-						throw new \Exception ('Fields not an array in '.$function);
-					}
-				}
-				
-				if($type !== 'insert'){
-					
-				}
-				
-				
-			}
-			
-		/**
 		* Check the sql function passed is ok
 		* @param string $value a sql function
 		* @return bool
 		*/
 			private function checkFunction(string $value = ''): ?bool
 			{
-				switch ($value){
-					case 'NOW()':
-						return true;
-					break;
-					default:
+				$value = trim($value);
+				
+				//protect against injection by semi-colon
+					if(mb_stripos($value, ';') !== false){
 						return false;
-					break;
-				}
+					}
+				
+				//none argument functions
+					switch ($value){
+						case 'NOW()':
+							return true;
+						break;
+					}
+				
+				//argument functions
+					$lastChar = (strlen($value)-1);
+					if((
+						//string
+							mb_stripos($value, 'CONCAT(') === 0 ||
+							mb_stripos($value, 'CHAR_LENGTH(') === 0 ||
+							mb_stripos($value, 'FORMAT(') === 0 ||
+							mb_stripos($value, 'LOWER(') === 0 ||
+							mb_stripos($value, 'UPPER(') === 0 ||
+							mb_stripos($value, 'TRIM(') === 0 ||
+						//number
+							mb_stripos($value, 'ABS(') === 0 ||
+							mb_stripos($value, 'AVG(') === 0 ||
+							mb_stripos($value, 'CEIL(') === 0 ||
+							mb_stripos($value, 'COUNT(') === 0 ||
+							mb_stripos($value, 'FORMAT(') === 0 ||
+							mb_stripos($value, 'FLOOR(') === 0 ||
+							mb_stripos($value, 'MAX(') === 0 ||
+							mb_stripos($value, 'MIN(') === 0 ||
+							mb_stripos($value, 'ROUND(') === 0 ||
+							mb_stripos($value, 'RAND(') === 0 ||
+							mb_stripos($value, 'SIGN(') === 0 ||
+							mb_stripos($value, 'SUM(') === 0 ||
+						//date
+							mb_stripos($value, 'DATE(') === 0 ||
+							mb_stripos($value, 'DATE_FORMAT(') === 0 ||
+							mb_stripos($value, 'DAY(') === 0 ||
+							mb_stripos($value, 'HOUR(') === 0 ||
+							mb_stripos($value, 'MINUTE(') === 0 ||
+							mb_stripos($value, 'MONTH(') === 0 ||
+							mb_stripos($value, 'QUARTER(') === 0 ||
+							mb_stripos($value, 'SECOND(') === 0 ||
+							mb_stripos($value, 'TIME(') === 0 ||
+							mb_stripos($value, 'WEEK(') === 0 ||
+							mb_stripos($value, 'WEEKDAY(') === 0 ||
+							mb_stripos($value, 'YEAR(') === 0
+						) &&
+						(
+							mb_strripos($value, ')') === $lastChar || 	//close of function 
+							mb_strripos($value, '"') === $lastChar		//where use of AS "something"
+						)
+					){
+						return true;
+					} else {
+						return false;
+					}
 			}
 			
 		/**
@@ -520,10 +548,16 @@ class lecPDO
 					$indexCount = count($this->_selectFields);
 					
 					foreach ($this->_selectFields as $value){
+						
 						if ($i <= $indexCount && $i > 1){
 							$fieldInj .= ',';
 						}
-						$fieldInj .= ' `'.$value.'` ';
+						
+						if($this->checkFunction($value) === true){
+							$fieldInj .= ' '.$value.' ';
+						} else {
+							$fieldInj .= ' `'.$value.'` ';
+						}
 						
 						$i++;
 					}
