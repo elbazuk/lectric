@@ -238,7 +238,7 @@ class lecPDO
 						if (empty($fetched)){
 							
 							//no rows
-							if($strict === 'STRICT'){
+							if($strict === true){
 								throw new \Exception('No Results');
 							}
 							
@@ -268,7 +268,7 @@ class lecPDO
 						if ($fetched === false){
 							
 							//no rows
-							if($strict === 'STRICT'){
+							if($strict === true){
 								throw new \Exception('No Results');
 							}
 								
@@ -285,7 +285,7 @@ class lecPDO
 						if (empty($fetched)){
 							
 							//no rows
-							if($strict === 'STRICT'){
+							if($strict === true){
 								throw new \Exception('No Results');
 							}
 							
