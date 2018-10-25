@@ -24,17 +24,17 @@ class pagination
 		public function __construct(int $itemcount = 1)
 		{
 		
-			if (!defined('PER_PAGE_FRONT')){
-				define('PER_PAGE_FRONT', 10);
+			if (!defined('PER_PAGE_FRONT_ADMIN')){
+				define('PER_PAGE_FRONT_ADMIN', 10);
 			}
 			
-			if (!defined('PAG_PAGE')){
-				define('PAG_PAGE', 1);
+			if (!defined('PAG_PAGE_ADMIN')){
+				define('PAG_PAGE_ADMIN', 1);
 			}
 			
 			?>
 				<ul class="pagination">
-					<?php $this->get_pages($itemcount, PAG_PAGE);?>
+					<?php $this->get_pages($itemcount, PAG_PAGE_ADMIN);?>
 				</ul>
 			<?php
 			
@@ -51,7 +51,7 @@ class pagination
 		private function get_pages(int $itemcount,  int $page): void
 		{
 			
-			$number_of_pages = ($itemcount / PER_PAGE_FRONT);
+			$number_of_pages = ($itemcount / PER_PAGE_FRONT_ADMIN);
 			
 			if ($number_of_pages > 1){
 				
