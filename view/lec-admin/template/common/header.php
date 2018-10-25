@@ -34,14 +34,9 @@
 	
 	<!--Main css stylesheet-->
     <link rel="stylesheet" href="<?php echo $this->_cssLocalDir; ?>/style.css">
-    <link rel="stylesheet" href="<?php echo $this->_cssLibDir; ?>/jquery_ui.css">
-	<link rel="stylesheet" href="/view/lec-admin/css/fancybox-v20170806.css">
 	
-	<script src="<?php echo $this->_jsLibDir; ?>/jquery.js"></script>
-	<script src="<?php echo $this->_jsLibDir; ?>/jquery_ui.js"></script>
-	<script src="<?php echo $this->_jsLibDir; ?>/plugins.js"></script>
+	<script src="<?php echo $this->_jsLocalDir; ?>/plugins.js"></script>
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-	<script src="/view/lec-admin/js/fancybox.js"></script>
     
 </head>
 
@@ -49,9 +44,8 @@
 <body>
 
 	<header>
+	
 		<h1 class="end left"><?php echo SITE_NAME.' - Administration'; ?></h1>
-		
-		
 		
 		<?php 
 		if ($this->adminUser->loggedIn()){
