@@ -62,8 +62,8 @@
 	try {
 		
 		//selection limits based on pagination
-			$limitInj = 'LIMIT '.PAG_START.','.PER_PAGE_FRONT;
-			$limitArray = [PAG_START, PER_PAGE_FRONT];
+			$limitInj = 'LIMIT '.PAG_START_ADMIN.','.PER_PAGE_FRONT_ADMIN;
+			$limitArray = [PAG_START_ADMIN, PER_PAGE_FRONT_ADMIN];
 		
 		//is there a search?
 			if (isset($_POST['search'])){
