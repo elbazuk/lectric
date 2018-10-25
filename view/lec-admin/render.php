@@ -26,7 +26,7 @@
 		}
 		
 	//page count definitions
-		define('PER_PAGE_FRONT', 30);
+		define('PER_PAGE_FRONT_ADMIN', 30);
 		
 		if (isset($_GET['page'])){
 			
@@ -42,8 +42,8 @@
 		
 		$start_pos = PER_PAGE_FRONT * ($page - 1);
 		
-		define('PAG_PAGE', $page);
-		define('PAG_START', $start_pos);
+		define('PAG_PAGE_ADMIN', $page);
+		define('PAG_START_ADMIN', $start_pos);
 		
 	//editor stylesheets MUST HAVE LEADING COMMA
 		if(DEBUG){
