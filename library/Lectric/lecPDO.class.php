@@ -119,7 +119,7 @@ class lecPDO
 			{
 			
 				$inj = $this->getFieldToValueInsert();
-				$sql = 'INSERT INTO `'.$table.'` ('.$inj['fields'].') VALUE ('.$inj['values'].')';
+				$sql = 'INSERT INTO `'.$table.'` ('.$inj['fields'].') VALUES ('.$inj['values'].')';
 				
 				if (in_array(self::SQL_ECHO, $args)){
 					echo $sql;
@@ -168,7 +168,7 @@ class lecPDO
 					}
 					$this->clearProperties();
 				} catch (\PDOException $e){
-					throw new SQLException($e->getMessage());
+					throw new \Exception($e->getMessage());
 				} finally {
 					return;
 				}
