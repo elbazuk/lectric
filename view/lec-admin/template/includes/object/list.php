@@ -49,11 +49,18 @@
 	}
 	
 	$itemCount = $this->countObjectItems($objectLoaded['table']);
-	$pagination = new \LecAdmin\pagination($itemCount);
 	$fieldArray = explode(',',$objectLoaded['table_fields']);
 	foreach($fieldArray as $key => $value){
 		$fieldArray[$key] = trim($value, '`');
 	}
+	
+	//add to array where field name is the key, to use in select_yesno 1 + 0 output on table...
+	$formFields = json_decode($objectLoaded['edit_fields'], true);
+	foreach($formFields as $key => $settings){
+		$formFields[$settings['field']] = $settings;
+	}
+	
+	$pagination = new \LecAdmin\pagination($itemCount);
 	
 	echo \LecAdmin\Form::startForm('adminTable', 'post', '/lec-admin/object?ob='.$objectLoaded['id'].'&list=yes', ' enctype="multipart/form-data" ');
 
@@ -121,6 +128,7 @@
 					
 					$fieldName = str_replace('`', '',  $fieldName);
 					
+					//Catch date fields and mark up appropriately
 					if (preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $item[$fieldName]) || preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/', $item[$fieldName])){
 						if ($item[$fieldName] == '0000-00-00'){
 							$item[$fieldName] = 'Not Set';
@@ -129,21 +137,22 @@
 							$item[$fieldName] = $dateTime->format('d/m/Y');
 						}
 					}
-					 
-					if ($fieldName == 'live'){
+					
+					//replace select_yesno values with yes/no
+					if($formFields[$fieldName]['form_type'] == 'select_yesno'){
 						if ($item[$fieldName] == 1){
 							$item[$fieldName] = 'Yes';
 						} else {
 							$item[$fieldName] = 'No';
 						}
 					}
-					 
-					if ($fieldName == 'complete'){
-						if ($item[$fieldName] == 1){
-							$item[$fieldName] = 'Yes';
-						} else {
-							$item[$fieldName] = 'No';
-						}
+					
+					//replace select values with actual value from select table
+					if($formFields[$fieldName]['form_type'] == 'select'){
+						
+						$itemsHere = \LecAdmin\Form::loadOptionsFromDbArray($this->DBH, ['id', $formFields[$fieldName]['select_field']], $formFields[$fieldName]['select_table']);
+						$item[$fieldName] = $itemsHere[$item[$fieldName]];
+						
 					}
 					 
 					?><td><a href="<?php echo '/lec-admin/object?ob='.$objectLoaded['id'].'&edit='.$item['id']; ?>"><?php echo htmlentities($item[$fieldName]);?></a></td><?php
