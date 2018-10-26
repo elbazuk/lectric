@@ -57,23 +57,13 @@ class lecAdmin extends \Lectric\lecPDO
 		 /**
          * Output list of items for given object
          * 
-         * @param int $objectid Object in question
+         * @param array $objectLoaded Object in question
          * @return void
          */
-			public function listHTML(int $objectid): void
+			public function listHTML(array $objectLoaded): void
 			{
-				
-				try{
-					$objectLoaded = $this->loadObject($objectid);					
-				} catch (\Exception $e) {
-					if(DEBUG){
-						echo 'Failed to load object in listHTML(): '.$e->getMessage();
-					}
-					return;
-				}
-				
 				require_once(DOC_ROOT.$this->_object_list_html);
-				
+				return;
 			}
 		
         /**
@@ -282,8 +272,11 @@ class lecAdmin extends \Lectric\lecPDO
 							case 'html':
 								$insertArray[$editField['field']] = $_POST[$editField['field']];
 							break;
+							case 'date':
+								$insertArray[$editField['field']] = (trim($_POST[$editField['field']]) == '') ? '0000-00-00' : htmlentities(trim($_POST[$editField['field']])) ;
+							break;
 							case 'number':
-								$insertArray[$editField['field']] = preg_replace('/[^0-9\.]/', '', $_POST[$editField['field']]);
+								$insertArray[$editField['field']] = (trim($_POST[$editField['field']]) == '') ? 0 : preg_replace('/[^0-9\.]/', '', $_POST[$editField['field']]) ;
 							break;
 							case 'password':
 								if (trim($_POST[$editField['field']] !== '')){
