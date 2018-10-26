@@ -40,7 +40,7 @@
 			$page = 1;
 		}
 		
-		$start_pos = PER_PAGE_FRONT * ($page - 1);
+		$start_pos = PER_PAGE_FRONT_ADMIN * ($page - 1);
 		
 		define('PAG_PAGE_ADMIN', $page);
 		define('PAG_START_ADMIN', $start_pos);
