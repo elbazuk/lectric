@@ -46,7 +46,7 @@
 					
 				//output table or form
 					if (isset($_GET['list'])){
-						$this->lecAdmin->listHTML((int)$_GET['ob']);
+						$this->lecAdmin->listHTML($objectLoaded);
 					} else if(isset($_GET['edit']) || isset($_POST['id'])){
 						$this->lecAdmin->formHTML((int)$_GET['ob'], (int)$_GET['edit'], false);
 					} else if(isset($_GET['new'])){
