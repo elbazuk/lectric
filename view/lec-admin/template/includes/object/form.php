@@ -81,21 +81,31 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 					
 				} else {
 					
+					//add image in if filemanager link box, and image
+					if (strpos($fField['class_inj'],'filemanager') !== false){
+						if(!$new && trim($itemLoaded[$fField['field']]) !== ''){
+							if(getimagesize( (string)$itemLoaded[$fField['field']] ) !== false){
+								?><img src="<?php echo (string)$itemLoaded[$fField['field']]; ?>" style="max-width:300px;"><?php
+							}
+						}
+					}
+					
 					?><label><?php
 					echo $fField['name']; echo ($fField['mandatory'] === 'yes') ? '<span class="req">*</span>' : '';
 					$cols = ($fField['form_type'] == 'textarea') ? 'rows="15"' : '';
 					echo \LecAdmin\Form::makeInput($fField['field'], $fField['form_type'], $fField['field'], str_replace('"', '&quot;', (string)$itemLoaded[$fField['field']]), $fField['placeholder'], ' '.$readOnly.' class="width-100 '.$fField['class_inj'].' '.$mandatory.' " '.$cols.' '); 
 					echo (trim($fField['help_text']) === '')? '' : '<div class="forms-desc">'.$fField['help_text'].'</div>';
 
+					//add filenmanager link
 					if (strpos($fField['class_inj'],'filemanager') !== false){
 						?>
 							<a href="/view/lec-admin/filemanager/dialog.php?type=0&field_id=<?php echo $fField['field']; ?>&akey=<?php echo $_SESSION['admin_userid']; ?>" class="btn btn-green filemanager_button" type="button">Open Filemanager</a>
 							<script>
 								$('.filemanager_button').fancybox({
-									'width'		: 900,
-									'height'	: 600, 
+									//'width'		: 900,
+									//'height'	: 900, 
 									'type'		: 'iframe',
-									'autoScale'    	: false
+									'autoScale'    	: true
 								});
 							</script>
 						<?php
