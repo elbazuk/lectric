@@ -84,7 +84,11 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 					//add image in if filemanager link box, and image
 					if (strpos($fField['class_inj'],'filemanager') !== false){
 						if(!$new && trim($itemLoaded[$fField['field']]) !== ''){
-							if(getimagesize( (string)$itemLoaded[$fField['field']] ) !== false){
+							
+							$bits = explode('.',trim($itemLoaded[$fField['field']]));
+							$ext = end($bits);
+							$allowedExts = ['png', 'jpg', 'jpeg', 'gif'];
+							if(in_array($ext, $allowedExts)){
 								?><img src="<?php echo (string)$itemLoaded[$fField['field']]; ?>" style="max-width:300px;"><?php
 							}
 						}
