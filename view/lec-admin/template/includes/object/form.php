@@ -104,14 +104,6 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 					if (strpos($fField['class_inj'],'filemanager') !== false){
 						?>
 							<a href="/view/lec-admin/filemanager/dialog.php?type=0&field_id=<?php echo $fField['field']; ?>&akey=<?php echo $_SESSION['admin_userid']; ?>" class="btn btn-green filemanager_button" type="button">Open Filemanager</a>
-							<script>
-								$('.filemanager_button').fancybox({
-									//'width'		: 900,
-									//'height'	: 900, 
-									'type'		: 'iframe',
-									'autoScale'    	: true
-								});
-							</script>
 						<?php
 					}
 					
