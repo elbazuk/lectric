@@ -43,3 +43,6 @@
 		?><p>There are no objects in this administration panel.</p><?php
 	}
 	
+	if(file_exists(DOC_ROOT.'/view/lec-admin/template/views/plugin/index.php')){
+		include(DOC_ROOT.'/view/lec-admin/template/views/plugin/index.php');
+	}
