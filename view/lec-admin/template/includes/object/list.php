@@ -1,6 +1,6 @@
 <h1><i class="fa <?php echo $objectLoaded['icon'] ;?>"></i> <?php echo $objectLoaded['name'];?></h1>
 
-<div class="units-row end">
+<div class="units-row ">
 
 	<div class="unit-50">
 	
@@ -101,67 +101,94 @@
 		?><tr><td>There are no items of this type.</td></tr></table><?php
 	} else {
 		
-		?><thead><tr><th></th><?php
-		
-		foreach ($fieldArray as $value){
+		//make friendly versions of field names as table head
+			?><thead><tr><th></th><?php
 			
-			$value = str_replace('`', '',  $value);
-				
-			?><th><?php echo ucwords(str_replace('`', '', str_replace('_',' ',$value))); ?></th><?php
-			
-		}
-		
-		?></tr></thead><tbody><?php
-				
-		foreach ($loadedItems as $item){
-		
-			?><tr><?php
-			
-			if (in_array($item['id'],json_decode($objectLoaded['nodelete'], true))){
-				?><td style="width:10px;"><input type="checkbox" disabled="disabled"/></td><?php
-			} else {
-			
-				?><td style="width:10px;"><input type="checkbox" id="admin_table_item_check_<?php echo $item['id']; ?>" name="admin_table_item_check_<?php echo $item['id']; ?>" class="admin_table_item_check"/></td><?php
-			}
-			
-				foreach ($fieldArray as $fieldName){
+				foreach ($fieldArray as $value){
 					
-					$fieldName = str_replace('`', '',  $fieldName);
-					
-					//Catch date fields and mark up appropriately
-					if (preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $item[$fieldName]) || preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/', $item[$fieldName])){
-						if ($item[$fieldName] == '0000-00-00'){
-							$item[$fieldName] = 'Not Set';
-						} else {
-							$dateTime = new DateTime(date($item[$fieldName]));
-							$item[$fieldName] = $dateTime->format('d/m/Y');
-						}
-					}
-					
-					//replace select_yesno values with yes/no
-					if($formFields[$fieldName]['form_type'] == 'select_yesno'){
-						if ($item[$fieldName] == 1){
-							$item[$fieldName] = 'Yes';
-						} else {
-							$item[$fieldName] = 'No';
-						}
-					}
-					
-					//replace select values with actual value from select table
-					if($formFields[$fieldName]['form_type'] == 'select'){
+					$value = str_replace('`', '',  $value);
 						
-						$itemsHere = \LecAdmin\Form::loadOptionsFromDbArray($this->DBH, ['id', $formFields[$fieldName]['select_field']], $formFields[$fieldName]['select_table']);
-						$item[$fieldName] = $itemsHere[$item[$fieldName]];
-						
-					}
-					 
-					?><td><a href="<?php echo '/lec-admin/object?ob='.$objectLoaded['id'].'&edit='.$item['id']; ?>"><?php echo htmlentities($item[$fieldName]);?></a></td><?php
+					?><th><?php echo ucwords(str_replace('`', '', str_replace('_',' ',$value))); ?></th><?php
+					
 				}
 			
-			?></tr><?php
-		}
-						
-		?></tbody></table><?php
+			?></tr></thead><?php
+		
+		//go through each item and produce a table row of the selected fields
+		
+			?><tbody><?php
+			
+				foreach ($loadedItems as $item){
+				
+					?><tr><?php
+					
+					if (in_array($item['id'],json_decode($objectLoaded['nodelete'], true))){
+						?><td style="width:10px;"><input type="checkbox" disabled="disabled"/></td><?php
+					} else {
+					
+						?><td style="width:10px;"><input type="checkbox" id="admin_table_item_check_<?php echo $item['id']; ?>" name="admin_table_item_check_<?php echo $item['id']; ?>" class="admin_table_item_check"/></td><?php
+					}
+					
+						//go through each selected field and output onto table.
+						foreach ($fieldArray as $fieldName){
+							
+							$fieldName = str_replace('`', '',  $fieldName);
+							
+							$cellValue = '';
+							
+							//Catch date fields and mark up appropriately
+							if (preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $item[$fieldName]) || preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/', $item[$fieldName])){
+								if ($item[$fieldName] == '0000-00-00'){
+									$cellValue = 'Not Set';
+								} else {
+									$dateTime = new DateTime(date($item[$fieldName]));
+									$cellValue = $dateTime->format('d/m/Y');
+								}
+							} else if(isset($formFields[$fieldName])){
+							
+								//replace select_yesno values with yes/no
+								if($formFields[$fieldName]['form_type'] == 'select_yesno'){
+									
+									$highLightInList = (isset($formFields[$fieldName]['highlight_in_list'])) ? $formFields[$fieldName]['highlight_in_list'] : 'no' ;
+									
+									if($highLightInList == 'yes'){
+										
+										if ($item[$fieldName] == 1){
+											$cellValue = '<span class="label label-green">Yes</span>';
+										} else {
+											$cellValue = '<span class="label label-red">No</span>';
+										}
+										
+									} else {
+										
+										if ($item[$fieldName] == 1){
+											$cellValue = 'Yes';
+										} else {
+											$cellValue = 'No';
+										}
+										
+									}
+									
+								} else if($formFields[$fieldName]['form_type'] == 'select'){
+									
+									$itemsHere = \LecAdmin\Form::loadOptionsFromDbArray($this->DBH, ['id', $formFields[$fieldName]['select_field']], $formFields[$fieldName]['select_table']);
+									$item[$fieldName] = $itemsHere[$item[$fieldName]];
+									
+								}
+								
+							}
+							
+							//catch anything not caught above as default value of item field.
+							$cellValue = ($cellValue === '') ? htmlentities($item[$fieldName]) : $cellValue ;
+							 
+							?><td><a href="<?php echo '/lec-admin/object?ob='.$objectLoaded['id'].'&edit='.$item['id']; ?>"><?php echo $cellValue;?></a></td><?php
+						}
+					
+					?></tr><?php
+					
+				}
+							
+			?></tbody></table><?php
 		
 		if ($objectLoaded['deletions'] === 0){
 			?><p class="tools-alert tools-alert-yellow">Deletions Disabled for <?php echo $objectLoaded['name']; ?></p><?php
@@ -174,7 +201,6 @@
 	$pagination = new \LecAdmin\pagination($itemCount);
 	
 	?><p style="text-align:center;" class="end"><?php echo $itemCount; ?> total entries</p><br/>
-	
 	
 	<?php
 	//include form
