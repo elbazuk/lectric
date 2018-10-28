@@ -152,7 +152,7 @@ fieldset{
 		left:0;
 		background:#292e41;
 		color:white;
-		z-index:999;
+		z-index:9999999;
 	}
 	
 		body.mce-fullscreen header{
@@ -239,6 +239,8 @@ fieldset{
 		height:56px;
 		line-height:56px;
 		background:white;
+		z-index:9999;
+		border-top: 1px solid #cccccc;
 	}
 	
 		footer li{
@@ -303,6 +305,7 @@ fieldset{
 		padding:10px;
 		border:1px solid #ccc;
 		border-radius:5px;
+		z-index:9999;
 	}
 	
 		.saveCancel .btn{
