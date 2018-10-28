@@ -1,15 +1,9 @@
-function setFieldset(){
-	var viewportHeight =  $(window).height();
-	var wiewPortWidth = $(window).width(); 
-	
-	//fieldset
-	$('.item_edit_fieldset').css('max-height', (viewportHeight-280)+'px');
-}
-
-$(window).resize(function(){
-	setFieldset();
-});
-
-$(document).ready(function(){
-	setFieldset();
+$('.filemanager_button').fancybox({
+	width : 900,
+	height : 900, 
+	minHeight : 900, 
+	autoHeight :true,
+	autoScale : true,
+	autoResize : true,
+	type : 'iframe'
 });
