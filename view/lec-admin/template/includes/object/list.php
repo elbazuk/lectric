@@ -1,8 +1,25 @@
+<?php
+	
+	$itemCount = $this->countObjectItems($objectLoaded['table']);
+	$fieldArray = explode(',',$objectLoaded['table_fields']);
+	foreach($fieldArray as $key => $value){
+		$fieldArray[$key] = trim($value, '`');
+	}
+	
+	//add to array where field name is the key, to use in select_yesno 1 + 0 output on table...
+	$formFields = json_decode($objectLoaded['edit_fields'], true);
+	foreach($formFields as $key => $settings){
+		unset($formFields[$key]);
+		$formFields[$settings['field']] = $settings;
+	}
+	
+?>
+
 <h1><i class="fa <?php echo $objectLoaded['icon'] ;?>"></i> <?php echo $objectLoaded['name'];?></h1>
 
-<div class="units-row ">
+<div>
 
-	<div class="unit-50">
+	<div class="width-50 left">
 	
 		<?php if ($objectLoaded['add_new'] === 1){ ?>
 			<a href="/lec-admin/object?ob=<?php echo $objectLoaded['id']; ?>&new=yes" class="btn btn-blue add_new"><i class="fa <?php echo $objectLoaded['icon'] ;?>"></i> Add New <?php echo $objectLoaded['s_word'];?></a>
@@ -15,25 +32,85 @@
 		<?php } ?>
 		
 	</div>
+	<div class="width-50 right forms" >
 	
-	<?php if ($objectLoaded['search'] === 1){ ?>
-	
-		<div class="unit-50" style="float:right">
+		<table class="table-simple">
+			<tr>
 			
-			<?php echo \LecAdmin\Form::startForm('search_form', 'post', '/lec-admin/object?ob='.$objectLoaded['id'].'&list=yes', ' class="end" enctype="multipart/form-data" '); ?>
-			<p class="text-right end" style="line-height:35px;">
-				<?php $s = (isset($_POST['search'])) ? $_POST['search'] : '';?>
-				<a href="/lec-admin/object?ob=<?php echo $objectLoaded['id']; ?>&list=yes" class="right" style="display:block;padding-left:20px;">Clear X </a>
-				<?php echo \LecAdmin\Form::makeInput('search', 'text', 'search', $s, 'Search', ' class="input-search right"  ');?>
-				<button type="submit" style="display:none;">Submit</button>
-			</p>
-			<?php echo \LecAdmin\Form::closeForm(); ?>
+				<?php
 				
-		</div>
+					$showSort = false;
+					$sortArray = [];
+				
+					foreach ($formFields as $fieldSettings){
+						
+						if(isset($fieldSettings['sortable'])){
+							
+							if($fieldSettings['sortable'] === 'yes'){
+								
+								$showSort = true;
+								if(isset($_POST['order_by'])){
+									$ascSelected = ($_POST['order_by'] == $fieldSettings['field'].'_lec-admin_ASC') ? 'selected="selected"' :'' ;
+									$descSelected = ($_POST['order_by'] == $fieldSettings['field'].'_lec-admin_DESC') ? 'selected="selected"' :'' ;
+								} else {
+									$ascSelected = '';
+									$descSelected = '';
+								}
+								$sortArray[] = '<option '.$ascSelected.' value="'.$fieldSettings['field'].'_lec-admin_ASC">'.$fieldSettings['name'].' Ascending</option>';
+								$sortArray[] = '<option '.$descSelected.' value="'.$fieldSettings['field'].'_lec-admin_DESC">'.$fieldSettings['name'].' Descending</option>';
+								continue;
+								
+							}
+							
+						}
+						
+					}
+					
+					//only show if not searching.
+					if($showSort === true && !isset($_POST['search'])){
+						
+						?><td><?php
+						echo \LecAdmin\Form::startForm('order_by_form', 'post', URL_REQUEST , ' class="end" style="display:inline;" ');
+						?>
+							<select class="width-100" name="order_by" onchange="$('#order_by_form').submit();">
+								<option value="none">Sort Page By</option>
+								<?php
+									foreach($sortArray as $sa){
+										echo $sa;
+									}
+								?>
+							</select>
+							<button type="submit" style="display:none;">Submit</button>
+						<?php
+						echo \LecAdmin\Form::closeForm();
+						?></td><?php
+					}
+				
+				?>
+	
+				<?php if ($objectLoaded['search'] === 1){ ?>
+				
+					<td>
+						<?php echo \LecAdmin\Form::startForm('search_form', 'post', '/lec-admin/object?ob='.$objectLoaded['id'].'&list=yes', ' class="end" enctype="multipart/form-data" style="display:inline;" '); ?>
+						<?php $s = (isset($_POST['search'])) ? $_POST['search'] : '';?>
+						<?php echo \LecAdmin\Form::makeInput('search', 'text', 'search', $s, 'Search', ' class="input-search right"  ');?>
+						<button type="submit" style="display:none;">Submit</button>
+						<?php echo \LecAdmin\Form::closeForm(); ?>
+					</td>
+					<td style="line-height:35px;white-space:nowrap;width:1%;">
+						<a href="/lec-admin/object?ob=<?php echo $objectLoaded['id']; ?>&list=yes" class="right" style="display:block;padding-left:20px;">Clear X </a>
+					</td>
+					
+				<?php } ?>
 		
-	<?php } ?>
+			</tr>
+		</table>
+	
+	</div>
 	
 </div>
+
+<div class="clear"></div>
 
 <?php
 
@@ -46,19 +123,7 @@
 			\Lectric\controller::clearSessionMessages();
 		?></div><?php
 		
-	}
-	
-	$itemCount = $this->countObjectItems($objectLoaded['table']);
-	$fieldArray = explode(',',$objectLoaded['table_fields']);
-	foreach($fieldArray as $key => $value){
-		$fieldArray[$key] = trim($value, '`');
-	}
-	
-	//add to array where field name is the key, to use in select_yesno 1 + 0 output on table...
-	$formFields = json_decode($objectLoaded['edit_fields'], true);
-	foreach($formFields as $key => $settings){
-		$formFields[$settings['field']] = $settings;
-	}
+	}	
 	
 	$pagination = new \LecAdmin\pagination($itemCount);
 	
@@ -78,13 +143,26 @@
 			} else {
 				$sqlInj = '';	
 			}
+			
+		//hows the orderby?
+			if (isset($_POST['order_by'])){
+				
+				if($_POST['order_by'] === 'none'){
+					$orderBy = ['id'=>'DESC'];
+				} else {
+					$bits = explode('_lec-admin_', $_POST['order_by']);
+					$orderBy = [$bits[0]=>$bits[1]];
+				}
+			} else {
+				$orderBy = ['id'=>'DESC'];
+			}
 	
 		//load normal table, or searched results table. 
 			if ($sqlInj == ''){
 				$fieldArrayHere = $fieldArray;
 				$fieldArrayHere[] = 'id';
 				$this->setSelectFields($fieldArrayHere);
-				$this->setOrderBy(['id'=>'DESC']);
+				$this->setOrderBy($orderBy);
 				$this->setLimit($limitArray);
 				$loadedItems = $this->selStrict($objectLoaded['table'], \Lectric\lecPDO::MULTI);
 			} else {
