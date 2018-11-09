@@ -4,10 +4,13 @@
 		<div class="fm_bar" style="width: 0%;"></div>
 	</div>
 	
-	<form class="fm_upload_file_form" method="post" action="<?php echo $this->_ajax_file; ?>" enctype="multipart/form-data">
+	<form class="fm_upload_file_form"  method="post" action="<?php echo $this->_ajax_file; ?>" enctype="multipart/form-data" id="fm_upload_form">
 		<table class="upload_file_table">
 			<tr>
-				<td><input id="fm_upload_file" name="fm_upload_file" type="file" value="" placeholder="" data-url="<?php echo $this->_ajax_file; ?>" style="display:inline" /><i class="fa fa-times fa-lg fa-fw fm_pointer fm_top_bar_slide_up" data-elem="fm_upload_file_form"></i></td>
+				<td>
+					<input id="fm_upload_file" name="fm_upload_file" type="file" value="" placeholder="" data-url="<?php echo $this->_ajax_file; ?>" style="display:inline" />
+					<i class="fa fa-times fa-lg fa-fw fm_pointer fm_top_bar_slide_up" data-elem="fm_upload_file_form"></i>
+				</td>
 			</tr>
 		</table>
 	</form>
