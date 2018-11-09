@@ -132,7 +132,7 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 								height : "280",
 								filemanager_title:"Filemanager" ,
 								valid_elements : '+*[*]',
-								external_plugins: { "filemanager" : "/view/lec-admin/js/plugins/filemanager/plugin.min.js", "fontawesome" : "/view/lec-admin/js/plugins/fontawesome/plugin.min.js"},
+								external_plugins: { "filemanager" : "/do/response/filemanager/plugin/", "fontawesome" : "/view/lec-admin/js/plugins/fontawesome/plugin.min.js"},
 							});
 						</script>
 					
