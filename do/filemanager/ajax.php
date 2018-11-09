@@ -3,16 +3,9 @@
 $this->adminUser = new \LecAdmin\adminUser($this->DBH);
 $this->filemanager = new \LecAdmin\filemanager('/uploads/');
 
-if ( (isset($_POST['func']) || isset($_FILES['fm_upload_file'])) && $this->adminUser->loggedIn()){
+if ( isset($_POST['func']) && $this->adminUser->loggedIn()){
 	
 	try{
-	
-		//catch uploaded file
-		if (isset($_FILES['fm_upload_file']) && is_uploaded_file($_FILES['fm_upload_file']['tmp_name'])){
-			
-			echo $uploadedFile = $this->filemanager->uploadFile($_POST['directory']);
-			
-		}
 
 		if (isset($_POST['func'])){
 			//continue to do something
@@ -39,9 +32,6 @@ if ( (isset($_POST['func']) || isset($_FILES['fm_upload_file'])) && $this->admin
 					} else {
 						$this->filemanager->loadDirectoryContentsHTML($_POST['new_dir']);
 					}
-				break;
-				case 'GET_TREE':
-					$this->filemanager->generateFileTreeHTML($_SESSION['userid']);
 				break;
 				
 			}
