@@ -16,7 +16,12 @@
 	
 	<div class="fm_footer">
 		<div class="fm_message"></div>
-		Allowed File Types: <?php echo implode(', ', $this->_allowed_file_types); ?>
+		Allowed File Types: 
+			<?php 
+				foreach($this->_allowed_file_types as $ext => $val){
+					echo $ext.' ';
+				}
+			?>
 	</div>
 
 </div><!--fm_wrapper-->
