@@ -25,7 +25,7 @@
     <meta name="keywords" content="<?php echo $this->page['metakeywords'];?>" />
     
 	<!--favicon-->
-    <link rel="shortcut icon" type="image/png" href="<?php echo $this->_imgLocalDir; ?>/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="/view/<?php echo DEFAULT_DIRECTORY; ?>/img/favicon.png" />
 	
 	<!--mobile support meta-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -33,7 +33,7 @@
 	<meta name="format-detection" content="telephone=no">
 	
 	<!--Main css stylesheet-->
-    <link rel="stylesheet" href="<?php echo $this->_cssLocalDir; ?>/style.css">
+    <link rel="stylesheet" href="<?php echo $this->_cssLocalDir; ?>/style-1.css">
 	
 	<script src="<?php echo $this->_jsLocalDir; ?>/plugins.js"></script>
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
