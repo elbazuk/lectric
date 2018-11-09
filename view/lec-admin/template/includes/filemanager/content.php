@@ -1,7 +1,3 @@
-<?php
-	//var_dump($dirContents);
-?>
-
 <div class="fm_content">
 
 	<?php echo $this->getBackButton($directory);?>
@@ -34,7 +30,7 @@
 						
 						?>
 							<tr class=" " >
-								<td class="fm_change_directory fm_pointer " data-dir="<?php echo urlencode($directory.$folder.'/'); ?>"><i class="fa fa-fw fa-lg fa-folder " ></i></td>
+								<td class="fm_change_directory fm_pointer " data-dir="<?php echo urlencode($directory.$folder.'/'); ?>"><i  style="line-height:1.65em;" class="fa fa-fw fa-lg fa-folder " ></i></td>
 								<td class="fm_change_directory fm_pointer" data-dir="<?php echo  urlencode($directory.$folder.'/'); ?>"><?php echo $folder; ?></td>
 								<td>-</td>
 								<td class="fm_actions_cell">
@@ -58,7 +54,7 @@
 						
 						?>
 							<tr class="fm_click_file" >
-								<td><i class="fa fa-fw fa-lg fa-<?php echo $this->getFAIconFile($file); ?>"></i></td>
+								<td><i class="fa fa-fw fa-lg <?php echo $this->getFAIconFile($file); ?>" style="line-height:1.65em;"></i></td>
 								<td class="fm_select_file fm_pointer" data-file="<?php echo str_replace(DOC_ROOT,'',$directory.$file); ?>">
 									<?php echo $file; ?>
 									<form target="_blank" class="fm_file_click_form" method="post" action="<?php echo $this->_download_serve_file; ?>" id="file_click_form_<?php echo $fileCounter; ?>">
