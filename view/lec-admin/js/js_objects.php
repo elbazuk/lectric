@@ -76,8 +76,11 @@
 	
 		$('.filemanager_button').fancybox({
 			width :  window.innerWidth-40,
-			height :  window.innerHeight-40,
-			type : 'iframe'
+			height :  $(window).height()-40,
+			type : 'iframe',
+			iframe: {
+				preload:false
+			}
 		});
 
 		function filemanager_onMessage(event){
