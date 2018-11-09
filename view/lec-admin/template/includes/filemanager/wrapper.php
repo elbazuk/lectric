@@ -12,7 +12,9 @@
 
 	<?php include(DOC_ROOT.$this->_filemanager_top_bar_template); ?>
 
+	<div class="fm_content">
 	<?php $this->loadDirectoryContentsHTML($directory); ?>
+	</div>
 	
 	<div class="fm_footer">
 		<div class="fm_message"></div>
