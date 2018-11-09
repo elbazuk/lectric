@@ -25,7 +25,7 @@
     <meta name="keywords" content="<?php echo $this->page['metakeywords'];?>" />
     
 	<!--favicon-->
-    <link rel="shortcut icon" type="image/png" href="/view/<?php echo DEFAULT_DIRECTORY; ?>/img/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="/view/<?php echo $this->_fileDirectory; ?>/img/header_logo.png" />
 	
 	<!--mobile support meta-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -33,7 +33,7 @@
 	<meta name="format-detection" content="telephone=no">
 	
 	<!--Main css stylesheet-->
-    <link rel="stylesheet" href="<?php echo $this->_cssLocalDir; ?>/style-1.css">
+    <link rel="stylesheet" href="<?php echo $this->_cssLocalDir; ?>/style-2018-11-09.css">
 	
 	<script src="<?php echo $this->_jsLocalDir; ?>/plugins.js"></script>
 	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
@@ -45,27 +45,41 @@
 
 	<header>
 	
-		<h1 class="end left"><?php echo SITE_NAME.' - Administration'; ?></h1>
+		<h3 class="end left color_white mobile-hide"><?php echo SITE_NAME; ?></h3>
 		
 		<?php 
 		if ($this->adminUser->loggedIn()){
 			
-			//header menu ?>
+			?>
 			
-			<form action="/do/action/LecAdmin/adminUser/adminLogout" method="post" class="forms end right" display="inline"> 
-				<input type="hidden" name="logout" value="yes">
-				<button class="btn btn-blue " type="submit"><i class="fa fa-sign-out"></i> Logout</button>
-			</form>
-			<p class="right end">Logged in as: <?php echo htmlentities($this->adminUser->name); ?>. </p>
-			<a href="/" class="right end" target="_blank"><i class="fa fa-desktop"></i> View Website</a>
-			<a href="/lec-admin/" class="right end"><i class="fa fa-home fa-fw"></i></a>
-			
-			<nav class="navbar nav-fullwidth end clear">
-				<?php echo $this->lecAdmin->adminTabsHTML() ; ?>
-			</nav>
+				<span class="menu_button desktop-hide right"><i class="fa fa-bars fa-fw fa-2x"></i></span>
+				
+				<div class="text-right right menu_options mobile_menu">
+					
+					<a href="/lec-admin/" class=" end"><i class="fa fa-fw fa-home fa-fw"></i></a>
+					
+					<a href="/" class=" end" target="_blank"><i class="fa fa-fw fa-desktop"></i></a>
+					
+					<span class="mobile-hide"><i class="fa fa-fw fa-user"></i> <?php echo htmlentities($this->adminUser->name); ?></span>
+					
+					<form action="/do/action/LecAdmin/adminUser/adminLogout" method="post" class="forms end inline" > 
+						<input type="hidden" name="logout" value="yes">
+						<button class="btn btn-blue " type="submit"><i class="fa fa-fw fa-power-off"></i> Logout</button>
+					</form>
+					
+				</div>
+				
+				<nav class="navbar nav-fullwidth end clear mobile_menu">
+					<?php echo $this->lecAdmin->adminTabsHTML() ; ?>
+				</nav>
+				
 			<?php
 		}
 		?>
+		
+		<script>
+			$('.menu_button').on('click', function(){ $('.mobile_menu').toggle(); });
+		</script>
 		
 	</header>
 	
