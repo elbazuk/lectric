@@ -1,4 +1,4 @@
-<div class="fm_content">
+
 
 	<?php echo $this->getBackButton($directory);?>
 	
@@ -100,5 +100,3 @@
 			
 		}
 	?>
-	
-</div>
