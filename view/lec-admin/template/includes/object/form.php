@@ -103,7 +103,7 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 					//add filenmanager link
 					if (strpos($fField['class_inj'],'filemanager') !== false){
 						?>
-							<a href="/view/lec-admin/filemanager/dialog.php?type=0&field_id=<?php echo $fField['field']; ?>&akey=<?php echo $_SESSION['admin_userid']; ?>" class="btn btn-green filemanager_button" type="button">Open Filemanager</a>
+							<a href="/do/response/filemanager/view/" class="btn btn-green filemanager_button" type="button" data-field="<?php echo $fField['field']; ?>">Open Filemanager</a>
 						<?php
 					}
 					
@@ -132,12 +132,7 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 								height : "280",
 								filemanager_title:"Filemanager" ,
 								valid_elements : '+*[*]',
-								external_plugins: { "filemanager" : "/view/lec-admin/filemanager/plugin.min.js", "fontawesome" : "/view/lec-admin/js/plugins/fontawesome/plugin.min.js"},
-								external_filemanager_path:"/view/lec-admin/filemanager/",
-								filemanager_access_key:"<?php echo $_SESSION['admin_userid']; ?>",
-								file_browser_callback:function(fieldName, url, objectType, w) {
-									filemanager(fieldName, url, objectType, w);
-								}
+								external_plugins: { "filemanager" : "/view/lec-admin/js/plugins/filemanager/plugin.min.js", "fontawesome" : "/view/lec-admin/js/plugins/fontawesome/plugin.min.js"},
 							});
 						</script>
 					
@@ -159,6 +154,8 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 	?>
 		
 </fieldset>
+
+<br/><br/>
 
 <div class="saveCancel">
 	<button class="btn btn-green object_form_submit" type="button" data-form="<?php echo $objectLoaded['table'].'_form'; ?>"><i class="fa fa-save"></i> Save</button>
