@@ -32,11 +32,7 @@ class pagination
 				define('PAG_PAGE_ADMIN', 1);
 			}
 			
-			?>
-				<ul class="pagination">
-					<?php $this->get_pages($itemcount, PAG_PAGE_ADMIN);?>
-				</ul>
-			<?php
+			$this->get_pages($itemcount, PAG_PAGE_ADMIN);
 			
 		}
 		
@@ -55,6 +51,8 @@ class pagination
 			
 			if ($number_of_pages > 1){
 				
+				?><ul class="pagination"><?php
+				
 				$getString = '';
 				foreach($_GET as $key => $val){
 				
@@ -70,9 +68,9 @@ class pagination
 				while ($page_loop < ceil($number_of_pages)){
 
 					if (($page_loop+1) == $page){
-					   $here = true;
+						$here = true;
 					} else {
-					$here = false;
+						$here = false;
 					}
 					
 					if ($page_loop == 0){
@@ -92,6 +90,9 @@ class pagination
 					
 					$page_loop++;
 				}
+				
+				?></ul><?php
+				
 			}
 			
 			return;
