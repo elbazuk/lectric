@@ -15,7 +15,8 @@ Example Field Structure<br/>
 		"class_inj":"",
 		"help_text":"",
 		"highlight_in_list":"yes",
-		"sortable":"no"
+		"sortable":"no",
+		"half_width":"no"
 	}
 ]'));?>
 	
