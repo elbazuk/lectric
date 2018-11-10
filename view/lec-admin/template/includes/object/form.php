@@ -7,14 +7,10 @@ if(file_exists(DOC_ROOT.'/view/lec-admin/template/includes/object/plugin/'.$obje
 		
 ?>
 
-<br/>
-
 <h1>
 	<i class="fa <?php echo $objectLoaded['icon'] ;?>"></i> <?php echo $objectLoaded['name'];?>
 	- <?php echo ($new)? 'New Item' : 'Edit Item'; ?>
 </h1>
-
-<br/>
 
 <?php $link = ($new) ? '/lec-admin/object?ob='.$objectLoaded['id'].'&list=yes' : '/lec-admin/object?ob='.$objectLoaded['id'].'&edit='.$itemLoaded['id'];
 
@@ -38,7 +34,19 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 		
 		if ($formFields != null){
 			
+			$halfWidthCounter = 1;
+			
 			foreach($formFields as $fField){
+				
+				if(isset($fField['half_width'])){
+					if($fField['half_width'] === 'yes'){
+						if($halfWidthCounter % 2 == 1){
+							?><div class="units-row end"><div class="unit-50 end"><?php
+						} else {
+							?><div class="unit-50 end"><?php
+						}
+					}
+				}
 				
 				$fField['read_only'] = (isset($fField['read_only'])) ? $fField['read_only'] : '';
 				$readOnly = ($fField['read_only'] === 'yes') ? 'readonly="readonly"' :'' ;
@@ -81,31 +89,43 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 					
 				} else {
 					
-					//add image in if filemanager link box, and image
-					if (strpos($fField['class_inj'],'filemanager') !== false){
-						if(!$new && trim($itemLoaded[$fField['field']]) !== ''){
-							
-							$bits = explode('.',trim($itemLoaded[$fField['field']]));
-							$ext = end($bits);
-							$allowedExts = ['png', 'jpg', 'jpeg', 'gif'];
-							if(in_array($ext, $allowedExts)){
-								?><img src="<?php echo (string)$itemLoaded[$fField['field']]; ?>" style="max-width:300px;"><?php
+					?><label><?php
+					
+						echo $fField['name'];
+						echo ($fField['mandatory'] === 'yes') ? '<span class="req">*</span>' : '';
+						
+						//add image in if filemanager link box, and image
+						if (strpos($fField['class_inj'],'filemanager') !== false){
+							if(!$new && trim($itemLoaded[$fField['field']]) !== ''){
+								
+								$bits = explode('.',trim($itemLoaded[$fField['field']]));
+								$ext = end($bits);
+								$allowedExts = ['png', 'jpg', 'jpeg', 'gif'];
+								if(in_array($ext, $allowedExts)){
+									?><br/><img src="<?php echo (string)$itemLoaded[$fField['field']]; ?>" style="max-width:300px;padding:0.3em;"><?php
+								}
 							}
 						}
-					}
-					
-					?><label><?php
-					echo $fField['name']; echo ($fField['mandatory'] === 'yes') ? '<span class="req">*</span>' : '';
-					$cols = ($fField['form_type'] == 'textarea') ? 'rows="15"' : '';
-					echo \LecAdmin\Form::makeInput($fField['field'], $fField['form_type'], $fField['field'], str_replace('"', '&quot;', (string)$itemLoaded[$fField['field']]), $fField['placeholder'], ' '.$readOnly.' class="width-100 '.$fField['class_inj'].' '.$mandatory.' " '.$cols.' '); 
-					echo (trim($fField['help_text']) === '')? '' : '<div class="forms-desc">'.$fField['help_text'].'</div>';
-
-					//add filenmanager link
-					if (strpos($fField['class_inj'],'filemanager') !== false){
-						?>
-							<a href="/do/response/filemanager/view/" class="btn btn-green filemanager_button" type="button" data-field="<?php echo $fField['field']; ?>">Open Filemanager</a>
-						<?php
-					}
+						
+						$cols = ($fField['form_type'] == 'textarea') ? 'rows="15"' : '';
+						
+						//add filenmanager button or normal
+						if (strpos($fField['class_inj'],'filemanager') !== false){
+							
+							?>
+								<div class="input-groups">
+									<span class="input-prepend" style="padding:0;border:0;"><a href="/do/response/filemanager/view/" class="btn btn-green filemanager_button" type="button" data-field="<?php echo $fField['field']; ?>"><i class="fa fa-fw fa-file-o"></i> Open Filemanager</a></span>
+									<?php echo \LecAdmin\Form::makeInput($fField['field'], $fField['form_type'], $fField['field'], str_replace('"', '&quot;', (string)$itemLoaded[$fField['field']]), $fField['placeholder'], ' '.$readOnly.' class="width-100 '.$fField['class_inj'].' '.$mandatory.' " '); ?>
+								</div>
+							<?php
+							
+						} else {
+							//normal input!
+							echo \LecAdmin\Form::makeInput($fField['field'], $fField['form_type'], $fField['field'], str_replace('"', '&quot;', (string)$itemLoaded[$fField['field']]), $fField['placeholder'], ' '.$readOnly.' class="width-100 '.$fField['class_inj'].' '.$mandatory.' " '.$cols.' '); 
+						}
+						
+						//help text
+						echo (trim($fField['help_text']) === '')? '' : '<div class="forms-desc">'.$fField['help_text'].'</div>';
 					
 					?></label><br/><?php
 					
@@ -118,11 +138,11 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 						<script>
 							tinymce.init({
 								selector:'#<?php echo $fField['field']; ?>',
-								plugins: "image,link, fullscreen, code,  filemanager, lists, paste, media,  table, colorpicker, textcolor, fontawesome",
+								plugins: "image,link, fullscreen, <?php if (ALLOW_CODE_IN_EDITOR === true) { ?>code,<?php } ?>  filemanager, lists, paste, media,  table, colorpicker, textcolor, fontawesome",
 								image_advtab: true,
 								content_css : "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css<?php echo EDITOR_STYLESHEETS; ?>", 
 								width : '100%',
-								toolbar: " undo redo | styleselect | bold italic underline strikethrough subscript superscript forecolor backcolor | inserttable bullist numlist outdent indent | alignleft aligncenter alignright alignjustify |  media link image  | code fullscreen | fontawesome",
+								toolbar: " undo redo | styleselect | bold italic underline strikethrough subscript superscript forecolor backcolor | inserttable bullist numlist outdent indent | alignleft aligncenter alignright alignjustify |  media link image  | <?php if (ALLOW_CODE_IN_EDITOR === true) { ?>code,<?php } ?> fullscreen | fontawesome",
 								relative_urls: true,
 								menubar: false,
 								remove_script_host:false,
@@ -131,13 +151,30 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 								statusbar: false,
 								height : "280",
 								filemanager_title:"Filemanager" ,
-								valid_elements : '+*[*]',
+								<?php if (ALLOW_CODE_IN_EDITOR === true) { ?>valid_elements : '+*[*]',<?php } ?>
 								external_plugins: { "filemanager" : "/do/response/filemanager/plugin/", "fontawesome" : "/view/lec-admin/js/plugins/fontawesome/plugin.min.js"},
 							});
 						</script>
 					
 					<?php
 				}
+				
+				if(isset($fField['half_width'])){
+					if($fField['half_width'] === 'yes'){
+						if($halfWidthCounter === 1){
+							?></div><?php
+							$halfWidthCounter = 2;
+						} else {
+							?></div></div><?php
+							$halfWidthCounter = 1;
+						}
+						
+					}
+				} else if($halfWidthCounter == 2){
+					//close the units-row div off....
+					?></div><?php
+				}
+				
 			}
 			
 		} else {
@@ -171,5 +208,4 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 	}
 
 	echo \LecAdmin\Form::closeForm().'<br/>';
-	
 	
