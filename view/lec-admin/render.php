@@ -1,4 +1,12 @@
 <?php
+	//for adding code in tinymce
+	if(!defined('ALLOW_CODE_IN_EDITOR')){
+		define('ALLOW_CODE_IN_EDITOR', false);
+	}
+	
+	if(ALLOW_CODE_IN_EDITOR === true){
+		header('X-XSS-Protection:0');
+	}
 
 	//get permissions
 		$this->adminUser = new \LecAdmin\adminUser($this->DBH);
@@ -26,7 +34,9 @@
 		}
 		
 	//page count definitions
-		define('PER_PAGE_FRONT_ADMIN', 30);
+		if(!defined('PER_PAGE_FRONT_ADMIN')){
+			define('PER_PAGE_FRONT_ADMIN', 30);
+		}
 		
 		if (isset($_GET['page'])){
 			
@@ -46,11 +56,10 @@
 		define('PAG_START_ADMIN', $start_pos);
 		
 	//editor stylesheets MUST HAVE LEADING COMMA
-		if(DEBUG){
-			define('EDITOR_STYLESHEETS', '');
-		} else {
+		if(!defined('EDITOR_STYLESHEETS')){
 			define('EDITOR_STYLESHEETS', '');
 		}
+
 
 	/*
 	* Include each template part from directory. Add switch here to facilitate other directories.
