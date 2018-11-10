@@ -83,6 +83,6 @@
 		
 	</header>
 	
-	<div style="height:90px;"></div>
+	<div class="header_spacer"></div>
 	
-	<div class="admin_page_wrapper">
+	<div class="admin_page_wrapper forms">
