@@ -42,6 +42,10 @@ fieldset{
 	.desktop-hide{
 		display:none;
 	}
+	
+	.mce-window{
+		z-index: 99999 !important; 
+	}
 
 	/* colors */
 	
@@ -123,11 +127,17 @@ fieldset{
 	
 	select, input[type="text"], input[type="password"], input[type="email"], input[type="url"], input[type="phone"], input[type="tel"], input[type="number"], input[type="datetime"], input[type="date"], input[type="month"], input[type="color"], input[type="time"], input[type="search"], input[type="datetime-local"]{
 		border-radius:5px;
+		-moz-border-radius:5px;
+		-webkit-border-radius:5px;
 		border-color:#a7a7a7;
 	}
 	
 	input.input-error {
 		background: rgb(255,201,201);
+	}
+	
+	.forms .btn, .forms input[type="submit"].btn, .forms button, .forms input[type="submit"], .forms input[type="reset"]{
+		padding: 0.47em 1.3em;
 	}
 	
 /* End shared and forms */
@@ -140,6 +150,22 @@ fieldset{
 		-moz-box-shadow: -3px 3px 25px 0px rgba(0,0,0,0.28);
 		box-shadow: -3px 3px 25px 0px rgba(0,0,0,0.28);
 		min-width:265px;
+		border-radius:10px;
+		-moz-border-radius:10px;
+		-webkit-border-radius:10px;
+		
+	}
+	
+	.login_box input[type="text"], .login_box input[type="password"]{
+		border-radius: 0px 5px 5px 0px;
+		-moz-border-radius: 0px 5px 5px 0px;
+		-webkit-border-radius: 0px 5px 5px 0px;
+	}
+	
+	.login_box .input-prepend{
+		border-radius: 5px 0px 0px 5px;
+		-moz-border-radius: 5px 0px 0px 5px;
+		-webkit-border-radius: 5px 0px 0px 5px;
 	}
 	
 	.login_box_inner {
@@ -233,7 +259,11 @@ fieldset{
 						color:white;
 						text-decoration:none;
 					}
-					
+		
+	.header_spacer{
+		height:90px;
+	}
+		
 	.mobile_menu{
 		display:block;
 	}
@@ -252,6 +282,8 @@ fieldset{
 		height:56px;
 		line-height:56px;
 		background:white;
+		border-top: 1px solid gray;
+		z-index:99999;
 	}
 	
 		footer li{
@@ -266,17 +298,18 @@ fieldset{
 		padding:5px;
 		height:80px;
 		line-height:80px;
+		overflow:hidden;
 	}
 
 	.index_object_button a{
 		width:100%;
-		border: 5px dashed #bbbbbb;
+		border: 2px dashed #bbbbbb;
 		display:block;
 		height:70px;
 		line-height:60px;
 		color:#bbbbbb;
 		text-align:center;
-		font-size:2em;
+		font-size:1.4em;
 		text-decoration:none;
 	}
 	
@@ -311,7 +344,7 @@ fieldset{
 	.saveCancel{
 		background-color:white;
 		position:fixed;
-		top:100px;
+		top:88px;
 		right:10px;
 		padding:10px;
 		border:1px solid #ccc;
@@ -367,6 +400,10 @@ fieldset{
 	
 	/*header*/
 	
+		.header_spacer{
+			height:40px;
+		}
+	
 		.mobile_menu{
 			display:none;
 		}
@@ -402,5 +439,11 @@ fieldset{
 		
 		.saveCancel{
 			top:50px;
+		}
+		
+	/* Footer */
+	
+		footer{
+			display:none;
 		}
 }
