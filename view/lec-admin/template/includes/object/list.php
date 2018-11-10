@@ -17,24 +17,39 @@
 
 <h1><i class="fa <?php echo $objectLoaded['icon'] ;?>"></i> <?php echo $objectLoaded['name'];?></h1>
 
-<div>
+<div class="units-row end">
 
-	<div class="width-50 left">
+	<div class="unit-50 end">
 	
-		<?php if ($objectLoaded['add_new'] === 1){ ?>
-			<a href="/lec-admin/object?ob=<?php echo $objectLoaded['id']; ?>&new=yes" class="btn btn-blue add_new"><i class="fa <?php echo $objectLoaded['icon'] ;?>"></i> Add New <?php echo $objectLoaded['s_word'];?></a>
-		<?php } ?>
-		<?php if ($objectLoaded['deletions'] === 1){ ?>
-			<button type="button" class="btn btn-red  delete_button"><i class="fa fa-trash-o"></i> Delete Selected</button>
-		<?php } ?>
-		<?php if ($objectLoaded['duplications'] === 1){ ?>
-			<button type="button"  class="btn btn-blue  duplicate_button"><i class="fa fa-copy"></i> Duplicate Selected</button>
+		<?php if ($objectLoaded['add_new'] === 1 || $objectLoaded['deletions'] === 1 || $objectLoaded['duplications'] === 1){ ?>
+	
+			<table class="table-simple end">
+				<tr>
+		
+					<?php if ($objectLoaded['add_new'] === 1){ ?>
+						<td>
+							<a href="/lec-admin/object?ob=<?php echo $objectLoaded['id']; ?>&new=yes" class="btn btn-green add_new"><i class="fa <?php echo $objectLoaded['icon'] ;?>"></i> New <?php echo $objectLoaded['s_word'];?></a>
+						</td>
+					<?php } ?>
+					<?php if ($objectLoaded['deletions'] === 1){ ?>
+						<td>
+							<button type="button" class="btn btn-red  delete_button"><i class="fa fa-trash-o"></i> Delete <span class="mobile-hide">Selected</span></button>
+						</td>
+					<?php } ?>
+					<?php if ($objectLoaded['duplications'] === 1){ ?>
+						<td>
+							<button type="button"  class="btn btn-blue  duplicate_button"><i class="fa fa-copy"></i> Duplicate <span class="mobile-hide">Selected</span></button>
+						</td>
+					<?php } ?>
+				</tr>
+			</table>
+			
 		<?php } ?>
 		
 	</div>
-	<div class="width-50 right forms" >
+	<div class="unit-50 end" >
 	
-		<table class="table-simple">
+		<table class="table-simple end">
 			<tr>
 			
 				<?php
@@ -93,7 +108,7 @@
 					<td>
 						<?php echo \LecAdmin\Form::startForm('search_form', 'post', '/lec-admin/object?ob='.$objectLoaded['id'].'&list=yes', ' class="end" enctype="multipart/form-data" style="display:inline;" '); ?>
 						<?php $s = (isset($_POST['search'])) ? $_POST['search'] : '';?>
-						<?php echo \LecAdmin\Form::makeInput('search', 'text', 'search', $s, 'Search', ' class="input-search right"  ');?>
+						<?php echo \LecAdmin\Form::makeInput('search', 'text', 'search', $s, 'Search', ' class="input-search width-100"  ');?>
 						<button type="submit" style="display:none;">Submit</button>
 						<?php echo \LecAdmin\Form::closeForm(); ?>
 					</td>
