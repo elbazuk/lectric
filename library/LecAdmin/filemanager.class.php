@@ -477,7 +477,7 @@ class filemanager
 			
 			//eventual destination
 				
-				$finalFileDest = $directory.$fileName;
+				$finalFileDest = urldecode($directory.$fileName);
 			
 			//move the chunk to the temp directory.
 			if(move_uploaded_file($_FILES['fm_upload_file']['tmp_name'], $chunkFileDest) === true){
@@ -547,7 +547,7 @@ class filemanager
 							}
 							
 						//file complete.
-						die('{"error":false, "info": "File Upload Successful.", "file": "'.$fileName.'", "chunks":'.$chunks.'}');
+						die('{"error":false, "info": "File Upload Successful.","directory":"'.$finalFileDest.'", "file": "'.$fileName.'", "chunks":'.$chunks.'}');
 						
 					} else {
 						die('{"error":true, "info": "Failed to open final file."}');
@@ -870,6 +870,7 @@ class filemanager
 										}
 									},
 									FileUploaded: function (up, file, result){
+										console.log(result.response);
 										var resp = JSON.parse(result.response);
 										if(resp.error === true){
 											spssUploader.trigger('Error', {code: plupload.GENERIC_ERROR, message:resp.info, file:file});
