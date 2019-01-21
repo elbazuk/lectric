@@ -438,12 +438,22 @@ class lecPDO
 						//If the OP is in, then $value is an array, but the key is also set (not assigned int index)
 							if ($op === 'IN'){
 								
+								//has string been passed? I.e. comma'd list
 								if(!is_array($value)){
-									$valBits = explode(',',$value);
-									$valBits = array_filter( $valBits, function($valBit) { return $valBit !== ''; });
+									
+									//check for presence of commas, if not there then array is 1 element in length
+									if(mb_stripos($value, ',') !== false){
+										$valBits = explode(',',$value);
+										$valBits = array_filter( $valBits, function($valBit) { return $valBit !== ''; });
+									} else {
+										$valBits = [$value];
+									}
+										
+								} else {
+									$valBits = $value;
 								}
 								
-								if(empty($value)){
+								if(empty($valBits)){
 									throw new \exception('IN operation in Where Fields array need to be a valid array or explodable string.');
 								}
 								
