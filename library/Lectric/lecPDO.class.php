@@ -398,6 +398,8 @@ class lecPDO
 			
 				/* This function takes all of the values (and arrays) in the Where Array and turns them into a string with bound parametres. */
 				/* Note all the trimming, as this can catch whether or not the supplied is with '`' or not. */
+				
+				$whereInj = '';
 			
 				if (is_array($this->_whereArray)){
 					
@@ -427,13 +429,12 @@ class lecPDO
 							if ($i <= $indexCount && $i > 1){
 								$whereInj .= ' AND ';
 							}
-					
-						$op = $this->getOP( $i);
 						
+						//get the operator						
+							$op = $this->getOp($i);
 						
 						//don't need this now, as will cause mis-matched number of bound array elements error
-							$keyUse = $key;
-							unset ($this->_whereArray[$keyUse]);
+							unset ($this->_whereArray[$key]);
 						
 						//If the OP is in, then $value is an array, but the key is also set (not assigned int index)
 							if ($op === 'IN'){
@@ -457,43 +458,43 @@ class lecPDO
 									throw new \exception('IN operation in Where Fields array need to be a valid array or explodable string.');
 								}
 								
-								$valueIdentifiers = [];
-								$i = 1;
-								foreach($valBits as $valBit){
-									$valueIdentifiers[] = ':'.$prefix.$keyUse.'_'.$i;
-									$this->_whereArray[$prefix.$keyUse.'_'.$i] = $valBit;
-									$i++;
-								}
+								//write the colon for preparation to each in the array
+									$valueIdentifiers = [];
+									$x = 1;
+									foreach($valBits as $valBit){
+										$valueIdentifiers[] = ':'.$prefix.$key.'_'.$x;
+										$this->_whereArray[$prefix.$key.'_'.$x] = $valBit;
+										$x++;
+									}
 								
-								//don't need this now, as will cause mis-matched number of bound array elements error
-								
-								$whereInj .= ' `'.$keyUse.'` IN ('.implode(', ',$valueIdentifiers).') ';
+								//write out to where string
+									$whereInj .= ' `'.$key.'` IN ('.implode(', ',$valueIdentifiers).') ';
 						
-						//otherwise, then if $value is an array, that means $keyUse has been auto assigned as an int, and it's part of multiple field where (eg range `date` > X AND `date < Y)
+						//otherwise, then if $value is an array, that means $key has been AUTO assigned as an int, and it's part of multiple field where (eg range `date` > X AND `date < Y)
 							} elseif (is_array($value)){
 							
 								foreach ($value as $subKey => $subValue){
 									
 									//set up bound parameter as appending the current loop number to it to make it unique in the bound array.
-									$whereInj .= ' `'.$subKey.'` '.$op.' :'.$prefix.$subKey.$i.' ';
-									$this->_whereArray[$prefix.$subKey.$i] = $subValue;
+										$whereInj .= ' `'.$subKey.'` '.$op.' :'.$prefix.$subKey.$i.' ';
+										$this->_whereArray[$prefix.$subKey.$i] = $subValue;
 									
 								}
 								
 						//if op is not IN and $value not an array, then just a flat where clause (possibly like)
 							} else {
 								
-								$value = ($op === 'LIKE') ? '%'.$value.'%' : $value;
-								$this->_whereArray[$prefix.$keyUse] = $value;
-								$whereInj .= ' `'.$keyUse.'` '.$op.' :'.$prefix.$keyUse.' ';
+								//catch LIKE operator
+									$value = ($op === 'LIKE') ? '%'.$value.'%' : $value;
+								//set up bound param and write to where string
+									$this->_whereArray[$prefix.$key] = $value;
+									$whereInj .= ' `'.$key.'` '.$op.' :'.$prefix.$key.' ';
 
 							}
 						
 						$i++;
 						
 					}
-				} else {
-					$whereInj = '';
 				}
 			
 				return $whereInj;
@@ -542,35 +543,38 @@ class lecPDO
 		* Build field injection string for select
 		* @return string
 		*/
-			private function getFieldInjSelect(): ?string{
+			private function getFieldInjSelect(): ?string
+			{
 				
 				if(is_array($this->_selectFields)){
 					
-					foreach ($this->_selectFields as $value){
-						if ($value === ''){
-							throw new \Exception ('Blank Select Fields array element found.');
+					//catch any blank elements
+						foreach ($this->_selectFields as $value){
+							if ($value === ''){
+								throw new \Exception ('Blank Select Fields array element found.');
+							}
 						}
-					}
 			
 					$fieldInj = '';
 				
 					$i = 1;
 					$indexCount = count($this->_selectFields);
 					
-					foreach ($this->_selectFields as $value){
-						
-						if ($i <= $indexCount && $i > 1){
-							$fieldInj .= ',';
+					//go through each element and add to the field string
+						foreach ($this->_selectFields as $value){
+							
+							if ($i <= $indexCount && $i > 1){
+								$fieldInj .= ',';
+							}
+							
+							if($this->checkFunction($value) === true){
+								$fieldInj .= ' '.$value.' ';
+							} else {
+								$fieldInj .= ' `'.$value.'` ';
+							}
+							
+							$i++;
 						}
-						
-						if($this->checkFunction($value) === true){
-							$fieldInj .= ' '.$value.' ';
-						} else {
-							$fieldInj .= ' `'.$value.'` ';
-						}
-						
-						$i++;
-					}
 					
 					return $fieldInj;
 				
@@ -587,29 +591,32 @@ class lecPDO
 			private function getOrderByInj(): ?string
 			{
 				
-				//check the order by array
 				if(is_array($this->_orderByArray)){
-					foreach ($this->_orderByArray as $key => $value){
-						if (trim($key) === ''){
-							throw new \Exception ('Order By array key empty.');
+					
+					//validate the order by array
+						foreach ($this->_orderByArray as $key => $value){
+							if (trim($key) === ''){
+								throw new \Exception ('Order By array key empty.');
+							}
+							
+							if(strtolower($value) !== 'asc' && strtolower($value) !== 'desc'){
+								throw new \Exception ('Order By array value must be "ASC" or "DESC".');
+							}
+						}
+					
+					//build the string
+						$i = 1;
+						$orderbyInj =  ' ORDER BY ';
+						$indexCount = count($this->_orderByArray);
+						foreach ($this->_orderByArray as $key => $value){
+							if ($i <= $indexCount && $i > 1){
+								$orderbyInj .= ' , ';
+							}
+											
+							$orderbyInj .= ' `'.$key.'` '.$value.' ';						
+							$i++;
 						}
 						
-						if(strtolower($value) !== 'asc' && strtolower($value) !== 'desc'){
-							throw new \Exception ('Order By array value must be "ASC" or "DESC".');
-						}
-					}
-					
-					$i = 1;
-					$orderbyInj =  ' ORDER BY ';
-					$indexCount = count($this->_orderByArray);
-					foreach ($this->_orderByArray as $key => $value){
-						if ($i <= $indexCount && $i > 1){
-							$orderbyInj .= ' , ';
-						}
-										
-						$orderbyInj .= ' `'.$key.'` '.$value.' ';						
-						$i++;
-					}
 					return $orderbyInj;
 					
 				} else {
@@ -624,36 +631,42 @@ class lecPDO
 			private function getGroupByInj(): ?string
 			{
 				
-				//check the group by array
-				if(is_array($this->_groupBy)){
-					foreach ($this->_groupBy as $value){
-						if ($value === ''){
-							throw new \Exception ('Blank Group By array element found.');
-						}
-					}
-					
-					$groupByInj = ' GROUP BY ';
-					$i = 1;
-					$groupCount = count($this->_groupBy);
-					foreach ($this->_groupBy as $value){
-					
-						if ($i <= $groupCount && $i > 1){
-							$groupByInj .= ' , ';
-						}
+				//can be array
+					if(is_array($this->_groupBy)){
 						
-						$groupByInj .= ' `'.$value.'` ';
+						//check the group by array
+							foreach ($this->_groupBy as $value){
+								if ($value === ''){
+									throw new \Exception ('Blank Group By array element found.');
+								}
+							}
 						
-						$i++;
-					
+						//build the string
+							$groupByInj = ' GROUP BY ';
+							$i = 1;
+							$groupCount = count($this->_groupBy);
+							foreach ($this->_groupBy as $value){
+							
+								if ($i <= $groupCount && $i > 1){
+									$groupByInj .= ' , ';
+								}
+								
+								$groupByInj .= ' `'.$value.'` ';
+								
+								$i++;
+							
+							}
+						
+						return $groupByInj;
+				
+				//or just a passed string
+					} elseif (trim($this->_groupBy) !== '' ){
+						return ' GROUP BY `'.trim($this->_groupBy).'` ';
+				
+				//or nothing
+					} else {
+						return '';
 					}
-					
-					return $groupByInj;
-					
-				} elseif (trim($this->_groupBy) !== '' ){
-					return ' GROUP BY `'.trim($this->_groupBy).'` ';
-				} else {
-					return '';
-				}
 				
 			}
 			
@@ -664,21 +677,26 @@ class lecPDO
 			private function getLimitInj(): ?string
 			{
 				
-				//check limit array
-				if(is_array($this->_limit)){
-					foreach ($this->_limit as $value){
-						if (!is_int((int)$value)){
-							throw new \Exception ('All Limit array elements must be of type integer.');
-						}
+				//can be array
+					if(is_array($this->_limit)){
+						
+						//check limit array
+							foreach ($this->_limit as $value){
+								if (!is_int((int)$value)){
+									throw new \Exception ('All Limit array elements must be of type integer.');
+								}
+							}
+						
+						return ' LIMIT '.$this->_limit[0].','.$this->_limit[1];
+				
+				//or just an int
+					} elseif(trim($this->_limit) !== ''){
+						return ' LIMIT 0,'.(int)$this->_limit;
+				
+				//or nothing
+					} else {
+						return '';
 					}
-					
-					return ' LIMIT '.$this->_limit[0].','.$this->_limit[1];
-					
-				} elseif(trim($this->_limit) !== ''){
-					return ' LIMIT 0,'.(int)$this->_limit;
-				} else {
-					return '';
-				}
 			}
 			
 		/**
@@ -688,29 +706,33 @@ class lecPDO
 			private function getUpdateFieldInj(): ?string
 			{
 			
-				if (!is_array($this->_updateFields)){
-					throw new \Exception ('Update Fields not set.');
-				}
+				//needs to be an array
+					if (!is_array($this->_updateFields)){
+						throw new \Exception ('Update Fields not set.');
+					}
 			
-				$fieldInj = '';
-			
-				$i = 1;
-				$indexCount = count($this->_updateFields);
+				//build string
+					$fieldInj = '';
 				
-				foreach ($this->_updateFields as $key=>$value){
-					if ($i <= $indexCount && $i > 1){
-						$fieldInj .= ',';
-					}
+					$i = 1;
+					$indexCount = count($this->_updateFields);
 					
-					//check passed function
-					if ($this->checkFunction($value)){
-						$fieldInj .= ' `'.$key.'` = '.$value.'';
-						unset($this->_updateFields[$key]);
-					} else {
-						$fieldInj .= ' `'.$key.'` = :'.$key.'';
+					foreach ($this->_updateFields as $key=>$value){
+						
+						if ($i <= $indexCount && $i > 1){
+							$fieldInj .= ',';
+						}
+						
+						//check passed function
+							if ($this->checkFunction($value)){
+								$fieldInj .= ' `'.$key.'` = '.$value.'';
+								unset($this->_updateFields[$key]);
+							} else {
+								$fieldInj .= ' `'.$key.'` = :'.$key.'';
+							}
+							
+						$i++;
 					}
-					$i++;
-				}
 				
 				return $fieldInj;
 			
@@ -724,9 +746,9 @@ class lecPDO
 			{
 				
 				//check insert array
-				if(!is_array($this->_insertFields)){
-					throw new \Exception ('Insert Fields array not set.');
-				}
+					if(!is_array($this->_insertFields)){
+						throw new \Exception ('Insert Fields array not set.');
+					}
 				
 				$inj = [
 					'fields' => '', 'values' => ''
