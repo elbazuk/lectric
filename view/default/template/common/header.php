@@ -70,7 +70,7 @@
 
 	
 
-	<script src="<?php echo $this->_jsLibDir; ?>/jquery.js"></script>
+	<script src="<?php echo $this->_jsLocalDir; ?>/jquery.js"></script>
 
     
 
