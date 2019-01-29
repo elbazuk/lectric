@@ -1,0 +1,4 @@
+#Use if you don't want people downloading from filemanager directory without auth.
+#Authname Private
+#AuthType basic
+#require user noadmittance
