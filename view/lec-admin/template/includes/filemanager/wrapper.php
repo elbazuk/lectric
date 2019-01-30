@@ -1,5 +1,5 @@
 <!--Main css stylesheet-->
-<link rel="stylesheet" href="/view/lec-admin/css/style.css">
+<link rel="stylesheet" href="/view/lec-admin/css/style-2018-11-09.css">
 <script src="/view/lec-admin/js/plugins.js"></script>
 <style>
 	<?php $this->getCSS(); ?>
