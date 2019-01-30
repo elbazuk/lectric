@@ -122,6 +122,8 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 						} else {
 							//normal input!
 							echo \LecAdmin\Form::makeInput($fField['field'], $fField['form_type'], $fField['field'], str_replace('"', '&quot;', (string)$itemLoaded[$fField['field']]), $fField['placeholder'], ' '.$readOnly.' class="width-100 '.$fField['class_inj'].' '.$mandatory.' " '.$cols.' '); 
+							//for tinmymce
+							 
 						}
 						
 						//help text
@@ -133,16 +135,21 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 				
 				
 				if (strpos($fField['class_inj'],'editor') !== false){
+					
+					if(ALLOW_CODE_IN_EDITOR === true) {
+						?><div class="<?php echo $fField['field'].'_pre'; ?>" style="display:none;"><?php echo (string)$itemLoaded[$fField['field']]; ?></div><?php
+					}
+					
 					?>
 					
 						<script>
 							tinymce.init({
 								selector:'#<?php echo $fField['field']; ?>',
-								plugins: "image,link, fullscreen, <?php if (ALLOW_CODE_IN_EDITOR === true) { ?>code,<?php } ?>  filemanager, lists, paste, media,  table, colorpicker, textcolor, fontawesome",
+								plugins: "image,link, fullscreen, <?php if (ALLOW_CODE_IN_EDITOR === true) { ?>code, codesample, <?php } ?>  filemanager, lists, paste, media,  table, colorpicker, textcolor, fontawesome",
 								image_advtab: true,
 								content_css : "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css<?php echo EDITOR_STYLESHEETS; ?>", 
 								width : '100%',
-								toolbar: " undo redo | styleselect | bold italic underline strikethrough subscript superscript forecolor backcolor | inserttable bullist numlist outdent indent | alignleft aligncenter alignright alignjustify |  media link image  | <?php if (ALLOW_CODE_IN_EDITOR === true) { ?>code,<?php } ?> fullscreen | fontawesome",
+								toolbar: " undo redo | styleselect | bold italic underline strikethrough subscript superscript forecolor backcolor | inserttable bullist numlist outdent indent | alignleft aligncenter alignright alignjustify |  media link image  | <?php if (ALLOW_CODE_IN_EDITOR === true) { ?>code, codesample,<?php } ?> fullscreen | fontawesome",
 								relative_urls: true,
 								menubar: false,
 								remove_script_host:false,
@@ -151,8 +158,17 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 								statusbar: false,
 								height : "280",
 								filemanager_title:"Filemanager" ,
-								<?php if (ALLOW_CODE_IN_EDITOR === true) { ?>valid_elements : '+*[*]',<?php } ?>
 								external_plugins: { "filemanager" : "/do/response/filemanager/plugin/", "fontawesome" : "/view/lec-admin/js/plugins/fontawesome/plugin.min.js"},
+								<?php if (ALLOW_CODE_IN_EDITOR === true) { ?>
+									valid_elements : '+*[*]',
+									setup: function (editor) {
+										editor.on('init', function () {
+										var theContent = $('.<?php echo $fField['field'].'_pre'; ?>').html();
+											console.log(theContent);
+											this.setContent(theContent);
+										});
+									} 
+								<?php } ?>
 							});
 						</script>
 					
