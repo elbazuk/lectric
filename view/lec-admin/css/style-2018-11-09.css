@@ -211,7 +211,7 @@ fieldset{
 		z-index:998;
 		background-color:#3e4562;
 		color:white;
-		z-index:99999;
+		z-index:99;
 	}
 
 		.header_tab:hover{
@@ -232,7 +232,7 @@ fieldset{
 			right:0;
 			background-color:#e9eff3;
 			display:none;
-			z-index:999;
+			z-index:99;
 		}
 		
 		.header_tab:hover .header_dropdown{
