@@ -283,7 +283,7 @@ fieldset{
 		line-height:56px;
 		background:white;
 		border-top: 1px solid gray;
-		z-index:99999;
+		z-index:99;
 	}
 	
 		footer li{
