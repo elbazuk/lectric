@@ -178,22 +178,14 @@ class lecPDO
 		* Check if row(s) exist
 		* @param string $table the table to select data from
 		* @param string $args array of args for single/multi, strict, tabled prefix return array and echo.
-		* @return mixed
+		* @return bool
 		*/
 			public function rowsExist(string $table = '', string ...$args): bool
 			{
 				
-				if (trim($table) === ''){
-					throw new \Exception ('Table argument empty string.');
-				}
+				$result = $this->selStrict($table, ...$args);
 				
-				$sql = 'SELECT '. $this->getFieldInjSelect().' FROM `'.$table.'` '.$this->getWhereInj();
-				
-				if (in_array(self::SQL_ECHO, $args)){
-					echo $sql;
-				} 
-				
-				return ($this->runSelect($sql, $table, in_array(self::SINGLE, $args), in_array(self::STRICT, $args), false, $this->_whereArray) === null) ? false : true ;
+				return ($result === null) ? false : true ;
 				
 			}
 			
@@ -201,7 +193,7 @@ class lecPDO
 		* Return a count of selected rows
 		* @param string $table the table to select data from
 		* @param string $args array of args for single/multi, strict, tabled prefix return array and echo.
-		* @return mixed
+		* @return int
 		*/
 			public function countRows(string $table = '', string $field = '`id`', string ...$args): int
 			{
@@ -217,6 +209,31 @@ class lecPDO
 				}
 			
 				return ($this->runSelect($sql, $table, true, in_array(self::STRICT, $args), false, $this->_whereArray))['count'];
+				
+			}
+			
+		/**
+		* Check if row(s) exist
+		* @param string $table the table to select data from
+		* @param string $args array of args for single/multi, strict, tabled prefix return array and echo.
+		* @return array
+		*/
+			public function loadKeyValueArray(string $table = '', array $fields = ['id','name'], string ...$args): array
+			{
+				
+				$result = $this->selStrict($table, ...$args);
+				
+				$array = array();
+
+				if ($result != null){
+					foreach ($result as $key => $row){
+						$array[$row[$fields[0]]] = $row[$fields[1]];
+					}
+				} else {
+					return array('No Items'=>'');
+				}
+				
+				return $array;
 				
 			}
 			
