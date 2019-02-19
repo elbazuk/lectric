@@ -174,6 +174,52 @@ class lecPDO
 				}
 			}
 			
+		/**
+		* Check if row(s) exist
+		* @param string $table the table to select data from
+		* @param string $args array of args for single/multi, strict, tabled prefix return array and echo.
+		* @return mixed
+		*/
+			public function rowsExist(string $table = '', string ...$args): bool
+			{
+				
+				if (trim($table) === ''){
+					throw new \Exception ('Table argument empty string.');
+				}
+				
+				$sql = 'SELECT '. $this->getFieldInjSelect().' FROM `'.$table.'` '.$this->getWhereInj();
+				
+				if (in_array(self::SQL_ECHO, $args)){
+					echo $sql;
+				} 
+				
+				return ($this->runSelect($sql, $table, in_array(self::SINGLE, $args), in_array(self::STRICT, $args), false, $this->_whereArray) === null) ? false : true ;
+				
+			}
+			
+		/**
+		* Return a count of selected rows
+		* @param string $table the table to select data from
+		* @param string $args array of args for single/multi, strict, tabled prefix return array and echo.
+		* @return mixed
+		*/
+			public function countRows(string $table = '', string $field = '`id`', string ...$args): int
+			{
+				
+				if (trim($table) === ''){
+					throw new \Exception ('Table argument empty string.');
+				}
+				
+				$sql = 'SELECT COUNT('.$field.') as "count" FROM `'.$table.'` '.$this->getWhereInj().' '.$this->getGroupByInj().' '.$this->getLimitInj();
+				
+				if (in_array(self::SQL_ECHO, $args)){
+					echo $sql;
+				}
+			
+				return ($this->runSelect($sql, $table, true, in_array(self::STRICT, $args), false, $this->_whereArray))['count'];
+				
+			}
+			
 	//End Query Functions
 	
 	//Utility Functions
