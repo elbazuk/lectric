@@ -474,11 +474,11 @@ class lecPDO
 						}
 						
 						if ($this->_whereOps === ''){
-							throw new \Exception ('Where Ops empty in '.$function);
+							throw new \Exception ('Where Ops empty');
 						}
 						
 						if (strlen($this->_whereOps) !== count($this->_whereArray)){
-							throw new \Exception ('Ops does not match Where array count in '.$function);
+							throw new \Exception ('Ops does not match Where array count');
 						}
 				
 					//Set up the counting variable and initial string
