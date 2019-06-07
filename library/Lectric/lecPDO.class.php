@@ -368,7 +368,7 @@ class lecPDO
 		* @param string $value a sql function
 		* @return bool
 		*/
-			private function checkFunction(string $value = ''): ?bool
+			private function checkFunction(?string $value = ''): ?bool
 			{
 				$value = trim($value);
 				
