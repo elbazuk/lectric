@@ -18,10 +18,10 @@
 <h1><i class="fa <?php echo $objectLoaded['icon'] ;?>"></i> <?php echo $objectLoaded['name'];?></h1>
 
 <div class="units-row end">
-
-	<div class="unit-50 end">
 	
-		<?php if ($objectLoaded['add_new'] === 1 || $objectLoaded['deletions'] === 1 || $objectLoaded['duplications'] === 1){ ?>
+	<?php if ($objectLoaded['add_new'] === 1 || $objectLoaded['deletions'] === 1 || $objectLoaded['duplications'] === 1){ ?>
+	
+		<div class="unit-50 end">
 	
 			<table class="table-simple end">
 				<tr>
@@ -44,9 +44,10 @@
 				</tr>
 			</table>
 			
-		<?php } ?>
-		
-	</div>
+		</div>
+			
+	<?php } ?>
+	
 	<div class="unit-50 end" >
 	
 		<table class="table-simple end">
