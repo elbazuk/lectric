@@ -39,6 +39,33 @@ class lecPDO
 	//Query Functions
 		
 		/**
+		* Quick Strict Select function
+		* @param array $whereFields array of selection fields
+		* @param string $ops where ops string
+		* @param string $table the table to select data from
+		* @param string $args array of args for single/multi, strict, tabled prefix return array and echo.
+		* @return array
+		*/
+			public function selectQuick(array $whereFields, string $ops, string $table = '', string ...$args): ?array
+			{
+				
+				$this->setWhereParams($whereFields, $ops);
+				
+				if (trim($table) === ''){
+					throw new \Exception ('Table argument empty string.');
+				}
+				
+				$sql = 'SELECT '. $this->getFieldInjSelect().' FROM `'.$table.'` '.$this->getWhereInj().' '.$this->getGroupByInj().' '.$this->getOrderByInj().' '.$this->getLimitInj();
+				
+				if (in_array(self::SQL_ECHO, $args)){
+					echo $sql;
+				} 
+				
+				return $this->runSelect($sql, $table, in_array(self::SINGLE, $args), in_array(self::STRICT, $args), in_array(self::TABLED, $args), $this->_whereArray);
+				
+			}
+			
+		/**
 		* Strict Select function
 		* @param string $table the table to select data from
 		* @param string $args array of args for single/multi, strict, tabled prefix return array and echo.
@@ -84,6 +111,39 @@ class lecPDO
 			
 		/**
 		* Strict Update function
+		* @param array $whereFields array of selection fields
+		* @param string $ops where ops string
+		* @param array $updateFields array of fields to be updated with values
+		* @param string $table the table to update the data into
+		* @param string $args array of args
+		* @return bool
+		*/
+			public function updateQuick(array $whereFields, string $ops, array $updateFields, string $table, ...$args): void
+			{
+				
+				$this->setWhereParams($whereFields, $ops);
+				$this->setUpdateFields($updateFields);
+				
+				$sql = 'UPDATE `'.$table.'` SET '.$this->getUpdateFieldInj().' '.$this->getWhereInj('w_').'';
+				
+				if (in_array(self::SQL_ECHO, $args)){
+					echo $sql;
+				}
+				
+				if (is_array($this->_whereArray)){
+					$boundArray = array_merge ($this->_updateFields, $this->_whereArray);
+				} else {
+					$boundArray = $this->_updateFields;
+				}
+				
+				$this->queryLax($sql, $boundArray);
+				
+				return;
+					
+			}		
+			
+		/**
+		* Strict Update function
 		* @param string $table the table to update the data into
 		* @param string $args array of args
 		* @return bool
@@ -108,6 +168,31 @@ class lecPDO
 				return;
 					
 			}
+			
+		/**
+		* Strict Insert function
+		* Function uses defined clauses as set before this function call to insert that data as key=>value pairs into database table
+		* @param array $insertFields Field=>value array of inserted info
+		* @param string $args array of args
+		* @return int
+		*/
+			public function insertQuick(array $insertFields, string $table, ...$args): ?int
+			{
+			
+				$this->setInsertFields($insertFields);
+				
+				$inj = $this->getFieldToValueInsert();
+				$sql = 'INSERT INTO `'.$table.'` ('.$inj['fields'].') VALUES ('.$inj['values'].')';
+				
+				if (in_array(self::SQL_ECHO, $args)){
+					echo $sql;
+				}
+				
+				$this->queryLax($sql, $this->_insertFields);
+				
+				return $this->DBH->lastInsertId();
+			}
+			
 			
 		/**
 		* Strict Insert function
@@ -139,6 +224,30 @@ class lecPDO
 			public function deleteStrict(string $table, ...$args): void
 			{
 					
+				$sql = 'DELETE FROM `'.$table.'` '.$this->getWhereInj().'';
+				
+				if (in_array(self::SQL_ECHO, $args)){
+					echo $sql;
+				}
+				
+				$this->queryLax($sql, $this->_whereArray);
+				
+				return;
+			}
+		
+		/**
+		* Strict Delete function
+		* @param array $whereFields array of selection fields
+		* @param string $ops where ops string
+		* @param string $table the table to delete data from
+		* @param string $args array of args
+		* @return void
+		*/
+			public function deleteQuick(array $whereFields, string $ops, string $table, ...$args): void
+			{
+				
+				$this->setWhereParams($whereFields, $ops);
+				
 				$sql = 'DELETE FROM `'.$table.'` '.$this->getWhereInj().'';
 				
 				if (in_array(self::SQL_ECHO, $args)){
@@ -849,6 +958,17 @@ class lecPDO
 	//End Get Functions
 	
 	//Set Functions
+	
+		/**
+		* Set both fields and ops at once.
+		* @return void
+		*/
+			public function setWhereParams(array $array, string $ops): void
+			{		
+				$this->_whereArray = $array;
+				$this->_whereOps = $ops;
+				return;
+			}
 			
 		/**
 		* Set the select where fields member
@@ -875,9 +995,10 @@ class lecPDO
 		*
 		* @return void
 		*/
-			public function setWhereFields(array $array): void
+			public function setwhereFields(array $array): void
 			{		
 				$this->_whereArray = $array;
+				return;
 			}
 			
 		/**
