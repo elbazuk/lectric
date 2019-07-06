@@ -145,11 +145,11 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 						<script>
 							tinymce.init({
 								selector:'#<?php echo $fField['field']; ?>',
-								plugins: "image,link, fullscreen, <?php if (ALLOW_CODE_IN_EDITOR === true) { ?>code, codesample, <?php } ?>  filemanager, lists, paste, media,  table, colorpicker, textcolor, fontawesome",
+								plugins: "image,link, hr, fullscreen, <?php if (ALLOW_CODE_IN_EDITOR === true) { ?>code, codesample, <?php } ?>  filemanager, lists, paste, media,  table, colorpicker, textcolor, fontawesome",
 								image_advtab: true,
 								content_css : "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css<?php echo EDITOR_STYLESHEETS; ?>", 
 								width : '100%',
-								toolbar: " undo redo | styleselect | bold italic underline strikethrough subscript superscript forecolor backcolor | inserttable bullist numlist outdent indent | alignleft aligncenter alignright alignjustify |  media link image  | <?php if (ALLOW_CODE_IN_EDITOR === true) { ?>code, codesample,<?php } ?> fullscreen | fontawesome",
+								toolbar: " undo redo | styleselect | hr bold italic underline strikethrough subscript superscript forecolor backcolor | inserttable bullist numlist outdent indent | alignleft aligncenter alignright alignjustify |  media link image  | <?php if (ALLOW_CODE_IN_EDITOR === true) { ?>code, codesample,<?php } ?> fullscreen | fontawesome",
 								relative_urls: true,
 								menubar: false,
 								remove_script_host:false,
