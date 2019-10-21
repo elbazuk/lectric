@@ -276,6 +276,14 @@ class lecPDO
 						$STH->execute($boundArray);
 					}
 					$this->clearProperties();
+					
+					if($STH->errorCode() == 0) {
+						//all good
+					} else {
+						$errors = $stmt->errorInfo();
+						throw new \Exception($errors[2]);
+					}
+					
 				} catch (\PDOException $e){
 					throw new \Exception($e->getMessage());
 				} finally {
