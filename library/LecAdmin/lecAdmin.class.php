@@ -258,7 +258,7 @@ class lecAdmin extends \Lectric\lecPDO
 						
 						switch ($editField['edit_type']){
 							case 'image':
-								continue; //dealt with below
+								continue 2; //dealt with below
 							break;
 							case 'url':
 								$insertArray[$editField['field']] = preg_replace('/[^0-9a-zA-z\.\-\/_]/', '', strtolower (trim($_POST[$editField['field']])));
