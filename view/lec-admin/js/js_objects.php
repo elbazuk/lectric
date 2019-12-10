@@ -71,49 +71,5 @@
 		}
 		
 	});
-	
-	//filemanager specficic
-	
-		$('.filemanager_button').fancybox({
-			width :  window.innerWidth-40,
-			height :  $(window).height()-40,
-			type : 'iframe',
-			iframe: {
-				preload:false
-			}
-		});
-
-		function filemanager_onMessage(event){
-						
-			if(event.data.sender === 'filemanager'){
-				
-				$('#'+window.filemanager_field).val(event.data.url);
-
-				// Remove event listener for a message from ResponsiveFilemanager
-				if(window.removeEventListener){
-					window.removeEventListener('message', filemanager_onMessage, false);
-				} else {
-					window.detachEvent('onmessage', filemanager_onMessage);
-				}
-				
-				window.filemanager_field = '';
-				
-				$.fancybox.close();
-				
-			}
-			
-		}
-
-		$('.filemanager_button').on('click', function(){
-			
-			window.filemanager_field = $(this).attr('data-field');
-			
-			if(window.addEventListener){
-				window.addEventListener('message', filemanager_onMessage, false);
-			} else {
-				window.attachEvent('onmessage', filemanager_onMessage);
-			}
-			
-		});
 
 </script>
