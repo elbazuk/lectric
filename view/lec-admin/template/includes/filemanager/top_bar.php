@@ -18,8 +18,7 @@
 	<div class="fm_new_folder_form">
 		<table class="new_folder_table width-50">
 			<tr>
-				<td><input id="fm_new_folder_name" type="text" value="" placeholder="New Folder" class="width-100" /></td>
-				<td><select id="fm_new_folder_universal" style="padding:3px;" class="width-100" /><option vlaue="no">Hidden (Add folder to user to see).</option><option value="yes">Universal</option></select></td>
+				<td class="width-100"><input id="fm_new_folder_name" type="text" value="" placeholder="New Folder" class="width-100" /></td>
 				<td><i class="fa fa-check fa-lg fa-fw fm_pointer fm_add_folder_submit" data-elem="fm_new_folder_form"></i></td>
 				<td><i class="fa fa-times fa-lg fa-fw fm_pointer fm_top_bar_slide_up" data-elem="fm_new_folder_form"></i></td>
 			</tr>
