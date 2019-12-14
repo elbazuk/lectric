@@ -54,7 +54,19 @@
 						
 						?>
 							<tr class="fm_click_file" >
-								<td><i class="fa fa-fw fa-lg <?php echo $this->getFAIconFile($file); ?>" style="line-height:1.65em;"></i></td>
+								<td>
+									<?php
+									
+										if ($this->isImage($file)){
+											?><img src="<?php echo $this->_download_serve_file;?>?file=<?php echo str_replace(DOC_ROOT,'',$directory).$file; ?>" alt="" /><?php
+										} else {
+											?><i class="fa fa-fw fa-lg <?php echo $this->getFAIconFile($file); ?>" style="line-height:1.65em;"></i></td><?php
+										}
+										
+									?>
+									
+								</td>
+								
 								<td class="fm_select_file fm_pointer" data-file="<?php echo str_replace(DOC_ROOT,'',$directory.$file); ?>">
 									<?php echo $file; ?>
 									<form target="_blank" class="fm_file_click_form" method="post" action="<?php echo $this->_download_serve_file; ?>" id="file_click_form_<?php echo $fileCounter; ?>">
