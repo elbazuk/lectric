@@ -76,9 +76,7 @@ class filemanager
 	* @param string $rootDir the directory of the filemanager files
 	*/
 		function __construct(string $rootDir = '')
-		{
-			
-			
+		{			
 			$this->_root_directory = $rootDir;
 			if(!file_exists(DOC_ROOT.$this->_root_directory)){
 				throw new \Exception('Can\'t find the filemanager directory.');
@@ -97,7 +95,7 @@ class filemanager
 			{
 				
 				/* Main call function */
-				$directory = DOC_ROOT.$this->_root_directory;
+				$directory = (isset($_SESSION['lec-filemanager-dir'])) ? $_SESSION['lec-filemanager-dir'] : DOC_ROOT.$this->_root_directory;
 				//go to output of html
 				include(DOC_ROOT.$this->_filemanager_wrapper_template);
 				
@@ -328,15 +326,6 @@ class filemanager
 					if (!is_dir($directory.$folderName)){
 						
 						mkdir($directory.$folderName);
-						
-						//chmod otherwise htaccess wont work
-						chmod($directory.$folderName, 0774);
-						
-						//add the htaccess file!
-						$myfile = fopen($directory.$folderName.'/.htaccess', "w");
-						$txt = 'Authname Private'.PHP_EOL.'AuthType basic'.PHP_EOL.'require user noadmittance';
-						fwrite($myfile, $txt);
-						fclose($myfile);
 						
 						return true;
 						
