@@ -189,7 +189,6 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 									setup: function (editor) {
 										editor.on('init', function () {
 										var theContent = $('.<?php echo $fField['field'].'_pre'; ?>').html();
-											console.log(theContent);
 											this.setContent(theContent);
 										});
 									} 
