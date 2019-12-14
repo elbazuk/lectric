@@ -1,12 +1,3 @@
-<?php
-
-//include form
-if(file_exists(DOC_ROOT.'/view/lec-admin/template/includes/object/plugin/'.$objectLoaded['include_file_before']) && $objectLoaded['include_file_before'] != ''){
-	include(DOC_ROOT.'/view/lec-admin/template/includes/object/plugin/'.$objectLoaded['include_file_before']);
-}
-		
-?>
-
 <h1>
 	<i class="fa <?php echo $objectLoaded['icon'] ;?>"></i> <?php echo $objectLoaded['name'];?>
 	- <?php echo ($new)? 'New Item' : 'Edit Item'; ?>
@@ -29,35 +20,62 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 		?></div><?php
 		
 	}
-
-		$formFields = json_decode($objectLoaded['edit_fields'], true);
 		
-		if ($formFields != null){
-			
+	//include form
+		if(file_exists(DOC_ROOT.'/view/lec-admin/template/includes/object/plugin/'.$objectLoaded['include_file_before']) && $objectLoaded['include_file_before'] != ''){
+			include(DOC_ROOT.'/view/lec-admin/template/includes/object/plugin/'.$objectLoaded['include_file_before']);
+		}
+
+	$formFields = json_decode($objectLoaded['edit_fields'], true);
+	
+	if ($formFields != null){
+		
+		//halfwidth counter that flips ebtween 1 and 2
 			$halfWidthCounter = 1;
+			$inHalfWidth = false;
+		
+		$fieldCount = count($formFields);
+		$fieldCounter = 1;
+		foreach($formFields as $fField){
 			
-			$fieldCount = count($formFields);
-			$fieldCounter = 1;
-			foreach($formFields as $fField){
+			//output either units-row + unit-50 div, or just unit-50 div if halfwidth
+			//if not, then set inHalfWidth as false
+			if(isset($fField['half_width'])){
 				
-				if(isset($fField['half_width'])){
-					if($fField['half_width'] === 'yes'){
-						if($halfWidthCounter % 2 == 1){
-							?><div class="units-row end"><div class="unit-50 end"><?php
-						} else {
-							?><div class="unit-50 end"><?php
-						}
+				if($fField['half_width'] === 'yes'){
+					$inHalfWidth = true;
+					if($halfWidthCounter % 2 == 1){
+						?><div class="units-row end"><div class="unit-50 end"><?php
+					} else {
+						?><div class="unit-50 end"><?php
 					}
+				} else {
+					$inHalfWidth = false;
 				}
 				
+			} else {
+				$inHalfWidth = false;
+			}
+			
+			//if last field was halfwidth, but this field is full width - close off the last units-row div.
+				if($halfWidthCounter == 2 && $inHalfWidth === false){
+					$halfWidthCounter = 1;
+					?></div><?php
+				}
+			
+			
+			//is the field read only?
 				$fField['read_only'] = (isset($fField['read_only'])) ? $fField['read_only'] : '';
 				$readOnly = ($fField['read_only'] === 'yes') ? 'readonly="readonly"' :'' ;
-				$fField['populate'] = (isset($fField['populate'])) ? $fField['populate'] : 'yes';
-				
-				$itemLoaded[$fField['field']] = ($fField['populate'] === 'no') ? '' : $itemLoaded[$fField['field']];
 			
+			//do we want to put the value stored in database back into form?
+				$fField['populate'] = (isset($fField['populate'])) ? $fField['populate'] : 'yes';
+				$itemLoaded[$fField['field']] = ($fField['populate'] === 'no') ? '' : $itemLoaded[$fField['field']];
+		
+			//mandatory field?
 				$mandatory = ($fField['mandatory'] === 'yes') ? 'mandatory' : '' ;
-				
+			
+			//select box from db table
 				if ( $fField['form_type'] === 'select'){
 					
 					?><label><?php
@@ -65,7 +83,8 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 					echo \LecAdmin\Form::makeSelect($fField['field'], \LecAdmin\Form::loadOptionsFromDbArray($this->DBH, ['id', $fField['select_field']], $fField['select_table']), ' class="width-100 '.$fField['class_inj'].' " ' , $fField['field'], $itemLoaded[$fField['field']]);
 					echo (trim($fField['help_text']) === '')? '' : '<div class="forms-desc">'.$fField['help_text'].'</div>';
 					?></label><br/><?php
-					
+				
+			//select yesno special (for "Live" etc)
 				} else if ( $fField['form_type'] === 'select_yesno'){
 					
 					?><label><?php
@@ -74,6 +93,7 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 					echo (trim($fField['help_text']) === '')? '' : '<div class="forms-desc">'.$fField['help_text'].'</div>';
 					?></label><br/><?php
 					
+			//image upload? Prefer using filemanager to link...
 				} else if($fField['form_type'] === 'image'){
 					
 					if (file_exists(DOC_ROOT.$objectLoaded['img_directory'].$itemLoaded[$fField['field']]) && trim($itemLoaded[$fField['field']]) !== ''){
@@ -89,58 +109,61 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 						?></label><br/><?php
 					}
 					
+			//"normal" input, can be text, date, textarea, filemanager link box etc...
 				} else {
 					
-					?><label><?php
+					?><label class="clear"><?php
 					
 						echo $fField['name'];
 						echo ($fField['mandatory'] === 'yes') ? '<span class="req">*</span>' : '';
 						
 						//add image in if filemanager link box, and image
-						if (strpos($fField['class_inj'],'filemanager') !== false){
-							if(!$new && trim($itemLoaded[$fField['field']]) !== ''){
-								
-								$bits = explode('.',trim($itemLoaded[$fField['field']]));
-								$ext = end($bits);
-								$allowedExts = ['png', 'jpg', 'jpeg', 'gif'];
-								if(in_array($ext, $allowedExts)){
-									?><br/><img src="<?php echo (string)$itemLoaded[$fField['field']]; ?>" style="max-width:300px;padding:0.3em;"><?php
+							if (strpos($fField['class_inj'],'filemanager') !== false){
+								if(!$new && trim($itemLoaded[$fField['field']]) !== ''){
+									
+									$bits = explode('.',trim($itemLoaded[$fField['field']]));
+									$ext = end($bits);
+									$allowedExts = ['png', 'jpg', 'jpeg', 'gif'];
+									if(in_array($ext, $allowedExts)){
+										?><br/><img src="<?php echo (string)$itemLoaded[$fField['field']]; ?>" alt="<?php echo $fField['name']; ?>" style="max-width:300px;max-height:100px;padding:0.3em;"><?php
+									}
 								}
 							}
-						}
 						
-						$cols = ($fField['form_type'] == 'textarea') ? 'rows="15"' : '';
+						//cols for textarea...
+							$cols = ($fField['form_type'] == 'textarea') ? 'rows="15"' : '';
 						
 						//add filenmanager button or normal
-						if (strpos($fField['class_inj'],'filemanager') !== false){
-							
-							?>
-								<div class="input-groups">
-									<span class="input-prepend" style="padding:0;border:0;"><a href="/do/response/filemanager/view/" class="btn btn-green filemanager_button" type="button" data-field="<?php echo $fField['field']; ?>"><i class="fa fa-fw fa-file-o"></i> Open Filemanager</a></span>
-									<?php echo \LecAdmin\Form::makeInput($fField['field'], $fField['form_type'], $fField['field'], str_replace('"', '&quot;', (string)$itemLoaded[$fField['field']]), $fField['placeholder'], ' '.$readOnly.' class="width-100 '.$fField['class_inj'].' '.$mandatory.' " '); ?>
-								</div>
-							<?php
-							
-						} else {
-							//normal input!
-							echo \LecAdmin\Form::makeInput($fField['field'], $fField['form_type'], $fField['field'], str_replace('"', '&quot;', (string)$itemLoaded[$fField['field']]), $fField['placeholder'], ' '.$readOnly.' class="width-100 '.$fField['class_inj'].' '.$mandatory.' " '.$cols.' '); 
-							//for tinmymce
-							 
-						}
+							if (strpos($fField['class_inj'],'filemanager') !== false){
+								
+								?>
+									<span class="input-groups">
+										<span class="input-prepend" style="padding:0;border:0;"><a href="/do/response/filemanager/view/" class="btn btn-green filemanager_button" data-field="<?php echo $fField['field']; ?>"><i class="fa fa-fw fa-file-o"></i> Open Filemanager</a></span>
+										<?php echo \LecAdmin\Form::makeInput($fField['field'], $fField['form_type'], $fField['field'], str_replace('"', '&quot;', (string)$itemLoaded[$fField['field']]), $fField['placeholder'], ' '.$readOnly.' class="width-100 '.$fField['class_inj'].' '.$mandatory.' " '); ?>
+									</span>
+								<?php
+								
+							} else {
+								
+								//normal input!
+								echo \LecAdmin\Form::makeInput($fField['field'], $fField['form_type'], $fField['field'], str_replace('"', '&quot;', (string)$itemLoaded[$fField['field']]), $fField['placeholder'], ' '.$readOnly.' class="width-100 '.$fField['class_inj'].' '.$mandatory.' " '.$cols.' '); 
+								 
+							}
 						
 						//help text
-						echo (trim($fField['help_text']) === '')? '' : '<div class="forms-desc">'.$fField['help_text'].'</div>';
+							echo (trim($fField['help_text']) === '')? '' : '<div class="forms-desc">'.$fField['help_text'].'</div>';
 					
 					?></label><br/><?php
 					
 				}
-				
-				
+			
+			//editor style input or textarea.
 				if (strpos($fField['class_inj'],'editor') !== false){
 					
-					if(ALLOW_CODE_IN_EDITOR === true) {
-						?><div class="<?php echo $fField['field'].'_pre'; ?>" style="display:none;"><?php echo (string)$itemLoaded[$fField['field']]; ?></div><?php
-					}
+					//needed so the content updates to the input properly (see setup() below).
+						if(ALLOW_CODE_IN_EDITOR === true) {
+							?><div class="<?php echo $fField['field'].'_pre'; ?>" style="display:none;"><?php echo (string)$itemLoaded[$fField['field']]; ?></div><?php
+						}
 					
 					?>
 					
@@ -176,7 +199,8 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 					
 					<?php
 				}
-				
+			
+			//output surround html if hald width, closing off elements or units-row's
 				if(isset($fField['half_width'])){
 					if($fField['half_width'] === 'yes'){
 						
@@ -200,18 +224,18 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 					//close the units-row div off....
 					?></div><?php
 				}
-				
-				$fieldCounter++;
-				
-			}
 			
-		} else {
+			$fieldCounter++;
 			
-			?><p>There are no form fields to edit this item.</p><?php
-			
-		} 
+		}
 		
-		//include form
+	} else {
+		
+		?><p>There are no form fields to edit this item.</p><?php
+		
+	} 
+	
+	//include form stuff before close of whole form.
 		if(file_exists(DOC_ROOT.'/view/lec-admin/template/includes/object/plugin/'.$objectLoaded['include_file_after']) && $objectLoaded['include_file_after'] != ''){
 			include(DOC_ROOT.'/view/lec-admin/template/includes/object/plugin/'.$objectLoaded['include_file_after']);
 		} 
@@ -229,11 +253,12 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 
 <?php
 
-	if ($new){
-		echo \LecAdmin\Form::makeInput('lec-admin_new', 'hidden', 'lec-admin_new', 'yes');
-	} else {
-		echo \LecAdmin\Form::makeInput('id', 'hidden', 'id', $itemLoaded['id']);
-	}
+	//save and cancel buttons
+		if ($new){
+			echo \LecAdmin\Form::makeInput('lec-admin_new', 'hidden', 'lec-admin_new', 'yes');
+		} else {
+			echo \LecAdmin\Form::makeInput('id', 'hidden', 'id', $itemLoaded['id']);
+		}
 
 	echo \LecAdmin\Form::closeForm().'<br/>';
 	
