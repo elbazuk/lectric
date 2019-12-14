@@ -12,6 +12,7 @@ if ( isset($_POST['func']) && $this->adminUser->loggedIn()){
 			switch ($_POST['func']){
 				
 				case 'CHANGE_DIRECTORY':
+					$_SESSION['lec-filemanager-dir'] = $_POST['new_dir'];
 					$this->filemanager->loadDirectoryContentsHTML($_POST['new_dir'] );
 				break;
 				case 'GET_NEW_BREADCRUMB':
