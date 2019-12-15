@@ -14,8 +14,8 @@ class filemanager
 		public $_universalFolders = [];
 		
 		//files
-		private $_ajax_file = '/do/response/filemanager/ajax';
-		private $_download_serve_file = '/do/response/filemanager/download';
+		public $_ajax_file = '/do/response/filemanager/ajax';
+		public $_download_serve_file = '/do/response/filemanager/download';
 		
 		//templates
 		private $_filemanager_wrapper_template = '/view/lec-admin/template/includes/filemanager/wrapper.php'; 
@@ -566,6 +566,78 @@ class filemanager
 	/* END UTILITY  function */
 	
 	/* JS Function */
+
+		 /**
+         * Output the plugin / script JS needed for filemanager
+         * 
+         * 
+         * @return <type>
+         */
+			public function getJSPlugin(): void
+			{
+				
+				?>
+				
+				<script>
+				
+					function setFileManager(){
+
+						$('.filemanager_button').fancybox({
+							width :  window.innerWidth-40,
+							height :  $(window).height()-40,
+							type : 'iframe',
+							iframe: {
+								preload:false
+							}
+						});
+						
+					}
+
+					function filemanager_onMessage(event){
+									
+						if(event.data.sender === 'filemanager'){
+							
+							$('body #'+window.filemanager_field).val(event.data.url).trigger('change');
+
+							// Remove event listener for a message from ResponsiveFilemanager
+							if(window.removeEventListener){
+								window.removeEventListener('message', filemanager_onMessage, false);
+							} else {
+								window.detachEvent('onmessage', filemanager_onMessage);
+							}
+							
+							window.filemanager_field = '';
+							
+							$.fancybox.close();
+							
+						}
+						
+					}
+					
+					$(document).ready(function(){
+						
+						//filemanager stuff
+						setFileManager();
+
+						$('body').on('click', '.filemanager_button', function(){
+
+							window.filemanager_field = $(this).attr('data-field');
+							
+							if(window.addEventListener){
+								window.addEventListener('message', filemanager_onMessage, false);
+							} else {
+								window.attachEvent('onmessage', filemanager_onMessage);
+							}
+							
+						});
+	
+					});
+					
+				</script>
+				
+				<?php
+				
+			}
 	
         /**
          * Output the JS needed for filemanager
@@ -927,12 +999,23 @@ class filemanager
 								
 							});
 						
-						//select file for tinyMCE
+						//select file for tinyMCE / filemanager button
 							$('.fm_wrapper').on('click', '.fm_select_file', function(){
 								
 								window.parent.postMessage({
 									sender: 'filemanager',
 									url: $(this).attr('data-file'),
+									field_id: ''
+								});
+								
+							});
+							
+						//select directory as the path instead.
+							$('.fm_wrapper').on('click', '.fm_select_dir', function(){
+								
+								window.parent.postMessage({
+									sender: 'filemanager',
+									url: $(this).attr('data-dir'),
 									field_id: ''
 								});
 								
