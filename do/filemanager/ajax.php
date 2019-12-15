@@ -34,6 +34,10 @@ if ( isset($_POST['func']) && $this->adminUser->loggedIn()){
 						$this->filemanager->loadDirectoryContentsHTML($_POST['new_dir']);
 					}
 				break;
+				case 'LIST_DIR':
+					$dir = $this->filemanager->getDirectoryContents($_POST['folder']);
+					echo json_encode($dir);
+				break;
 				
 			}
 		}
