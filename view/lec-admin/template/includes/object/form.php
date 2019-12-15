@@ -136,6 +136,8 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 						//add filenmanager button or normal
 							if (strpos($fField['class_inj'],'filemanager') !== false){
 								
+								$filemanagerJS = true;
+								
 								?>
 									<span class="input-groups">
 										<span class="input-prepend" style="padding:0;border:0;"><a href="/do/response/filemanager/view/" class="btn btn-green filemanager_button" data-field="<?php echo $fField['field']; ?>"><i class="fa fa-fw fa-file-o"></i> Open Filemanager</a></span>
@@ -261,3 +263,7 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 
 	echo \LecAdmin\Form::closeForm().'<br/>';
 	
+	if(class_exists('\LecAdmin\filemanager')){
+		$filemanager = new \LecAdmin\filemanager('/uploads/');
+		$filemanager->getJSPlugin();
+	}
