@@ -11,6 +11,8 @@
 			
 			?>
 			
+				<button class=" btn right fm_select_dir fm_pointer" data-dir="<?php echo str_replace(DOC_ROOT,'', $directory); ?>"><i class="fa fa-fw fa-folder"></i> Select Folder</button>
+			
 				<table class="fm_contents_table">
 					<thead>
 						<tr>
