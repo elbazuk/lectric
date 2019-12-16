@@ -111,6 +111,16 @@ fieldset{
 		}
 
 	/* end btn's */
+	
+	.answer_drag_placeholder{
+		height:52px;
+		background:orange;
+		border:1px dashed green;
+	}
+
+	.pointer{
+		cursor:pointer;
+	}
 
 /* end helpers */
 
@@ -356,6 +366,11 @@ fieldset{
 			width:150px;
 		}
 	
+	.filemanager_img{
+		max-width:300px;
+		max-height:100px;
+		padding:0.3em;
+	}
 	
 /* Pagination */
 
