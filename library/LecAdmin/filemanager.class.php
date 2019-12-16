@@ -597,18 +597,36 @@ class filemanager
 									
 						if(event.data.sender === 'filemanager'){
 							
-							$('body #'+window.filemanager_field).val(event.data.url).trigger('change');
+							//set value on input
+								$('body #'+window.filemanager_field).val(event.data.url).trigger('change');
+							
+							//if it's an image, then set preview.
+								var str = event.data.url;
+								var dotIndex = str.lastIndexOf('.');
+								var ext = str.substring(dotIndex);
+								
+								if(
+									ext == '.jpg' ||
+									ext == '.jpeg' ||
+									ext == '.png' ||
+									ext == '.bmp' ||
+									ext == '.gif'
+								){
+									$('body #'+window.filemanager_field).parent().siblings('.filemanager_img_outer').html('<br/><img src="'+event.data.url+'" alt="" class="filemanager_img">');
+								}
 
 							// Remove event listener for a message from ResponsiveFilemanager
-							if(window.removeEventListener){
-								window.removeEventListener('message', filemanager_onMessage, false);
-							} else {
-								window.detachEvent('onmessage', filemanager_onMessage);
-							}
+								if(window.removeEventListener){
+									window.removeEventListener('message', filemanager_onMessage, false);
+								} else {
+									window.detachEvent('onmessage', filemanager_onMessage);
+								}
 							
-							window.filemanager_field = '';
+							//clear field
+								window.filemanager_field = '';
 							
-							$.fancybox.close();
+							//close fancybox
+								$.fancybox.close();
 							
 						}
 						
