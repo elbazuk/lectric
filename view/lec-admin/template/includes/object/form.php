@@ -117,25 +117,27 @@ echo \LecAdmin\Form::startForm($objectLoaded['table'].'_form', 'post', $link, ' 
 						echo $fField['name'];
 						echo ($fField['mandatory'] === 'yes') ? '<span class="req">*</span>' : '';
 						
-						//add image in if filemanager link box, and image
-							if (strpos($fField['class_inj'],'filemanager') !== false){
-								if(!$new && trim($itemLoaded[$fField['field']]) !== ''){
-									
-									$bits = explode('.',trim($itemLoaded[$fField['field']]));
-									$ext = end($bits);
-									$allowedExts = ['png', 'jpg', 'jpeg', 'gif'];
-									if(in_array($ext, $allowedExts)){
-										?><br/><img src="<?php echo (string)$itemLoaded[$fField['field']]; ?>" alt="<?php echo $fField['name']; ?>" style="max-width:300px;max-height:100px;padding:0.3em;"><?php
-									}
-								}
-							}
-						
 						//cols for textarea...
 							$cols = ($fField['form_type'] == 'textarea') ? 'rows="15"' : '';
 						
 						//add filenmanager button or normal
 							if (strpos($fField['class_inj'],'filemanager') !== false){
 								
+								?><span class="filemanager_img_outer"><?php
+								
+								if(!$new && trim($itemLoaded[$fField['field']]) !== ''){
+									
+									$bits = explode('.',trim($itemLoaded[$fField['field']]));
+									$ext = end($bits);
+									$allowedExts = ['png', 'jpg', 'jpeg', 'gif'];
+									if(in_array($ext, $allowedExts)){
+										?><br/><img src="<?php echo (string)$itemLoaded[$fField['field']]; ?>" alt="<?php echo $fField['name']; ?>" class="filemanager_img"><?php
+									}
+								}
+								
+								?></span><?php
+								
+								//for below...
 								$filemanagerJS = true;
 								
 								?>
