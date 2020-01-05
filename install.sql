@@ -102,6 +102,7 @@ INSERT INTO `lec-admin_tabs` (`id`, `sortorder`, `name`) VALUES
   `password` varchar(250) COLLATE utf8_bin DEFAULT NULL,
   `salt` varchar(250) COLLATE utf8_bin DEFAULT NULL,
   `unique` varchar(250) COLLATE utf8_bin DEFAULT NULL,
+  `unique_count` TINYINT NULL DEFAULT '0',
   `folders` varchar(1000) COLLATE utf8_bin DEFAULT NULL,
   `last_logged_in` datetime DEFAULT NULL,
   `created` datetime DEFAULT NULL,
