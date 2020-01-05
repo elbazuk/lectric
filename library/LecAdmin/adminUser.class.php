@@ -41,10 +41,8 @@ class adminUser extends \Lectric\lecPDO
 		
 		/**
 		* Load user data into private members
-		*
-		* @return void
 		*/		
-			private function loadUserData(): void
+			private function loadUserData()
 			{
 				
 				try {
@@ -60,8 +58,71 @@ class adminUser extends \Lectric\lecPDO
 					return;
 				}
 				
-				$this->name = $user['name'];
-				$this->unique = $user['unique'];
+				//check unique
+				if ($_SESSION['unique'] === $user['unique']){
+					
+					//increment unique
+					
+					$uniqueCount = $user['unique_count'];
+					$uniqueCount++;
+					
+					if($uniqueCount > 5){
+						
+						//unset so new sesh id's are created in browser
+						
+						unset($_SESSION['admin_userid']);
+						unset($_SESSION['unique']);
+						
+						session_regenerate_id(true);
+						
+						$_SESSION['admin_userid'] = $user['id'];
+						$_SESSION['unique'] = password_hash(date('Y-m-d H:i:s').uniqid(), PASSWORD_DEFAULT);
+						
+						try {
+							$this->setWhereFields(['id'=>$user['id']]);
+							$this->setWhereOps('=');
+							$this->setUpdateFields(['unique'=>$_SESSION['unique'], 'unique_count'=>0]);
+							$this->updateStrict($this->_user_table);
+						} catch (\Exception $e){
+							$this->logout();
+							if(DEBUG){
+								echo 'Failed to update unique_count: '.$e->getMessage();
+								return new \Lectric\controlAction();
+							}
+							return new \Lectric\controlAction('view', '/lec-admin/login/', 'Login Failed due to a database error. ');
+						}
+						
+						//reset unique in class too
+						$this->unique = $_SESSION['unique'];
+						
+					} else {
+						
+						try {
+							$this->setWhereFields(['id'=>$user['id']]);
+							$this->setWhereOps('=');
+							$this->setUpdateFields(['unique_count'=>$uniqueCount]);
+							$this->updateStrict($this->_user_table);
+						} catch (\Exception $e){
+							$this->logout();
+							if(DEBUG){
+								echo 'Failed to update unique_count: '.$e->getMessage();
+								return new \Lectric\controlAction();
+							}
+							return new \Lectric\controlAction('view', '/lec-admin/login/', 'Login Failed due to a database error. ');
+						}
+						
+						//unique is same as stored
+						$this->unique = $user['unique'];
+						
+					}
+					
+					$this->name = $user['name'];
+				
+				} else {
+					$this->logout();
+					return;
+				} 
+				
 				return;
 				
 			}
@@ -111,12 +172,12 @@ class adminUser extends \Lectric\lecPDO
 							if(password_verify($pass.$user['salt'], $user['password'])){
 								
 								$_SESSION['admin_userid'] = $user['id'];
-								$_SESSION['unique'] = password_hash(date('Y-m-d H:i:s'), PASSWORD_DEFAULT);
+								$_SESSION['unique'] = password_hash(date('Y-m-d H:i:s').uniqid(), PASSWORD_DEFAULT);
 								
 								try {
 									$this->setWhereFields(['id'=>$user['id']]);
 									$this->setWhereOps('=');
-									$this->setUpdateFields(['last_logged_in'=>date('Y-m-d H:i:s'), 'unique'=>$_SESSION['unique']]);
+									$this->setUpdateFields(['last_logged_in'=>date('Y-m-d H:i:s'), 'unique'=>$_SESSION['unique'], 'unique_count'=>0]);
 									$this->updateStrict($this->_user_table);
 								} catch (\Exception $e){
 									if(DEBUG){
