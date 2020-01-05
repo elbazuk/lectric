@@ -38,6 +38,9 @@ if ( isset($_POST['func']) && $this->adminUser->loggedIn()){
 					$dir = $this->filemanager->getDirectoryContents($_POST['folder']);
 					echo json_encode($dir);
 				break;
+				case 'GET_TREE':
+					$this->filemanager->generateFileTreeHTML();
+				break;
 				
 			}
 		}
