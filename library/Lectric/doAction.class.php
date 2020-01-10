@@ -34,7 +34,7 @@ class doAction
 					
 					$action = $doer->{'do_'.URL_NODES[4]}();
 					
-					if ($action instanceof controlAction) {
+					if ($action instanceof \Lectric\controlAction) {
 					
 						$action->performAction();
 						
