@@ -1195,7 +1195,7 @@ class filemanager
 									sender: 'filemanager',
 									url: $(this).attr('data-file'),
 									field_id: ''
-								});
+								}, "*");
 								
 							});
 							
@@ -1206,7 +1206,7 @@ class filemanager
 									sender: 'filemanager',
 									url: $(this).attr('data-dir'),
 									field_id: ''
-								});
+								}, "*");
 								
 							});
 						
