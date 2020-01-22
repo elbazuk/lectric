@@ -16,7 +16,7 @@
 				<table class="fm_contents_table">
 					<thead>
 						<tr>
-							<th></th>
+							<th width="10%"></th>
 							<th width="78%">Name</th>
 							<th>Size</th>
 							<th  width="10%">Actions</th>
@@ -60,9 +60,9 @@
 									<?php
 									
 										if ($this->isImage($file)){
-											?><img src="<?php echo $this->_download_serve_file;?>?file=<?php echo str_replace(DOC_ROOT,'',$directory).$file; ?>" alt="" /><?php
+											?><img src="<?php echo str_replace(DOC_ROOT,'',$directory).$file; ?>" alt="" class="fm_select_file fm_pointer" data-file="<?php echo str_replace(DOC_ROOT,'',$directory.$file); ?>" /><?php
 										} else {
-											?><i class="fa fa-fw fa-lg <?php echo $this->getFAIconFile($file); ?>" style="line-height:1.65em;"></i></td><?php
+											?><i class="fa fa-fw fa-lg <?php echo $this->getFAIconFile($file); ?> fm_select_file fm_pointer" style="line-height:1.65em;" data-file="<?php echo str_replace(DOC_ROOT,'',$directory.$file); ?>"></i><?php
 										}
 										
 									?>
@@ -85,7 +85,7 @@
 										</div>
 										<i class="fa fa-trash-o fa-fw fm_pointer fm_show_elem" data-elem="fm_delete_file_<?php echo $fileCounter; ?>"></i>&nbsp;&nbsp;&nbsp;
 									
-									<i class="fa fa-download fa-fw fm_click_file fm_pointer" data-file="<?php echo $directory.$file; ?>" data-form="file_click_form_<?php echo $fileCounter; ?>"></i>
+									<a target="_blank" class="fa fa-download fa-fw fm_pointer" href="<?php echo str_replace(DOC_ROOT,'',$directory).$file; ?>" data-form="file_click_form_<?php echo $fileCounter; ?>"></a>
 									<?php echo ($this->isImage($file)) ? '<i class="fa fa-eye fa-fw fm_file_preview fm_pointer" data-file-row="'.$fileCounter.'"></i>' : ''; ?>
 								</td>
 							</tr>
@@ -96,7 +96,7 @@
 									?>
 									
 										<tr style="display:none;" class="file_preview_tr_<?php echo $fileCounter; ?>">
-											<td colspan="4"><img src="<?php echo $this->_download_serve_file;?>?file=<?php echo str_replace(DOC_ROOT,'',$directory).$file; ?>" alt="" /></td>
+											<td colspan="4"><img src="<?php echo str_replace(DOC_ROOT,'',$directory).$file; ?>" alt="" /></td>
 										</tr>
 									
 									<?php
